@@ -1,5 +1,5 @@
 # Build Ng
-FROM node:14.15-alpine AS build
+FROM node:14.15-alpine AS node
 ENV PATH=/app/node_modules/.bin:$PATH
 
 WORKDIR /app
@@ -10,4 +10,4 @@ RUN yarn run build
 # Nginx
 
 FROM nginx:1.23.0
-COPY --from=build /app/dist/yakumo-dash /usr/share/nginx/html
+COPY --from=node /app/dist/yakumo-dash /usr/share/nginx/html
