@@ -1467,6 +1467,20 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
+"@ngrx/effects@^14.0.2":
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-14.0.2.tgz#4f448de91462a5905a58b4db8c860270e567ee83"
+  integrity sha512-1VBJ9eBoeCKSBDkn+wllV1gFGLBrRwq5So0F0QUX2rPcjpE5N1pdpuLAmmwQ84f8nttVlMOx4P9kcEM8qW9jLg==
+  dependencies:
+    tslib "^2.0.0"
+
+"@ngrx/store-devtools@^14.0.2":
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-14.0.2.tgz#c071ca666c6de21686de69abb1f56fd85fd924ae"
+  integrity sha512-szaJSeoWA2GAaE9uzVmH00ewlWQDCI4Xfb6/5GEKMhGNtRSh6UctulNHVR+0TjjiEb4dhUBLMOVUc9HkI+yFCQ==
+  dependencies:
+    tslib "^2.0.0"
+
 "@ngrx/store@^14.0.1":
   version "14.0.1"
   resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-14.0.1.tgz#5a9de1bb0c322f0b4ce953339dc3ca4925c41af5"
@@ -2661,6 +2675,11 @@ chrome-trace-event@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/chrome-trace-event/-/chrome-trace-event-1.0.3.tgz#1015eced4741e15d06664a957dbbf50d041e26ac"
   integrity sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg==
+
+class-transformer@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.5.1.tgz#24147d5dffd2a6cea930a3250a677addf96ab336"
+  integrity sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==
 
 clean-stack@^2.0.0:
   version "2.2.0"

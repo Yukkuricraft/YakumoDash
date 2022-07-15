@@ -23,6 +23,11 @@
             "ignoreGlobals": true
           }
         ],
+        "object-curly-spacing": "off",
+        "@typescript-eslint/object-curly-spacing": [
+          "error",
+          "always"
+        ],
         "@angular-eslint/directive-selector": [
           "error",
           {

@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from "@angular/common/http";
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { LoginComponent } from './components/login/login.component';
@@ -11,6 +11,17 @@ import { LandingPageComponent } from './components/landing-page/landing-page.com
 import { AuthGuardDirective } from './directives/auth-guard.directive';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatCardModule } from "@angular/material/card";
+import { ActionReducerMap, StoreModule } from "@ngrx/store";
+import { AppState } from "@app/store/app.state";
+import { rootReducer } from "@app/store/root.reducer";
+import { Features } from "@app/store";
+import { AuthService } from "@app/services/auth/auth.service";
+import { TokenInterceptor } from "@app/interceptors/token/token.interceptor";
+
+
+const reducers: ActionReducerMap<AppState> = {
+  [Features.Root]: rootReducer
+};
 
 
 @NgModule({
@@ -22,13 +33,16 @@ import { MatCardModule } from "@angular/material/card";
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
     SocialLoginModule,
+    StoreModule.forRoot(reducers),
+    AppRoutingModule,
+
+    HttpClientModule,
     MatToolbarModule,
     MatCardModule,
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
@@ -42,6 +56,10 @@ import { MatCardModule } from "@angular/material/card";
           }
         ]
       } as SocialAuthServiceConfig,
+    },
+    {
+      provide: AuthService,
+      deps: [HttpClient],
     },
   ],
   bootstrap: [AppComponent]

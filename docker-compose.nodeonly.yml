@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  yakumo-dash:
+    container_name: yakumo-dash-dev
+    image: yukkuricraft/yakumo-dash-dev
+    command: yarn start
+    environment:
+      VIRTUAL_HOST: yakumo2.yukkuricraft.net
+      VIRTUAL_PORT: 25699
+      LETSENCRYPT_HOST: yakumo2.yukkuricraft.net
+    volumes:
+      - ./:/app
+    networks:
+      - yukkuricraft_yc-web-dev
+
+networks:
+  yukkuricraft_yc-web-dev:
+    external: true
+
+
