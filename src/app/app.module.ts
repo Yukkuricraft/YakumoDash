@@ -7,8 +7,6 @@ import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from "@angular/common
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { LoginComponent } from './components/login/login.component';
-import { LandingPageComponent } from './components/landing-page/landing-page.component';
-import { AuthGuardDirective } from './directives/auth-guard.directive';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatCardModule } from "@angular/material/card";
 import { ActionReducerMap, StoreModule } from "@ngrx/store";
@@ -17,6 +15,15 @@ import { rootReducer } from "@app/store/root.reducer";
 import { Features } from "@app/store";
 import { AuthService } from "@app/services/auth/auth.service";
 import { TokenInterceptor } from "@app/interceptors/token/token.interceptor";
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { ContentWithSideNavComponent } from './layouts/content-with-side-nav/content-with-side-nav.component';
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatListModule } from "@angular/material/list";
+import { MatIconModule } from "@angular/material/icon";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ServerManagementComponent } from './components/server-management/server-management.component';
+import { MatButtonModule } from "@angular/material/button";
 
 
 const reducers: ActionReducerMap<AppState> = {
@@ -28,18 +35,25 @@ const reducers: ActionReducerMap<AppState> = {
   declarations: [
     AppComponent,
     LoginComponent,
-    LandingPageComponent,
-    AuthGuardDirective,
+    ContentWithSideNavComponent,
+    DashboardComponent,
+    ServerManagementComponent,
   ],
   imports: [
     BrowserModule,
     SocialLoginModule,
     StoreModule.forRoot(reducers),
+    StoreDevtoolsModule.instrument({ maxAge: 50 }),
     AppRoutingModule,
+    BrowserAnimationsModule,
 
     HttpClientModule,
     MatToolbarModule,
     MatCardModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    MatButtonModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

@@ -5,3 +5,12 @@ export interface ILoginRequest {
 export interface ILoginReturn {
   access_token: string,
 }
+
+
+export interface ILogoutRequest {
+  access_token: string,
+}
+
+export interface ILogoutReturn  {
+  success: boolean
+}

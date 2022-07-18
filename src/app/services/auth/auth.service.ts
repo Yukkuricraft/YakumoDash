@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
-import { map, Observable } from "rxjs";
-import { SocialUser } from "@abacritt/angularx-social-login";
+import { map, Observable, tap } from "rxjs";
+import { SocialAuthService, SocialUser } from "@abacritt/angularx-social-login";
 import { HttpClient } from "@angular/common/http";
 import { DomainConverter } from "@app/helpers/domain";
-import { ILoginRequest, ILoginReturn } from "@app/models/auth";
+import { ILoginRequest, ILoginReturn, ILogoutRequest, ILogoutReturn } from "@app/models/auth";
+import { Store } from "@ngrx/store";
+import { setLoggedInUser } from "@app/store/root.actions";
+import { IUser, User } from "@app/models/user";
 
 const accessTokenName = 'auth.yakumo.access_token';
 
@@ -11,10 +14,14 @@ const accessTokenName = 'auth.yakumo.access_token';
   providedIn: 'root'
 })
 export class AuthService {
-  private basePath: string = 'https://api2.yukkuricraft.net';
+  private basePath: string = 'https://api2.yukkuricraft.net/auth';
   private _accessToken: string | null = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private store: Store,
+    private socialAuthService: SocialAuthService
+  ) {}
 
   get accessToken(): string | null {
     if (!this._accessToken) {
@@ -34,20 +41,34 @@ export class AuthService {
     }
   }
 
-  me(): Observable<SocialUser | null> {
+  me(): Observable<IUser | null> {
+    // TODO: TYPES FOR FAILURE CASE
     return this.http
-      .get(`${this.basePath}/auth/me`)
-      .pipe(map((data) => DomainConverter.fromDto(SocialUser, data)));
+      .get(`${this.basePath}/me`)
+      .pipe(map((data) => DomainConverter.fromDto(User, data)));
   }
 
   login(body: ILoginRequest): Observable<ILoginReturn> {
     return this.http
-      .post<ILoginReturn>(`${this.basePath}/auth/login`, body)
-      .pipe(map((data: ILoginReturn) => {
-        console.log(data)
+      .post<ILoginReturn>(`${this.basePath}/login`, body)
+      .pipe(tap((data: ILoginReturn) => {
         this.accessToken = `${data.access_token }`;
-        return data
     }))
   }
 
+  logout(): Observable<ILogoutReturn> {
+    const body: ILogoutRequest = { access_token: this.accessToken ?? '' }
+    return this.http
+      .post<ILogoutReturn>(`${this.basePath}/logout`, body)
+      .pipe(tap((data: ILogoutReturn) => {
+        this.accessToken = null;
+        console.log("LOGOUT SUCCESSFUL")
+    }))
+  }
+
+  createdb(): Observable<object> {
+    console.log("CREATEDB")
+    return this.http
+      .get(`${this.basePath}/createdbdeleteme`)
+  }
 }

@@ -12,7 +12,6 @@ const accessTokenName = 'auth.yakumo.access_token';
 })
 export class DockerService {
   private basePath: string = 'https://api2.yukkuricraft.net';
-  private _accessToken: string | null = null;
 
   constructor(private http: HttpClient) { }
 

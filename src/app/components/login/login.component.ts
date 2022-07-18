@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Store } from "@ngrx/store";
 import { AuthService } from "@app/services/auth/auth.service";
 import { setLoggedInUser } from "@app/store/root.actions";
-import { DockerService } from "@app/services/docker/docker.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -13,25 +13,15 @@ import { DockerService } from "@app/services/docker/docker.service";
 })
 export class LoginComponent implements OnInit {
   user: SocialUser | null;
-  apiUrl = ':5001/api'
 
   constructor(
       private http: HttpClient,
       private socialAuthService: SocialAuthService,
       private ycAuthService: AuthService,
-      private dockerService: DockerService,
-      private store: Store
+      private store: Store,
+      private router: Router,
   ) {
     this.user = null;
-    console.log(this.socialAuthService)
-  }
-
-  listContainers() {
-    this.dockerService.list().subscribe(
-      result => {
-        console.log(result)
-      }
-    )
   }
 
   ngOnInit() {
@@ -40,9 +30,15 @@ export class LoginComponent implements OnInit {
       this.store.dispatch(setLoggedInUser({ user }));
       this.ycAuthService.login({ id_token: user.idToken }).subscribe(
         (result) => {
-          console.log("RETURN FROM LOGIN", result)
+          this.router.navigateByUrl('/');
         }
       )
+    });
+  }
+
+  createdb() {
+    this.ycAuthService.createdb().subscribe((data) => {
+      console.log(data);
     });
   }
 }
