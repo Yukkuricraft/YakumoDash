@@ -3,7 +3,8 @@ import { DockerService } from "@app/services/docker/docker.service";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { selectAvailableEnvsFormatted } from "@app/store/root.selectors";
+import { selectAvailableEnvs } from "@app/store/root.selectors";
+import { Env } from "@app/models/server";
 
 @Component({
   selector: 'app-server-management',
@@ -11,13 +12,13 @@ import { selectAvailableEnvsFormatted } from "@app/store/root.selectors";
   styleUrls: ['./server-management.component.scss']
 })
 export class ServerManagementComponent {
-  availableEnvs$: Observable<string[]>;
+  availableEnvs$: Observable<Env[]>;
 
   constructor(private store: Store, private dockerApi: DockerService, private envsApi: EnvironmentsService) {
-    this.availableEnvs$ = this.store.select(selectAvailableEnvsFormatted);
+    this.availableEnvs$ = this.store.select(selectAvailableEnvs);
   }
 
-  listContainers(env: string) {
+  listContainers(env: Env) {
     this.dockerApi.list(env).subscribe(
       (data) => {
         console.log(data)

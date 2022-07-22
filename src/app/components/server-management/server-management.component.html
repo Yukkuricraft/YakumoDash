@@ -3,8 +3,8 @@
 </mat-toolbar>
 
 <mat-tab-group>
-  <mat-tab *ngFor="let env of availableEnvs$ | async" label="{{env}}">
-    <button (click)="listContainers(env.toLowerCase().replace(' ', ''))">
+  <mat-tab *ngFor="let env of availableEnvs$ | async" label="{{env.formatted}}">
+    <button (click)="listContainers(env)">
      Console Log Containers
     </button>
     <button (click)="listEnvs()">

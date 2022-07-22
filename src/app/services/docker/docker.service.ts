@@ -4,7 +4,7 @@ import { SocialUser } from "@abacritt/angularx-social-login";
 import { HttpClient } from "@angular/common/http";
 import { DomainConverter } from "@app/helpers/domain";
 import { ILoginRequest, ILoginReturn } from "@app/models/auth";
-import { Container } from "@app/models/server";
+import { Container, Env } from "@app/models/server";
 
 const accessTokenName = 'auth.yakumo.access_token';
 
@@ -22,9 +22,9 @@ export class DockerService {
     ));
   }
 
-  list(env: string) {
+  list(env: Env) {
     return this.http
-      .get(`${this.basePath}/docker/${env}/containers`)
+      .get(`${this.basePath}/docker/${env.name}/containers`)
       .pipe(map((data: any) =>
         data.map((obj: any) =>
           DomainConverter.fromDto(Container, this.lowercaseKeys(obj))

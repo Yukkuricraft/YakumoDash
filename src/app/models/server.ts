@@ -8,10 +8,10 @@ export interface IEnv {
   name: string;
   alias: string;
 
-  formatted: string;
-
   type: string;
   num: number | null;
+
+  formatted: string;
 }
 
 export enum ContainerState {
@@ -45,10 +45,10 @@ export class Env implements IEnv{
   name = "";
   alias = "";
 
-  formatted = "";
-
   type = "";
   num: number | null = null;
+
+  formatted = "";
 }
 
 export class Container implements IContainer {

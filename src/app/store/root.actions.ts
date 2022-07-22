@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { User } from "@app/models/user";
+import { Env } from "@app/models/server";
 
 export const initializeApp = createAction(
   '[Root] Initializing YakumoDash',
@@ -16,5 +17,5 @@ export const setLogoutUser = createAction(
 
 export const setAvailableEnvs = createAction(
   '[Root] Set Available Environments',
-  props<{ envs: string[] }>()
+  props<{ envs: Env[] }>()
 )
