@@ -4,7 +4,7 @@
 
 <mat-tab-group>
   <mat-tab *ngFor="let env of availableEnvs$ | async" label="{{env}}">
-    <button (click)="listContainers(env)">
+    <button (click)="listContainers(env.toLowerCase().replace(' ', ''))">
      Console Log Containers
     </button>
     <button (click)="listEnvs()">

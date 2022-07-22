@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   constructor(
       private http: HttpClient,
@@ -22,6 +22,4 @@ export class LoginComponent implements OnInit {
   ) {
   }
 
-  ngOnInit() {
-  }
 }

@@ -3,7 +3,7 @@ import { DockerService } from "@app/services/docker/docker.service";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { selectAvailableEnvs } from "@app/store/root.selectors";
+import { selectAvailableEnvsFormatted } from "@app/store/root.selectors";
 
 @Component({
   selector: 'app-server-management',
@@ -14,7 +14,7 @@ export class ServerManagementComponent {
   availableEnvs$: Observable<string[]>;
 
   constructor(private store: Store, private dockerApi: DockerService, private envsApi: EnvironmentsService) {
-    this.availableEnvs$ = this.store.select(selectAvailableEnvs)
+    this.availableEnvs$ = this.store.select(selectAvailableEnvsFormatted);
   }
 
   listContainers(env: string) {
