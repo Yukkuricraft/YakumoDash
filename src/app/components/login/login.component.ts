@@ -12,7 +12,6 @@ import { Router } from "@angular/router";
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  user: SocialUser | null;
 
   constructor(
       private http: HttpClient,
@@ -21,24 +20,8 @@ export class LoginComponent implements OnInit {
       private store: Store,
       private router: Router,
   ) {
-    this.user = null;
   }
 
   ngOnInit() {
-    this.socialAuthService.authState.subscribe((user) => {
-      this.user = user;
-      this.store.dispatch(setLoggedInUser({ user }));
-      this.ycAuthService.login({ id_token: user.idToken }).subscribe(
-        (result) => {
-          this.router.navigateByUrl('/');
-        }
-      )
-    });
-  }
-
-  createdb() {
-    this.ycAuthService.createdb().subscribe((data) => {
-      console.log(data);
-    });
   }
 }

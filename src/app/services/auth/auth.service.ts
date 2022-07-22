@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { map, Observable, tap } from "rxjs";
+import { catchError, map, Observable, of, tap } from "rxjs";
 import { SocialAuthService, SocialUser } from "@abacritt/angularx-social-login";
 import { HttpClient } from "@angular/common/http";
 import { DomainConverter } from "@app/helpers/domain";
 import { ILoginRequest, ILoginReturn, ILogoutRequest, ILogoutReturn } from "@app/models/auth";
 import { Store } from "@ngrx/store";
-import { setLoggedInUser } from "@app/store/root.actions";
 import { IUser, User } from "@app/models/user";
 
 const accessTokenName = 'auth.yakumo.access_token';
@@ -53,7 +52,7 @@ export class AuthService {
       .post<ILoginReturn>(`${this.basePath}/login`, body)
       .pipe(tap((data: ILoginReturn) => {
         this.accessToken = `${data.access_token }`;
-    }))
+    }), catchError((err) => {console.log(err); return of()}))
   }
 
   logout(): Observable<ILogoutReturn> {

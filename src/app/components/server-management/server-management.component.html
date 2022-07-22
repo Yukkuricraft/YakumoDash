@@ -1,1 +1,14 @@
-<p>server-management works!</p>
+<mat-toolbar>
+  <mat-card-title>Server Management</mat-card-title>
+</mat-toolbar>
+
+<mat-tab-group>
+  <mat-tab *ngFor="let env of availableEnvs$ | async" label="{{env}}">
+    <button (click)="listContainers(env)">
+     Console Log Containers
+    </button>
+    <button (click)="listEnvs()">
+      Console Log Envs
+    </button>
+  </mat-tab>
+</mat-tab-group>

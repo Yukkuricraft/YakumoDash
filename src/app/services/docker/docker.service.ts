@@ -15,9 +15,10 @@ export class DockerService {
 
   constructor(private http: HttpClient) { }
 
-  list() {
+  list(env: string) {
     return this.http
-      .get(`${this.basePath}/docker/prod/containers`)
+      .get(`${this.basePath}/docker/${env}/containers`)
   }
+
 
 }

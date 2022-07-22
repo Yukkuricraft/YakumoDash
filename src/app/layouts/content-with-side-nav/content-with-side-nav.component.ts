@@ -16,7 +16,6 @@ export class ContentWithSideNavComponent {
   logout() {
     this.ycAuth.logout()
       .subscribe((resp) => {
-        console.log(resp);
         this.router.navigateByUrl('/login')
       })
   }

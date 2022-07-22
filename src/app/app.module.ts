@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Type } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -24,11 +24,17 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ServerManagementComponent } from './components/server-management/server-management.component';
 import { MatButtonModule } from "@angular/material/button";
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatTabsModule } from "@angular/material/tabs";
+import { EffectsModule } from "@ngrx/effects";
+import { RootEffects } from "@app/store/root.effects";
 
 
 const reducers: ActionReducerMap<AppState> = {
   [Features.Root]: rootReducer
 };
+
+const effects: Type<any>[] = [RootEffects]
 
 
 @NgModule({
@@ -44,6 +50,7 @@ const reducers: ActionReducerMap<AppState> = {
     SocialLoginModule,
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 50 }),
+    EffectsModule.forRoot(effects),
     AppRoutingModule,
     BrowserAnimationsModule,
 
@@ -51,12 +58,18 @@ const reducers: ActionReducerMap<AppState> = {
     MatToolbarModule,
     MatCardModule,
     MatSidenavModule,
+    MatTabsModule,
     MatListModule,
     MatIconModule,
     MatButtonModule,
+    MatSnackBarModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: { duration: 5000, data: { action: 'Close' } },
+    },
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
@@ -65,7 +78,9 @@ const reducers: ActionReducerMap<AppState> = {
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              '1084736521175-2b5rrrpcs422qdc5458dhisdsj8auo0p.apps.googleusercontent.com'
+              '1084736521175-2b5rrrpcs422qdc5458dhisdsj8auo0p.apps.googleusercontent.com', {
+                oneTapEnabled: false,
+              }
             )
           }
         ]

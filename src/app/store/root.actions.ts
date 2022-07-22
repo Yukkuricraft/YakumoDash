@@ -1,11 +1,20 @@
 import { createAction, props } from "@ngrx/store";
-import { SocialUser } from "@abacritt/angularx-social-login";
+import { User } from "@app/models/user";
+
+export const initializeApp = createAction(
+  '[Root] Initializing YakumoDash',
+)
 
 export const setLoggedInUser = createAction(
   '[Root] Set Logged-In User',
-  props<{ user: SocialUser }>()
+  props<{ user: User }>()
 )
 
 export const setLogoutUser = createAction(
   '[Root] Set Logout User',
+)
+
+export const setAvailableEnvs = createAction(
+  '[Root] Set Available Environments',
+  props<{ envs: string[] }>()
 )
