@@ -3,7 +3,6 @@ import {
   dockerStringArrayTransformer
 } from "@app/helpers/dto-transformers";
 import { Transform } from "class-transformer";
-import { Env } from "@app/models/env";
 
 export enum ContainerType {
   Minecraft = 'mc',

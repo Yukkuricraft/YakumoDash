@@ -1,7 +1,5 @@
 import { User } from "@app/models/user";
 import {
-  Container,
-  ContainerType,
   EnvContainerMapping
 } from "@app/models/container";
 import { Env } from "@app/models/env";

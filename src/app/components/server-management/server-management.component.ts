@@ -47,6 +47,14 @@ export class ServerManagementComponent {
     )
   }
 
+  listContainers(env: Env) {
+    this.dockerApi.list(env).subscribe(
+      (data) => {
+        console.log(data)
+      }
+    )
+  }
+
   getContainersForEnvAndType(env: Env, type: ContainerType) {
     return this.store.select(selectContainersByEnvAndType(env, type));
   }
