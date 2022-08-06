@@ -9,7 +9,7 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { LoginComponent } from './components/login/login.component';
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatCardModule } from "@angular/material/card";
-import { ActionReducerMap, StoreModule } from "@ngrx/store";
+import { ActionReducer, ActionReducerMap, MetaReducer, StoreModule } from "@ngrx/store";
 import { AppState } from "@app/store/app.state";
 import { rootReducer } from "@app/store/root.reducer";
 import { Features } from "@app/store";
@@ -28,14 +28,13 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBar, MatSnackBarModule } from "@
 import { MatTabsModule } from "@angular/material/tabs";
 import { EffectsModule } from "@ngrx/effects";
 import { RootEffects } from "@app/store/root.effects";
-
+import { localStorageSync } from 'ngrx-store-localstorage';
 
 const reducers: ActionReducerMap<AppState> = {
   [Features.Root]: rootReducer
 };
 
 const effects: Type<any>[] = [RootEffects]
-
 
 @NgModule({
   declarations: [

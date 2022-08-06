@@ -3,15 +3,13 @@ import {
   dockerStringArrayTransformer
 } from "@app/helpers/dto-transformers";
 import { Transform } from "class-transformer";
+import { Env } from "@app/models/env";
 
-export interface IEnv {
-  name: string;
-  alias: string;
-
-  formatted: string;
-
-  type: string;
-  num: number | null;
+export enum ContainerType {
+  Minecraft = 'mc',
+  MySQL = 'mysql',
+  Velocity = 'vel',
+  Unknown = 'unknown',
 }
 
 export enum ContainerState {
@@ -21,7 +19,15 @@ export enum ContainerState {
   Paused,
   Exited,
   Dead,
-  Uninitialized
+  Uninitialized,
+}
+
+export interface ContainerTypeToContainerMapping {
+  [containerType: string]: Container[],
+}
+
+export interface EnvContainerMapping {
+  [env: string]: ContainerTypeToContainerMapping
 }
 
 export interface IContainer {
@@ -39,16 +45,6 @@ export interface IContainer {
   size: string;
   state: ContainerState;
   status: string;
-}
-
-export class Env implements IEnv{
-  name = "";
-  alias = "";
-
-  formatted = "";
-
-  type = "";
-  num: number | null = null;
 }
 
 export class Container implements IContainer {

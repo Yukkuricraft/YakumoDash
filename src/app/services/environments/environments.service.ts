@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
+import { map, tap } from "rxjs";
+import _ from 'lodash';
+import { DomainConverter } from "@app/helpers/domain";
+import { Env } from "@app/models/env";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +16,11 @@ export class EnvironmentsService {
 
   listEnvsWithConfigs() {
     return this.http
-      .get<string[]>(`${this.basePath}/environments/list-envs-with-configs`)
+      .get<any[]>(`${this.basePath}/environments/list-envs-with-configs`).pipe(
+        map((envs ) =>
+          envs.map((env) => DomainConverter.fromDto(Env, env))
+        ),
+        tap(console.log),
+      )
   }
 }

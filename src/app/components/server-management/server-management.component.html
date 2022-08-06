@@ -2,13 +2,23 @@
   <mat-card-title>Server Management</mat-card-title>
 </mat-toolbar>
 
-<mat-tab-group>
-  <mat-tab *ngFor="let env of availableEnvs$ | async" label="{{env}}">
-    <button (click)="listContainers(env.toLowerCase().replace(' ', ''))">
-     Console Log Containers
-    </button>
-    <button (click)="listEnvs()">
-      Console Log Envs
-    </button>
+<mat-tab-group (selectedIndexChange)="selectedIndexChanged($event)"
+               [selectedIndex]="activeTabIndex$ | async">
+  <mat-tab *ngFor="let env of availableEnvs$ | async"
+           [label]="env.formatted">
+    <!-- Velocity -->
+    <div *ngFor="let container of getContainersForEnvAndType(env, ContainerType.Velocity) | async">
+      {{container.names}} - {{container.image}}
+    </div>
+
+    <!-- MySQL -->
+    <div *ngFor="let container of getContainersForEnvAndType(env, ContainerType.MySQL) | async">
+      {{container.names}} - {{container.image}}
+    </div>
+
+    <!-- MC Containers -->
+    <div *ngFor="let container of getContainersForEnvAndType(env, ContainerType.Minecraft) | async">
+      {{container.names}} - {{container.image}}
+    </div>
   </mat-tab>
 </mat-tab-group>

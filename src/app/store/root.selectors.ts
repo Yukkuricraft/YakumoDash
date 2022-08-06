@@ -1,31 +1,23 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { RootState } from "@app/store/root.state";
 import { Features } from "@app/store/index";
-import _ from "lodash";
+import { Env } from "@app/models/env";
+import { ContainerType } from "@app/models/container";
 
-const selectRootState = createFeatureSelector<RootState>(Features.Root)
+const selectRootState =
+  createFeatureSelector<RootState>(Features.Root)
 
-export const selectUser = createSelector(selectRootState, (state) => state.user);
+export const selectUser =
+  createSelector(selectRootState, (state) => state.user);
 
-export const selectAvailableEnvs = createSelector(selectRootState, (state) => state.availableEnvs);
-export const selectAvailableEnvsFormatted = createSelector(selectRootState, (state) => {
-  const unsortedEnvs = state.availableEnvs;
-  let sortedEnvs = [];
-  if (_.includes(unsortedEnvs, 'prod')) {
-    sortedEnvs.push('prod')
-  }
+export const selectAvailableEnvs =
+  createSelector(selectRootState, (state) => state.availableEnvs);
 
-  for(const envName of state.availableEnvs) {
-    if (envName !== 'prod') {
-      sortedEnvs.push(envName)
-    }
-  }
+export const selectContainersByEnv = (env: Env) =>
+  createSelector(selectRootState, (state) => state.containersByEnv[env.name] || [])
 
-  console.log(state.availableEnvs, sortedEnvs)
+export const selectContainersByEnvAndType = (env: Env, type: ContainerType) =>
+  createSelector(selectRootState, (state) => (state.containersByEnv[env.name] ?? {})[type])
 
-  return sortedEnvs.map((env) => {
-    const envName = env.replace(/\d/g, "");
-    const envNum = env.replace(/\D/g, "")
-    return _.capitalize(envName) + ` ${envNum}`;
-  });
-});
+export const selectCurrentTabIndex = (pageType: string) =>
+  createSelector(selectRootState, (state) => state.tabIndex[pageType] ?? 0)
