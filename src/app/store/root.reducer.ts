@@ -26,7 +26,7 @@ export const rootReducer = createReducer(
   }),
   on(setContainersForEnv,
     (state, { env, containers }): RootState => {
-      let currEnvContainers: ContainerTypeToContainerMapping = state.containersByEnv[env.name] ?? {};
+      let currEnvContainers: ContainerTypeToContainerMapping = {};
       let containerTypeLabel = 'net.yukkuricraft.container_type';
 
       for (const container of containers) {
@@ -34,7 +34,7 @@ export const rootReducer = createReducer(
         if (_.includes(container.labels, `${containerTypeLabel}=minecraft`)) {
           containerType = ContainerType.Minecraft;
         } else if (_.includes(container.labels, `${containerTypeLabel}=velocity`)) {
-          containerType = ContainerType.Velocity;
+          containerType = ContainerType.MCProxy;
         } else if (_.includes(container.labels, `${containerTypeLabel}=mysql`)) {
           containerType = ContainerType.MySQL;
         } else {
@@ -53,7 +53,6 @@ export const rootReducer = createReducer(
       });
     }),
   on(setTabIndexForPage, (state, { pageType, tabIndex }): RootState => {
-    console.log("mmmm")
     return ({
       ...state,
       tabIndex: {

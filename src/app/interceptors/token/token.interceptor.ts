@@ -18,7 +18,6 @@ export class TokenInterceptor implements HttpInterceptor {
 
   addAuthHeader(request: HttpRequest<any>) {
     const accessToken = this.authService.accessToken;
-    console.log("Grabbing access token?", accessToken)
     if (accessToken) {
       return request.clone({
         setHeaders: {

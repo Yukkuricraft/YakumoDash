@@ -1,24 +1,39 @@
 <mat-toolbar>
-  <mat-card-title>Server Management</mat-card-title>
+  <span>Server Management</span>
+  <button mat-icon-button (click)="openNewEnvDialog()" matTooltip="Create New Environment">
+    <mat-icon>
+      add_box
+    </mat-icon>
+  </button>
 </mat-toolbar>
 
 <mat-tab-group (selectedIndexChange)="selectedIndexChanged($event)"
                [selectedIndex]="activeTabIndex$ | async">
   <mat-tab *ngFor="let env of availableEnvs$ | async"
            [label]="env.formatted">
-    <!-- Velocity -->
-    <div *ngFor="let container of getContainersForEnvAndType(env, ContainerType.Velocity) | async">
-      {{container.names}} - {{container.image}}
-    </div>
+    <div class="container-tab">
+      <div class="container-summary">
+        <mat-card>
+          <mat-card-title>
+            Summary
+          </mat-card-title>
+        </mat-card>
+      </div>
+      <div class="aux-containers">
+        <!-- Velocity -->
+        <div *ngFor="let container of getContainersForEnvAndType$(env, ContainerType.MCProxy) | async">
+          <app-aux-container-card [container]="container"></app-aux-container-card>
+        </div>
 
-    <!-- MySQL -->
-    <div *ngFor="let container of getContainersForEnvAndType(env, ContainerType.MySQL) | async">
-      {{container.names}} - {{container.image}}
-    </div>
-
-    <!-- MC Containers -->
-    <div *ngFor="let container of getContainersForEnvAndType(env, ContainerType.Minecraft) | async">
-      {{container.names}} - {{container.image}}
+        <!-- MySQL -->
+        <div *ngFor="let container of getContainersForEnvAndType$(env, ContainerType.MySQL) | async">
+          <app-aux-container-card [container]="container"></app-aux-container-card>
+        </div>
+      </div>
+      <div class="mc-containers">
+        <!-- MC Containers -->
+        <app-minecraft-containers-table [containers]="(getContainersForEnvAndType$(env, ContainerType.Minecraft) | async) ?? []"></app-minecraft-containers-table>
+      </div>
     </div>
   </mat-tab>
 </mat-tab-group>

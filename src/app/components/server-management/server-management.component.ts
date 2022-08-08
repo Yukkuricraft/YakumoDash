@@ -12,6 +12,8 @@ import {
 import { Env } from "@app/models/env";
 import { setContainersForEnv, setTabIndexForPage } from "@app/store/root.actions";
 import { ContainerType } from "@app/models/container";
+import { MatDialog } from "@angular/material/dialog";
+import { NewEnvironmentDialogComponent } from "@app/components/server-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
 
 @Component({
   selector: 'app-server-management',
@@ -27,40 +29,41 @@ export class ServerManagementComponent {
   activeTabIndex$!: Observable<number | undefined>;
   activeEnv$!: Observable<Env>;
 
-  constructor(private store: Store, private dockerApi: DockerService, private envsApi: EnvironmentsService) {
+  constructor(
+    public dialog: MatDialog,
+    private store: Store,
+    private dockerApi: DockerService,
+    private envsApi: EnvironmentsService
+  ) {
     this.availableEnvs$ = this.store.select(selectAvailableEnvs);
     this.activeTabIndex$ = this.store.select(selectCurrentTabIndex(this.pageType))
+
     this.activeEnv$ = this.activeTabIndex$.pipe(
       switchMap((tabIndex) => this.availableEnvs$.pipe(
         map(envs => envs[tabIndex ?? 0])
       ))
     )
-  }
 
-  updateContainersForEnv() {
     this.activeEnv$.subscribe(
       (env) => {
-        this.dockerApi.list(env).subscribe(
-          (containers) => this.store.dispatch(setContainersForEnv({ env, containers }))
+        this.dockerApi.listActive(env).subscribe(
+          (containers) => {
+            this.store.dispatch(setContainersForEnv({ env, containers }))
+          }
         )
       }
     )
   }
 
-  listContainers(env: Env) {
-    this.dockerApi.list(env).subscribe(
-      (data) => {
-        console.log(data)
-      }
-    )
+  openNewEnvDialog(): void {
+    this.dialog.open(NewEnvironmentDialogComponent, { width: '500px' })
   }
 
-  getContainersForEnvAndType(env: Env, type: ContainerType) {
+  getContainersForEnvAndType$(env: Env, type: ContainerType) {
     return this.store.select(selectContainersByEnvAndType(env, type));
   }
 
   selectedIndexChanged(tabIndex: number) {
     this.store.dispatch(setTabIndexForPage({ pageType: this.pageType, tabIndex }));
-    this.updateContainersForEnv();
   }
 }

@@ -1,0 +1,14 @@
+<div class="container-table">
+  <div *ngFor="let container of containers"
+       class="minecraft-container">
+    <mat-card>
+      <mat-card-title>
+        {{container.containerName}}
+      </mat-card-title>
+      <mat-card-content>
+        {{container.status}}
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

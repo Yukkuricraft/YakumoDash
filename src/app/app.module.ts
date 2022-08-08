@@ -29,6 +29,14 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { EffectsModule } from "@ngrx/effects";
 import { RootEffects } from "@app/store/root.effects";
 import { localStorageSync } from 'ngrx-store-localstorage';
+import { NewEnvironmentDialogComponent } from './components/server-management/subcomponents/new-environment-dialog/new-environment-dialog.component';
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { AuxContainerCardComponent } from './components/server-management/subcomponents/aux-container-card/aux-container-card.component';
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MinecraftContainersTableComponent } from './components/server-management/subcomponents/minecraft-containers-table/minecraft-containers-table.component';
+import { MatTableModule } from "@angular/material/table";
 
 const reducers: ActionReducerMap<AppState> = {
   [Features.Root]: rootReducer
@@ -43,6 +51,9 @@ const effects: Type<any>[] = [RootEffects]
     ContentWithSideNavComponent,
     DashboardComponent,
     ServerManagementComponent,
+    NewEnvironmentDialogComponent,
+    AuxContainerCardComponent,
+    MinecraftContainersTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +65,9 @@ const effects: Type<any>[] = [RootEffects]
     BrowserAnimationsModule,
 
     HttpClientModule,
+    MatFormFieldModule,
     MatToolbarModule,
+    MatDialogModule,
     MatCardModule,
     MatSidenavModule,
     MatTabsModule,
@@ -62,6 +75,9 @@ const effects: Type<any>[] = [RootEffects]
     MatIconModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatInputModule,
+    MatTooltipModule,
+    MatTableModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

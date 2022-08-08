@@ -3,11 +3,12 @@ import {
   dockerStringArrayTransformer
 } from "@app/helpers/dto-transformers";
 import { Transform } from "class-transformer";
+import _ from "lodash";
 
 export enum ContainerType {
   Minecraft = 'mc',
   MySQL = 'mysql',
-  Velocity = 'vel',
+  MCProxy = 'MCProxy',
   Unknown = 'unknown',
 }
 
@@ -46,7 +47,13 @@ export interface IContainer {
   status: string;
 }
 
+const ServiceLabel = "net.yukkuricraft.container_name";
 export class Container implements IContainer {
+  get containerName() {
+    const serviceLabel: string = this.labels.filter((label: string) => label.includes(ServiceLabel))[0];
+    return _.capitalize(serviceLabel ? serviceLabel.split("=")[1] : this.names[0]);
+  }
+
   command = '';
 
   @Transform(dateStringTransformer)
@@ -74,4 +81,6 @@ export class Container implements IContainer {
   size = '';
   state = ContainerState.Uninitialized;
   status = '';
+
+
 }
