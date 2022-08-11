@@ -23,6 +23,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ServerManagementComponent } from './components/server-management/server-management.component';
+import { ContainerActionsComponent } from "@app/components/server-management/subcomponents/container-actions/container-actions.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTabsModule } from "@angular/material/tabs";
@@ -37,6 +38,7 @@ import { AuxContainerCardComponent } from './components/server-management/subcom
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MinecraftContainersTableComponent } from './components/server-management/subcomponents/minecraft-containers-table/minecraft-containers-table.component';
 import { MatTableModule } from "@angular/material/table";
+import { ContainerStatusLightComponent } from './components/server-management/subcomponents/container-status-light/container-status-light.component';
 
 const reducers: ActionReducerMap<AppState> = {
   [Features.Root]: rootReducer
@@ -54,6 +56,8 @@ const effects: Type<any>[] = [RootEffects]
     NewEnvironmentDialogComponent,
     AuxContainerCardComponent,
     MinecraftContainersTableComponent,
+    ContainerActionsComponent,
+    ContainerStatusLightComponent,
   ],
   imports: [
     BrowserModule,

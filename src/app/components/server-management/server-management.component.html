@@ -13,6 +13,9 @@
            [label]="env.formatted">
     <div class="container-tab">
       <div class="container-summary">
+        <h3>
+          Overview
+        </h3>
         <mat-card>
           <mat-card-title>
             Summary
@@ -20,6 +23,9 @@
         </mat-card>
       </div>
       <div class="aux-containers">
+        <h3>
+          Aux Containers
+        </h3>
         <!-- Velocity -->
         <div *ngFor="let container of getContainersForEnvAndType$(env, ContainerType.MCProxy) | async">
           <app-aux-container-card [container]="container"></app-aux-container-card>
@@ -32,6 +38,9 @@
       </div>
       <div class="mc-containers">
         <!-- MC Containers -->
+        <h3>
+          Servers
+        </h3>
         <app-minecraft-containers-table [containers]="(getContainersForEnvAndType$(env, ContainerType.Minecraft) | async) ?? []"></app-minecraft-containers-table>
       </div>
     </div>

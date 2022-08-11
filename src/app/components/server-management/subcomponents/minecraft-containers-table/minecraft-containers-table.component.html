@@ -3,12 +3,19 @@
        class="minecraft-container">
     <mat-card>
       <mat-card-title>
-        {{container.containerName}}
+        <div class="container-name">
+          <div class="">{{container.containerName}}</div>
+          <div>
+            <app-container-status-light [container]="container"></app-container-status-light>
+          </div>
+        </div>
       </mat-card-title>
       <mat-card-content>
-        {{container.status}}
+        <div class="container-status">
+          {{container.status}}
+        </div>
+        <app-container-actions [container]="container"></app-container-actions>
       </mat-card-content>
     </mat-card>
-
   </div>
 </div>
