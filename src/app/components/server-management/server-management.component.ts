@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { DockerService } from "@app/services/docker/docker.service";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import { Store } from "@ngrx/store";
-import { map, Observable, of, switchMap, tap } from "rxjs";
+import { flatMap, map, Observable, of, switchMap, tap } from "rxjs";
 import {
   selectAvailableEnvs,
-  selectContainersByEnv,
-  selectContainersByEnvAndType,
-  selectCurrentTabIndex
+  selectActiveContainersByEnv,
+  selectActiveContainersByEnvAndType,
+  selectCurrentTabIndex, selectDefinedContainersByEnvAndType
 } from "@app/store/root.selectors";
 import { Env } from "@app/models/env";
-import { setContainersForEnv, setTabIndexForPage } from "@app/store/root.actions";
+import { setActiveContainersForEnv, setDefinedContainersForEnv, setTabIndexForPage } from "@app/store/root.actions";
 import { ContainerType } from "@app/models/container";
 import { MatDialog } from "@angular/material/dialog";
 import { NewEnvironmentDialogComponent } from "@app/components/server-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
@@ -46,9 +46,16 @@ export class ServerManagementComponent {
 
     this.activeEnv$.subscribe(
       (env) => {
+        // Set defined containers every time env tab is changed
+        this.dockerApi.listDefined(env).subscribe(
+          (containers) => {
+            this.store.dispatch(setDefinedContainersForEnv({ env, containers }))
+          }
+        )
+        // Also for active containers
         this.dockerApi.listActive(env).subscribe(
           (containers) => {
-            this.store.dispatch(setContainersForEnv({ env, containers }))
+            this.store.dispatch(setActiveContainersForEnv({ env, containers }))
           }
         )
       }
@@ -59,8 +66,8 @@ export class ServerManagementComponent {
     this.dialog.open(NewEnvironmentDialogComponent, { width: '500px' })
   }
 
-  getContainersForEnvAndType$(env: Env, type: ContainerType) {
-    return this.store.select(selectContainersByEnvAndType(env, type));
+  getDefinedContainersForEnvAndType$(env: Env, type: ContainerType) {
+    return this.store.select(selectDefinedContainersByEnvAndType(env, type));
   }
 
   selectedIndexChanged(tabIndex: number) {

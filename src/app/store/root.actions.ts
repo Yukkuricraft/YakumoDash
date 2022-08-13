@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import { User } from "@app/models/user";
 import { Env } from "@app/models/env";
-import { Container } from "@app/models/container";
+import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 
 export const initializeApp = createAction(
   '[Root] Initializing YakumoDash',
@@ -21,9 +21,14 @@ export const setAvailableEnvs = createAction(
   props<{ envs: Env[] }>()
 )
 
-export const setContainersForEnv = createAction(
-  '[Root] Set Containers for Env',
-  props<{ env: Env, containers: Container[] }>()
+export const setActiveContainersForEnv = createAction(
+  '[Root] Set Active Containers for Env',
+  props<{ env: Env, containers: ActiveContainer[] }>()
+)
+
+export const setDefinedContainersForEnv = createAction(
+  '[Root] Set Defined Containers for Env',
+  props<{ env: Env, containers: ContainerDefinition[] }>()
 )
 
 export const setTabIndexForPage = createAction(

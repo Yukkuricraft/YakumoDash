@@ -1,16 +1,14 @@
 import { initialState, RootState } from "@app/store/root.state";
 import { ActionReducer, createReducer, MetaReducer, on } from "@ngrx/store";
 import {
-  setAvailableEnvs,
-  setContainersForEnv,
+  setActiveContainersForEnv,
+  setAvailableEnvs, setDefinedContainersForEnv,
   setLoggedInUser,
   setLogoutUser,
   setTabIndexForPage
 } from "@app/store/root.actions";
 import {
-  Container,
-  ContainerType,
-  ContainerTypeToContainerMapping,
+  ContainerType, ContainerTypeToActiveContainerMapping, ContainerTypeToContainerDefinitionMapping,
 } from "@app/models/container";
 import _ from "lodash";
 
@@ -24,30 +22,37 @@ export const rootReducer = createReducer(
   on(setAvailableEnvs, (state, { envs }): RootState => {
     return ({ ...state, availableEnvs: envs });
   }),
-  on(setContainersForEnv,
+  on(setDefinedContainersForEnv,
     (state, { env, containers }): RootState => {
-      let currEnvContainers: ContainerTypeToContainerMapping = {};
-      let containerTypeLabel = 'net.yukkuricraft.container_type';
+      let currEnvContainers: ContainerTypeToContainerDefinitionMapping = {};
 
       for (const container of containers) {
-        let containerType: ContainerType;
-        if (_.includes(container.labels, `${containerTypeLabel}=minecraft`)) {
-          containerType = ContainerType.Minecraft;
-        } else if (_.includes(container.labels, `${containerTypeLabel}=velocity`)) {
-          containerType = ContainerType.MCProxy;
-        } else if (_.includes(container.labels, `${containerTypeLabel}=mysql`)) {
-          containerType = ContainerType.MySQL;
-        } else {
-          containerType = ContainerType.Unknown;
-        }
-
+        let containerType: ContainerType = container.labelsToContainerType(container.labels);
         currEnvContainers[containerType] = [...(currEnvContainers[containerType] ?? []), container];
       }
 
       return ({
         ...state,
-        containersByEnv: {
-          ...state.containersByEnv,
+        definedContainersByEnv: {
+          ...state.definedContainersByEnv,
+          [env.name]: currEnvContainers,
+        }
+      });
+    }
+  ),
+  on(setActiveContainersForEnv,
+    (state, { env, containers }): RootState => {
+      let currEnvContainers: ContainerTypeToActiveContainerMapping = {};
+
+      for (const container of containers) {
+        let containerType: ContainerType = container.labelsToContainerType(container.labels);
+        currEnvContainers[containerType] = [...(currEnvContainers[containerType] ?? []), container];
+      }
+
+      return ({
+        ...state,
+        activeContainersByEnv: {
+          ...state.activeContainersByEnv,
           [env.name]: currEnvContainers,
         }
       });

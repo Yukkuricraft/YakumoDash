@@ -1,12 +1,16 @@
 <div>
   <button mat-icon-button
-          matTooltip="Start the container">
+          matTooltip="Start the container"
+          (click)="startContainer()"
+          [disabled]="startContainerDisabled()">
     <mat-icon>
       play_circle_filled
     </mat-icon>
   </button>
   <button mat-icon-button
-          matTooltip="Shut down the container">
+          matTooltip="Shut down the container"
+          (click)="stopContainer()"
+          [disabled]="stopContainerDisabled()">
     <mat-icon>
       stop
     </mat-icon>

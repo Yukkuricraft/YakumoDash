@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Container } from "@app/models/container";
+import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 import { ContainerActionsComponent } from "@app/components/server-management/subcomponents/container-actions/container-actions.component";
 
 @Component({
@@ -8,7 +8,7 @@ import { ContainerActionsComponent } from "@app/components/server-management/sub
   styleUrls: ['./aux-container-card.component.scss']
 })
 export class AuxContainerCardComponent {
-  @Input() container!: Container;
+  @Input() containerDef!: ContainerDefinition;
 
   constructor() {
   }

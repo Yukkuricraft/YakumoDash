@@ -1,6 +1,6 @@
 import { User } from "@app/models/user";
 import {
-  EnvContainerMapping
+  EnvToActiveContainerMapping, EnvToDefinedContainerMapping
 } from "@app/models/container";
 import { Env } from "@app/models/env";
 
@@ -8,12 +8,14 @@ export interface RootState {
   tabIndex: { [pageName: string]: number };
   user: User | null;
   availableEnvs: Env[];
-  containersByEnv: EnvContainerMapping;
+  activeContainersByEnv: EnvToActiveContainerMapping;
+  definedContainersByEnv: EnvToDefinedContainerMapping;
 }
 
 export const initialState: RootState = {
   tabIndex: {},
   user: null,
   availableEnvs: [],
-  containersByEnv: {},
+  activeContainersByEnv: {},
+  definedContainersByEnv: {},
 }

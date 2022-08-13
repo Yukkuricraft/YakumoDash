@@ -1,20 +1,20 @@
 <div class="container-table">
-  <div *ngFor="let container of containers"
+  <div *ngFor="let containerDef of containers$ | async"
        class="minecraft-container">
     <mat-card>
       <mat-card-title>
         <div class="container-name">
-          <div class="">{{container.containerName}}</div>
+          <div class="">{{containerDef.containerName}}</div>
           <div>
-            <app-container-status-light [container]="container"></app-container-status-light>
+            <app-container-status-light [container]="containerDef"></app-container-status-light>
           </div>
         </div>
       </mat-card-title>
       <mat-card-content>
-        <div class="container-status">
-          {{container.status}}
-        </div>
-        <app-container-actions [container]="container"></app-container-actions>
+<!--        <div class="container-status">-->
+<!--          {{container.status}}-->
+<!--        </div>-->
+        <app-container-actions [container]="containerDef"></app-container-actions>
       </mat-card-content>
     </mat-card>
   </div>

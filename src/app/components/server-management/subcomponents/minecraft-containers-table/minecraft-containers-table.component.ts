@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Container } from "@app/models/container";
+import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 import { Observable } from "rxjs";
 
 @Component({
@@ -8,7 +8,7 @@ import { Observable } from "rxjs";
   styleUrls: ['./minecraft-containers-table.component.scss']
 })
 export class MinecraftContainersTableComponent {
-    @Input() containers!: Container[];
+  @Input() containers$!: Observable<ContainerDefinition[]>;
 
   constructor() { }
 

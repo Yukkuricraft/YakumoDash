@@ -13,11 +13,17 @@ export const selectUser =
 export const selectAvailableEnvs =
   createSelector(selectRootState, (state) => state.availableEnvs);
 
-export const selectContainersByEnv = (env: Env) =>
-  createSelector(selectRootState, (state) => state.containersByEnv[env.name] || [])
+export const selectActiveContainersByEnv = (env: Env) =>
+  createSelector(selectRootState, (state) => state.activeContainersByEnv[env.name] || [])
 
-export const selectContainersByEnvAndType = (env: Env, type: ContainerType) =>
-  createSelector(selectRootState, (state) => (state.containersByEnv[env.name] ?? {})[type])
+export const selectActiveContainersByEnvAndType = (env: Env, type: ContainerType) =>
+  createSelector(selectRootState, (state) => (state.activeContainersByEnv[env.name] ?? {})[type])
+
+export const selectDefinedContainersByEnv = (env: Env) =>
+  createSelector(selectRootState, (state) => state.definedContainersByEnv[env.name] || [])
+
+export const selectDefinedContainersByEnvAndType = (env: Env, type: ContainerType) =>
+  createSelector(selectRootState, (state) => (state.definedContainersByEnv[env.name] ?? {})[type])
 
 export const selectCurrentTabIndex = (pageType: string) =>
   createSelector(selectRootState, (state) => state.tabIndex[pageType] ?? 0)

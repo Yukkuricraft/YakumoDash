@@ -20,28 +20,32 @@
           <mat-card-title>
             Summary
           </mat-card-title>
+          <mat-card-content>
+            Poop
+          </mat-card-content>
         </mat-card>
       </div>
+
       <div class="aux-containers">
         <h3>
           Aux Containers
         </h3>
         <!-- Velocity -->
-        <div *ngFor="let container of getContainersForEnvAndType$(env, ContainerType.MCProxy) | async">
-          <app-aux-container-card [container]="container"></app-aux-container-card>
+        <div *ngFor="let container of getDefinedContainersForEnvAndType$(env, ContainerType.MCProxy) | async">
+          <app-aux-container-card [containerDef]="container"></app-aux-container-card>
         </div>
-
         <!-- MySQL -->
-        <div *ngFor="let container of getContainersForEnvAndType$(env, ContainerType.MySQL) | async">
-          <app-aux-container-card [container]="container"></app-aux-container-card>
+        <div *ngFor="let container of getDefinedContainersForEnvAndType$(env, ContainerType.MySQL) | async">
+          <app-aux-container-card [containerDef]="container"></app-aux-container-card>
         </div>
       </div>
+
       <div class="mc-containers">
         <!-- MC Containers -->
         <h3>
-          Servers
+          Server Containers
         </h3>
-        <app-minecraft-containers-table [containers]="(getContainersForEnvAndType$(env, ContainerType.Minecraft) | async) ?? []"></app-minecraft-containers-table>
+        <app-minecraft-containers-table [containers$]="getDefinedContainersForEnvAndType$(env, ContainerType.Minecraft)"></app-minecraft-containers-table>
       </div>
     </div>
   </mat-tab>

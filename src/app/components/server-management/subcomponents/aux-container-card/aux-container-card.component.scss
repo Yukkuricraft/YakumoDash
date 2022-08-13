@@ -1,6 +1,10 @@
+@import "../../../../styles/common";
+
 .container {
   display: flex;
   flex-direction: column;
   margin-bottom: 8px;
   max-width: 350px;
+
+  padding: 14px 16px 14px 16px;
 }

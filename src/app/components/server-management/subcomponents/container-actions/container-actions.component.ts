@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Container } from "@app/models/container";
+import { ActiveContainer, ContainerDefinition, ContainerStates } from "@app/models/container";
 
 @Component({
   selector: 'app-container-actions',
@@ -7,8 +7,22 @@ import { Container } from "@app/models/container";
   styleUrls: ['./container-actions.component.scss']
 })
 export class ContainerActionsComponent  {
-  @Input() container!: Container;
+  @Input() container!: ContainerDefinition;
 
   constructor() { }
 
+  startContainerDisabled() {
+    return this.container.getContainerState() === ContainerStates.Up;
+  }
+  startContainer() {
+    console.log("Starting container", this.container)
+  }
+
+
+  stopContainerDisabled() {
+    return this.container.getContainerState() === ContainerStates.Down;
+  }
+  stopContainer() {
+    console.log("Stopping container", this.container)
+  }
 }

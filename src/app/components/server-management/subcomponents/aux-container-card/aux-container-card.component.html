@@ -1,15 +1,17 @@
 <mat-card class="container">
   <mat-card-title>
-    {{container.containerName}}
-  </mat-card-title>
-  <mat-card-content>
-    <div>
-      {{container.image}}
-    </div>
-    <div>
-      {{container.state}}
+    <div class="container-name">
+      {{containerDef.containerName}}
+      <app-container-status-light [container]="containerDef"></app-container-status-light>
     </div>
 
-    <app-container-actions></app-container-actions>
+  </mat-card-title>
+  <mat-card-content>
+    <div class="container-status">
+<!--      <div>-->
+<!--        {{container.status}}-->
+<!--      </div>-->
+    </div>
+    <app-container-actions [container]="containerDef"></app-container-actions>
   </mat-card-content>
 </mat-card>

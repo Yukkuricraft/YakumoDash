@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Container } from "@app/models/container";
+import { ActiveContainer, ContainerDefinition, DockerContainerState, StateMapping } from "@app/models/container";
+import _ from "lodash";
 
 @Component({
   selector: 'app-container-status-light',
@@ -7,14 +8,15 @@ import { Container } from "@app/models/container";
   styleUrls: ['./container-status-light.component.scss']
 })
 export class ContainerStatusLightComponent {
-  @Input() container!: Container;
+  @Input() container!: ActiveContainer | ContainerDefinition;
 
   constructor() { }
 
-  status() {
-    const status: string = "good";
-
-    return status;
+  state(): string {
+    return this.container.getContainerState();
   }
 
+  stateDescription(): string {
+    return StateMapping[this.container.getContainerState()].desc;
+  }
 }
