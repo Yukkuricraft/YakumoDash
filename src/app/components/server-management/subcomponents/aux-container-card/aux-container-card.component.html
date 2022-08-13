@@ -1,8 +1,8 @@
 <mat-card class="container">
   <mat-card-title>
     <div class="container-name">
-      {{containerDef.containerName}}
-      <app-container-status-light [container]="containerDef"></app-container-status-light>
+      {{containerDef.getFormattedContainerName()}}
+      <app-container-status-light [containerDef]="containerDef"></app-container-status-light>
     </div>
 
   </mat-card-title>
@@ -12,6 +12,6 @@
 <!--        {{container.status}}-->
 <!--      </div>-->
     </div>
-    <app-container-actions [container]="containerDef"></app-container-actions>
+    <app-container-actions [containerDef]="containerDef"></app-container-actions>
   </mat-card-content>
 </mat-card>

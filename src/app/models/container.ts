@@ -51,12 +51,24 @@ export interface IContainerDefinition {
 }
 
 export class ContainerDefinition {
-  ServiceLabel = "net.yukkuricraft.container_name";
+  NameLabel = "net.yukkuricraft.container_name";
   TypeLabel = "net.yukkuricraft.container_type";
+  EnvLabel = "net.yukkuricraft.env";
 
-  get containerName() {
-    const serviceLabel: string = this.labels.filter((label: string) => label.includes(this.ServiceLabel))[0];
-    return _.capitalize(serviceLabel ? serviceLabel.split("=")[1] : this.names[0]);
+  getLabelValue(targetLabel: string) {
+    const filteredLabels = this.labels.filter((label: string) => label.includes(targetLabel));
+    const label = filteredLabels ? filteredLabels[0] : "";
+    const splitLabel = label.split("=");
+    return splitLabel.length > 1 ? splitLabel[1] : "";
+  }
+
+  getContainerName() {
+    const serviceLabel = this.getLabelValue(this.NameLabel);
+    return serviceLabel ? serviceLabel : this.names[0];
+  }
+
+  getFormattedContainerName() {
+    return _.capitalize(this.getContainerName())
   }
 
   labelsToContainerType(labels: string[]) {
@@ -70,6 +82,14 @@ export class ContainerDefinition {
     }
 
     return containerType;
+  }
+
+  getContainerEnvString(): string {
+    return this.getLabelValue(this.EnvLabel);
+  }
+
+  getContainerType(): ContainerType {
+    return this.labelsToContainerType(this.labels);
   }
 
   getContainerState(): string {

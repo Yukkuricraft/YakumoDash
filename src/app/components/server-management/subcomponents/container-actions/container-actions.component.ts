@@ -7,22 +7,22 @@ import { ActiveContainer, ContainerDefinition, ContainerStates } from "@app/mode
   styleUrls: ['./container-actions.component.scss']
 })
 export class ContainerActionsComponent  {
-  @Input() container!: ContainerDefinition;
+  @Input() containerDef!: ContainerDefinition;
 
   constructor() { }
 
   startContainerDisabled() {
-    return this.container.getContainerState() === ContainerStates.Up;
+    return this.containerDef.getContainerState() === ContainerStates.Up;
   }
   startContainer() {
-    console.log("Starting container", this.container)
+    console.log("Starting container", this.containerDef)
   }
 
 
   stopContainerDisabled() {
-    return this.container.getContainerState() === ContainerStates.Down;
+    return this.containerDef.getContainerState() === ContainerStates.Down;
   }
   stopContainer() {
-    console.log("Stopping container", this.container)
+    console.log("Stopping container", this.containerDef)
   }
 }
