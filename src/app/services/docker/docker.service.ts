@@ -14,26 +14,34 @@ export class DockerService {
 
   constructor(private http: HttpClient) { }
 
+  createEnv(proxyPort: number, envAlias: string) {
+    return this.http
+      .post(`${this.basePath}/server/create-env`, {
+        PROXY_PORT: proxyPort,
+        ENV_ALIAS: envAlias,
+      })
+  }
+
   upEnv(env: Env) {
     return this.http
-      .get(`${this.basePath}/docker/${env.name}/containers/up`)
+      .get(`${this.basePath}/server/${env.name}/containers/up`)
 
   }
 
   downEnv(env: Env) {
     console.log("Downing")
     return this.http
-      .get(`${this.basePath}/docker/${env.name}/containers/down`)
+      .get(`${this.basePath}/server/${env.name}/containers/down`)
   }
 
   restartEnv(env: Env) {
     return this.http
-      .get(`${this.basePath}/docker/${env.name}/containers/restart`)
+      .get(`${this.basePath}/server/${env.name}/containers/restart`)
   }
 
   listDefined(env: Env) {
     return this.http
-      .get(`${this.basePath}/docker/${env.name}/containers`)
+      .get(`${this.basePath}/server/${env.name}/containers`)
       .pipe(tap(console.log), map((data: any) =>
         data.map((obj: any) => DomainConverter.fromDto(ContainerDefinition, obj))
       ))
@@ -41,7 +49,7 @@ export class DockerService {
 
   listActive(env: Env) {
     return this.http
-      .get(`${this.basePath}/docker/${env.name}/containers/active`)
+      .get(`${this.basePath}/server/${env.name}/containers/active`)
       .pipe(map((data: any) =>
         data.map((obj: any) => DomainConverter.fromDto(ActiveContainer, lowercaseKeys(obj)))
       ), tap(console.log))

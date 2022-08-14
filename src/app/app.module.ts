@@ -39,6 +39,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MinecraftContainersTableComponent } from './components/server-management/subcomponents/minecraft-containers-table/minecraft-containers-table.component';
 import { MatTableModule } from "@angular/material/table";
 import { ContainerStatusLightComponent } from './components/server-management/subcomponents/container-status-light/container-status-light.component';
+import { FormsModule } from "@angular/forms";
 
 const reducers: ActionReducerMap<AppState> = {
   [Features.Root]: rootReducer
@@ -82,6 +83,7 @@ const effects: Type<any>[] = [RootEffects]
     MatInputModule,
     MatTooltipModule,
     MatTableModule,
+    FormsModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

@@ -10,13 +10,13 @@
       <mat-form-field>
         <mat-label>Environment Alias</mat-label>
         <mat-hint>Assign an alias to the environment so it's easier to know what it's for.</mat-hint>
-        <input matInput placeholder="Enter Alias...">
+        <input matInput placeholder="Enter Alias..." [(ngModel)]="envAlias">
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Minecraft Proxy Port</mat-label>
         <mat-hint>The port the proxy will run on. This will be the port you connect to in Minecraft. Port must be between 25600-25700 and not already used by another environment.</mat-hint>
-        <input matInput placeholder="Enter Port...">
+        <input matInput placeholder="Enter Port..." [(ngModel)]="proxyPort">
       </mat-form-field>
     </div>
 
