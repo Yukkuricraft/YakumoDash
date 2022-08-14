@@ -8,11 +8,11 @@
     </mat-icon>
   </button>
   <button mat-icon-button
-          matTooltip="Shut down the container"
-          (click)="stopContainer()"
-          [disabled]="stopContainerDisabled()">
+          matTooltip="Restart Container"
+          (click)="restartContainer()"
+          [disabled]="restartContainerDisabled()">
     <mat-icon>
-      stop
+     replay
     </mat-icon>
   </button>
   <button mat-icon-button

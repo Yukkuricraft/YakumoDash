@@ -21,7 +21,42 @@
             Summary
           </mat-card-title>
           <mat-card-content>
-            Poop
+            <div class="env-actions">
+              <button mat-icon-button>
+                <div>
+                  <button mat-icon-button
+                          matTooltip="Start Environment"
+                          (click)="startEnvironment()"
+                          [disabled]="startEnvironmentDisabled()">
+                    <mat-icon>
+                      play_circle_filled
+                    </mat-icon>
+                  </button>
+                  <button mat-icon-button
+                          matTooltip="Shut Down Environment"
+                          (click)="stopEnvironment()"
+                          [disabled]="stopEnvironmentDisabled()">
+                    <mat-icon>
+                      stop
+                    </mat-icon>
+                  </button>
+                  <button mat-icon-button
+                          matTooltip="Attempt to Restart Environment"
+                          (click)="restartEnvironment()"
+                          [disabled]="restartEnvironmentDisabled()">
+                    <mat-icon>
+                      replay
+                    </mat-icon>
+                  </button>
+                  <button mat-icon-button
+                          matTooltip="Edit Environment Config">
+                    <mat-icon>
+                      edit
+                    </mat-icon>
+                  </button>
+                </div>
+              </button>
+            </div>
           </mat-card-content>
         </mat-card>
       </div>

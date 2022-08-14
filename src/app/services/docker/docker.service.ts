@@ -14,6 +14,23 @@ export class DockerService {
 
   constructor(private http: HttpClient) { }
 
+  upEnv(env: Env) {
+    return this.http
+      .get(`${this.basePath}/docker/${env.name}/containers/up`)
+
+  }
+
+  downEnv(env: Env) {
+    console.log("Downing")
+    return this.http
+      .get(`${this.basePath}/docker/${env.name}/containers/down`)
+  }
+
+  restartEnv(env: Env) {
+    return this.http
+      .get(`${this.basePath}/docker/${env.name}/containers/restart`)
+  }
+
   listDefined(env: Env) {
     return this.http
       .get(`${this.basePath}/docker/${env.name}/containers`)

@@ -19,10 +19,10 @@ export class ContainerActionsComponent  {
   }
 
 
-  stopContainerDisabled() {
-    return this.containerDef.getContainerState() === ContainerStates.Down;
+  restartContainerDisabled() {
+    return this.containerDef.getContainerState() !== ContainerStates.Up;
   }
-  stopContainer() {
-    console.log("Stopping container", this.containerDef)
+  restartContainer() {
+    console.log("Restarting container", this.containerDef)
   }
 }

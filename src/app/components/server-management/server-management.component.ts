@@ -28,6 +28,7 @@ export class ServerManagementComponent {
 
   activeTabIndex$!: Observable<number | undefined>;
   activeEnv$!: Observable<Env>;
+  activeEnv: Env | null = null;
 
   constructor(
     public dialog: MatDialog,
@@ -46,6 +47,7 @@ export class ServerManagementComponent {
 
     this.activeEnv$.subscribe(
       (env) => {
+        this.activeEnv = env;
         // Set defined containers every time env tab is changed
         this.dockerApi.listDefined(env).subscribe(
           (containers) => {
@@ -73,4 +75,46 @@ export class ServerManagementComponent {
   selectedIndexChanged(tabIndex: number) {
     this.store.dispatch(setTabIndexForPage({ pageType: this.pageType, tabIndex }));
   }
+
+  // Env Actions
+  startEnvironment() {
+    if (this.activeEnv === null) {
+      return;
+    }
+    console.log("UPPING ENV", this.activeEnv)
+    this.dockerApi.upEnv(this.activeEnv).subscribe(
+      console.log
+    );
+  }
+  startEnvironmentDisabled() {
+    return false;
+  }
+
+  stopEnvironment() {
+    if (this.activeEnv === null) {
+      return;
+    }
+    console.log("DOWNING ENV", this.activeEnv)
+    this.dockerApi.downEnv(this.activeEnv).subscribe(
+      console.log
+    );
+  }
+  stopEnvironmentDisabled() {
+    return false;
+  }
+
+  restartEnvironment() {
+    if (this.activeEnv === null) {
+      return;
+    }
+    console.log("RESTARTING ENV", this.activeEnv)
+    this.dockerApi.restartEnv(this.activeEnv).subscribe(
+      console.log
+    );
+  }
+  restartEnvironmentDisabled() {
+    return false;
+  }
+
+
 }
