@@ -16,6 +16,15 @@ export const setLogoutUser = createAction(
   '[Root] Set Logout User',
 )
 
+export const fetchAvailableEnvs = createAction(
+  '[Root] Fetching Available Environments',
+)
+
+export const fetchContainerStatusForEnv = createAction(
+  '[Root] Fetching Container Status for Env',
+  props<{ env: Env }>(),
+)
+
 export const setAvailableEnvs = createAction(
   '[Root] Set Available Environments',
   props<{ envs: Env[] }>()

@@ -17,4 +17,6 @@ export class Env implements IEnv{
   num: number | null = null;
 
   formatted = "";
+
+  getFormattedLabel() { return `${this.formatted} (${this.alias})`; }
 }

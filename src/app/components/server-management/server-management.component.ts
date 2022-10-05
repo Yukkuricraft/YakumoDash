@@ -10,10 +10,13 @@ import {
   selectCurrentTabIndex, selectDefinedContainersByEnvAndType
 } from "@app/store/root.selectors";
 import { Env } from "@app/models/env";
-import { setActiveContainersForEnv, setDefinedContainersForEnv, setTabIndexForPage } from "@app/store/root.actions";
+import { fetchAvailableEnvs, fetchContainerStatusForEnv, setActiveContainersForEnv, setDefinedContainersForEnv, setTabIndexForPage } from "@app/store/root.actions";
 import { ContainerType } from "@app/models/container";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { NewEnvironmentDialogComponent } from "@app/components/server-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
+import { ConfirmationDialogComponent, ConfirmationDialogData } from '../shared/confirmation-dialog/confirmation-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-server-management',
@@ -32,9 +35,12 @@ export class ServerManagementComponent {
 
   constructor(
     public dialog: MatDialog,
+    private router: Router,
     private store: Store,
     private dockerApi: DockerService,
-    private envsApi: EnvironmentsService
+    private snackbar: MatSnackBar,
+    private envsApi: EnvironmentsService,
+    
   ) {
     this.availableEnvs$ = this.store.select(selectAvailableEnvs);
     this.activeTabIndex$ = this.store.select(selectCurrentTabIndex(this.pageType))
@@ -48,25 +54,14 @@ export class ServerManagementComponent {
     this.activeEnv$.subscribe(
       (env) => {
         this.activeEnv = env;
-        // Set defined containers every time env tab is changed
-        this.dockerApi.listDefined(env).subscribe(
-          (containers) => {
-            this.store.dispatch(setDefinedContainersForEnv({ env, containers }))
-          }
-        )
-        // Also for active containers
-        this.dockerApi.listActive(env).subscribe(
-          (containers) => {
-            this.store.dispatch(setActiveContainersForEnv({ env, containers }))
-          }
-        )
+        this.refreshContainersForEnv(env);
       }
     )
   }
 
-
-  formatEnvLabel(env: Env): string {
-    return `${env.formatted} (${env.alias})`;
+  refreshContainersForEnv(env: Env): void {
+    console.log(`Refreshing containers for ${env.getFormattedLabel()}`);
+    this.store.dispatch(fetchContainerStatusForEnv({ env }));
   }
 
   openNewEnvDialog(): void {
@@ -87,8 +82,14 @@ export class ServerManagementComponent {
       return;
     }
     console.log("UPPING ENV", this.activeEnv)
+    
     this.dockerApi.upEnv(this.activeEnv).subscribe(
-      console.log
+      (data) => {
+        const activeEnv = this.activeEnv as Env;
+        this.snackbar.open(`Servers for env '${(activeEnv).getFormattedLabel()}' started.`);
+        console.log(data);
+        this.refreshContainersForEnv(activeEnv);
+      }
     );
   }
   startEnvironmentDisabled() {
@@ -101,8 +102,35 @@ export class ServerManagementComponent {
     }
     console.log("DOWNING ENV", this.activeEnv)
     this.dockerApi.downEnv(this.activeEnv).subscribe(
-      console.log
+      (data) =>  {
+        this.snackbar.open(`Servers for env '${(this.activeEnv as Env).getFormattedLabel()}' started.`);
+        console.log(data);
+        this.refreshContainersForEnv(this.activeEnv as Env);
+      }
     );
+
+    const dialogRef = this.dialog.open<ConfirmationDialogComponent, ConfirmationDialogData, boolean>(
+      ConfirmationDialogComponent,
+      {
+        data: { 
+          title: 'Confirm Shutdown of Environment',
+          description: `This action will stop all containers and servers for the environment '${(this.activeEnv).getFormattedLabel()}'.`
+        },
+        width: '300px',
+      },
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.dockerApi.downEnv(this.activeEnv as Env).subscribe(
+          (data) =>  {
+            this.snackbar.open(`Servers for env '${(this.activeEnv as Env).getFormattedLabel()}' stopped.`);
+            console.log(data);
+            this.refreshContainersForEnv(this.activeEnv as Env);
+          }
+        );
+
+      }
+    });
   }
   stopEnvironmentDisabled() {
     return false;
@@ -127,8 +155,26 @@ export class ServerManagementComponent {
     }
     console.log("DELETING ENVIRONMENT: ", this.activeEnv);
 
-    this.dockerApi.deleteEnv(this.activeEnv).subscribe(
-      console.log
-    )
+    const dialogRef = this.dialog.open<ConfirmationDialogComponent, ConfirmationDialogData, boolean>(
+      ConfirmationDialogComponent,
+      {
+        data: { 
+          title: 'Confirm Environment Deletion',
+          description: `This action will delete the environment '${(this.activeEnv).getFormattedLabel()}'. Are you sure?`
+        },
+        width: '300px',
+      },
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.dockerApi.deleteEnv(this.activeEnv as Env).subscribe(
+          (data) => {
+            this.snackbar.open(`Env '${(this.activeEnv as Env).getFormattedLabel()}' successfully deleted`);
+            console.log(data);
+            this.store.dispatch(fetchAvailableEnvs());
+          }
+        )
+      }
+    });
   }
 }

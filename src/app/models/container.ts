@@ -175,11 +175,11 @@ export const StateMapping: ActiveContainerStateMapping = {
 
 
 export class ActiveContainer extends ContainerDefinition implements IActiveContainer {
-  override getContainerState(): string {
+  override getContainerState(): ContainerStates {
     for (let state in StateMapping) {
       if (StateMapping[state].condition(this)) {
-        return state;
-      }
+        return state as ContainerStates;
+       }
     }
     return ContainerStates.Unknown;
   }

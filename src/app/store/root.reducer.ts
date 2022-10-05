@@ -49,6 +49,8 @@ export const rootReducer = createReducer(
         currEnvContainers[containerType] = [...(currEnvContainers[containerType] ?? []), container];
       }
 
+      console.log(`UPDATING CONTAINER STATE FOR ENV: ${env.getFormattedLabel()}`);
+      console.log(currEnvContainers);
       return ({
         ...state,
         activeContainersByEnv: {

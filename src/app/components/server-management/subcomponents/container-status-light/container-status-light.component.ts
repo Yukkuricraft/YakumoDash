@@ -9,6 +9,7 @@ import {
 import _ from "lodash";
 import { selectActiveContainerByContainerDef } from "@app/store/root.selectors";
 import { Store } from "@ngrx/store";
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-container-status-light',
@@ -17,24 +18,36 @@ import { Store } from "@ngrx/store";
 })
 export class ContainerStatusLightComponent implements OnInit {
   @Input() containerDef!: ContainerDefinition;
-  container: ActiveContainer | null = null;
+
+  container$!: Observable<ActiveContainer | null>;
+  state$!: Observable<ContainerStates>;
+  stateDescription$!: Observable<string>;
 
   constructor(private store: Store) {
-
   }
 
   ngOnInit() {
-    this.store.select(selectActiveContainerByContainerDef(this.containerDef)).subscribe(
-      (container) => {
-        this.container = container;
+    this.container$ = this.store.select(selectActiveContainerByContainerDef(this.containerDef));
+
+    this.state$ = this.container$.pipe(
+        map((container: ActiveContainer | null) => {
+          console.log('NEW CONTAINER STATE:::::')
+          console.log(container);
+
+          if (container === null) {
+            return ContainerStates.Down;
+          } else {
+            return container ? container.getContainerState() : ContainerStates.Unknown;     
+          }
+        })
+      )
+
+    this.stateDescription$ = this.state$.pipe(
+      map((state: ContainerStates) => {
+        return StateMapping[state].desc;
       })
-  }
+    )
 
-  state(): string {
-    return this.container ? this.container.getContainerState() : ContainerStates.Down;
   }
-
-  stateDescription(): string {
-    return StateMapping[this.state()].desc;
-  }
+  
 }

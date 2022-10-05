@@ -10,7 +10,7 @@
 <mat-tab-group (selectedIndexChange)="selectedIndexChanged($event)"
                [selectedIndex]="activeTabIndex$ | async">
   <mat-tab *ngFor="let env of availableEnvs$ | async"
-           [label]="formatEnvLabel(env)">
+           [label]="env.getFormattedLabel()">
     <div class="container-tab">
       <div class="container-summary">
         <h3>

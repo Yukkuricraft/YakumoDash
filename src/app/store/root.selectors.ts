@@ -20,8 +20,8 @@ export const selectActiveContainersByEnv = (env: Env) =>
 export const selectActiveContainersByEnvAndType = (env: Env, type: ContainerType) =>
   createSelector(selectRootState, (state) => {
     const containersInEnv = state.activeContainersByEnv[env.name];
-    if (!containersInEnv) {
-      return []
+    if (!containersInEnv || !_.has(containersInEnv, type)) {
+      return [];
     }
     return containersInEnv[type];
   })
@@ -37,13 +37,15 @@ export const selectActiveContainerByContainerDef = (containerDef: ContainerDefin
 export const selectActiveContainerByEnvTypeAndName = (env: Env, type: ContainerType, name: string) =>
   createSelector(selectActiveContainersByEnvAndType(env, type),
     (containers) => {
-    for (let container of containers) {
-      if (_.includes(container.labels, `${container.NameLabel}=${name}`)) {
-        return container;
+      if (_.isNil(containers)) { return null; }
+      for (let container of containers) {
+        if (_.includes(container.labels, `${container.NameLabel}=${name}`)) {
+          return container;
+        }
       }
+      return null;
     }
-    return null;
-  })
+  )
 
 export const selectDefinedContainersByEnv = (env: Env) =>
   createSelector(selectRootState, (state) => state.definedContainersByEnv[env.name] || [])

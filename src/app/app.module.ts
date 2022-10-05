@@ -31,7 +31,8 @@ import { EffectsModule } from "@ngrx/effects";
 import { RootEffects } from "@app/store/root.effects";
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { NewEnvironmentDialogComponent } from './components/server-management/subcomponents/new-environment-dialog/new-environment-dialog.component';
-import { MatDialogModule } from "@angular/material/dialog";
+import { ConfirmationDialogComponent } from './components/shared/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { AuxContainerCardComponent } from './components/server-management/subcomponents/aux-container-card/aux-container-card.component';
@@ -59,6 +60,7 @@ const effects: Type<any>[] = [RootEffects]
     MinecraftContainersTableComponent,
     ContainerActionsComponent,
     ContainerStatusLightComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
