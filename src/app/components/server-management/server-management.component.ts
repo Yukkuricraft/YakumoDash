@@ -64,6 +64,11 @@ export class ServerManagementComponent {
     )
   }
 
+
+  formatEnvLabel(env: Env): string {
+    return `${env.formatted} (${env.alias})`;
+  }
+
   openNewEnvDialog(): void {
     this.dialog.open(NewEnvironmentDialogComponent, { width: '500px' })
   }
@@ -116,5 +121,14 @@ export class ServerManagementComponent {
     return false;
   }
 
+  deleteEnvironment() {
+    if (this.activeEnv === null) {
+      return;
+    }
+    console.log("DELETING ENVIRONMENT: ", this.activeEnv);
 
+    this.dockerApi.deleteEnv(this.activeEnv).subscribe(
+      console.log
+    )
+  }
 }

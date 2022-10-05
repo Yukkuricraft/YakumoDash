@@ -10,7 +10,7 @@
 <mat-tab-group (selectedIndexChange)="selectedIndexChanged($event)"
                [selectedIndex]="activeTabIndex$ | async">
   <mat-tab *ngFor="let env of availableEnvs$ | async"
-           [label]="env.formatted">
+           [label]="formatEnvLabel(env)">
     <div class="container-tab">
       <div class="container-summary">
         <h3>
@@ -53,6 +53,12 @@
                     <mat-icon>
                       edit
                     </mat-icon>
+                  </button>
+                  <button *ngIf="!(env.name === 'prod')"
+                          mat-icon-button
+                          (click)="deleteEnvironment()"
+                          matTooltip="DELETE ENVIRONMENT">
+                    <mat-icon svgIcon="trash" class="filter-to-white"></mat-icon>
                   </button>
                 </div>
               </button>

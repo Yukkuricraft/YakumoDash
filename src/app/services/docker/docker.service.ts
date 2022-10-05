@@ -14,6 +14,12 @@ export class DockerService {
 
   constructor(private http: HttpClient) { }
 
+  deleteEnv(env: Env) {
+    console.log("Deleting env")
+    return this.http
+      .delete(`${this.basePath}/server/${env.name}`)
+  }
+
   createEnv(proxyPort: number, envAlias: string) {
     return this.http
       .post(`${this.basePath}/server/create-env`, {
