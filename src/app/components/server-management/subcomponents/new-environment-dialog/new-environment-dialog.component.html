@@ -6,20 +6,21 @@
   <mat-card-content>
     <p>This will create a new environment which will spin up a new server on the specified proxy port.</p>
 
-    <div class="new-env-configuration">
+    <mat-form [formGroup]="form" class="new-env-configuration">
       <mat-form-field>
         <mat-label>Environment Alias</mat-label>
         <mat-hint>Assign an alias to the environment so it's easier to know what it's for.</mat-hint>
-        <input matInput placeholder="Enter Alias..." [(ngModel)]="envAlias">
+        <input matInput placeholder="Enter Alias..." formControlName="envAlias" id="envAlias">
+        <mat-error *ngIf="envAlias.invalid">{{getErrorMessage(envAlias)}}</mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Minecraft Proxy Port</mat-label>
         <mat-hint>The port the proxy will run on. This will be the port you connect to in Minecraft. Port must be between 25600-25700 and not already used by another environment.</mat-hint>
-        <input matInput placeholder="Enter Port..." [(ngModel)]="proxyPort">
+        <input matInput placeholder="Enter Port..." formControlName="proxyPort" id="proxyPort">
+        <mat-error *ngIf="proxyPort.invalid">{{getErrorMessage(proxyPort)}}</mat-error>
       </mat-form-field>
-    </div>
-
+    </mat-form>
     <button mat-raised-button (click)="createNewEnv()" color='primary'>
       Create New Environment
     </button>
