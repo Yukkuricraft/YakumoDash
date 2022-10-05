@@ -11,6 +11,9 @@ const selectRootState =
 export const selectUser =
   createSelector(selectRootState, (state) => state.user);
 
+export const selectGlobalLoadingBarState =
+  createSelector(selectRootState, (state) => state.globalLoadingBarState);
+
 export const selectAvailableEnvs =
   createSelector(selectRootState, (state) => state.availableEnvs);
 

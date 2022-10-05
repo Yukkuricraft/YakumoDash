@@ -41,6 +41,8 @@ import { MinecraftContainersTableComponent } from './components/server-managemen
 import { MatTableModule } from "@angular/material/table";
 import { ContainerStatusLightComponent } from './components/server-management/subcomponents/container-status-light/container-status-light.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+
 
 const reducers: ActionReducerMap<AppState> = {
   [Features.Root]: rootReducer
@@ -70,7 +72,7 @@ const effects: Type<any>[] = [RootEffects]
     EffectsModule.forRoot(effects),
     AppRoutingModule,
     BrowserAnimationsModule,
-
+    MatProgressBarModule,
     HttpClientModule,
     FormsModule,
     MatFormFieldModule,

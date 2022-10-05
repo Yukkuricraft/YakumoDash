@@ -8,7 +8,7 @@ import {
   selectCurrentTabIndex, selectDefinedContainersByEnvAndType
 } from "@app/store/root.selectors";
 import { Env } from "@app/models/env";
-import { fetchAvailableEnvs, fetchContainerStatusForEnv, setTabIndexForPage } from "@app/store/root.actions";
+import { fetchAvailableEnvs, fetchContainerStatusForEnv, setGlobalLoadingBarActive, setGlobalLoadingBarInactive, setTabIndexForPage } from "@app/store/root.actions";
 import { ContainerType } from "@app/models/container";
 import { MatDialog } from "@angular/material/dialog";
 import { NewEnvironmentDialogComponent } from "@app/components/server-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
@@ -80,11 +80,16 @@ export class ServerManagementComponent {
     const activeEnv = this.activeEnv as Env;
     console.log("UPPING ENV", activeEnv)
     
+    // eslint-disable-next-line ngrx/avoid-dispatching-multiple-actions-sequentially
+    this.store.dispatch(setGlobalLoadingBarActive());
     this.dockerApi.upEnv(activeEnv).subscribe(
       (data) => {
         this.snackbar.open(`Servers for env '${activeEnv.getFormattedLabel()}' started.`);
         console.log(data);
         this.refreshContainersForEnv(activeEnv);
+
+        // eslint-disable-next-line ngrx/avoid-dispatching-multiple-actions-sequentially
+        this.store.dispatch(setGlobalLoadingBarInactive());
       }
     );
   }
@@ -110,11 +115,18 @@ export class ServerManagementComponent {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+
+        // eslint-disable-next-line ngrx/avoid-dispatching-multiple-actions-sequentially
+        this.store.dispatch(setGlobalLoadingBarActive());
+
         this.dockerApi.downEnv(activeEnv).subscribe(
           (data) =>  {
             this.snackbar.open(`Servers for env '${activeEnv.getFormattedLabel()}' stopped.`);
             console.log(data);
             this.refreshContainersForEnv(activeEnv);
+
+            // eslint-disable-next-line ngrx/avoid-dispatching-multiple-actions-sequentially
+            this.store.dispatch(setGlobalLoadingBarInactive());
           }
         );
       }
@@ -157,11 +169,18 @@ export class ServerManagementComponent {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+
+        // eslint-disable-next-line ngrx/avoid-dispatching-multiple-actions-sequentially
+        this.store.dispatch(setGlobalLoadingBarActive());
+
         this.dockerApi.deleteEnv(activeEnv).subscribe(
           (data) => {
             this.snackbar.open(`Env '${activeEnv.getFormattedLabel()}' successfully deleted`);
             console.log(data);
             this.store.dispatch(fetchAvailableEnvs());
+
+            // eslint-disable-next-line ngrx/avoid-dispatching-multiple-actions-sequentially
+            this.store.dispatch(setGlobalLoadingBarInactive());
           }
         )
       }

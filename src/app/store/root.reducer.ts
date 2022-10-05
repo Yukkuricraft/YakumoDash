@@ -3,6 +3,8 @@ import { ActionReducer, createReducer, MetaReducer, on } from "@ngrx/store";
 import {
   setActiveContainersForEnv,
   setAvailableEnvs, setDefinedContainersForEnv,
+  setGlobalLoadingBarActive,
+  setGlobalLoadingBarInactive,
   setLoggedInUser,
   setLogoutUser,
   setTabIndexForPage
@@ -19,6 +21,12 @@ export const rootReducer = createReducer(
     return ({ ...state, user });
   }),
   on(setLogoutUser, (state): RootState => { return ({ ...state, user: null }) }),
+  on(setGlobalLoadingBarActive, (state): RootState => {
+    return ({ ...state, globalLoadingBarState: true });
+  }),
+  on(setGlobalLoadingBarInactive, (state): RootState => {
+    return ({ ...state, globalLoadingBarState: false });
+  }),
   on(setAvailableEnvs, (state, { envs }): RootState => {
     return ({ ...state, availableEnvs: envs });
   }),
@@ -49,8 +57,6 @@ export const rootReducer = createReducer(
         currEnvContainers[containerType] = [...(currEnvContainers[containerType] ?? []), container];
       }
 
-      console.log(`UPDATING CONTAINER STATE FOR ENV: ${env.getFormattedLabel()}`);
-      console.log(currEnvContainers);
       return ({
         ...state,
         activeContainersByEnv: {

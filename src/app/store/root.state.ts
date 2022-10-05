@@ -10,6 +10,7 @@ export interface RootState {
   availableEnvs: Env[];
   activeContainersByEnv: EnvToActiveContainerMapping;
   definedContainersByEnv: EnvToDefinedContainerMapping;
+  globalLoadingBarState: boolean;
 }
 
 export const initialState: RootState = {
@@ -18,4 +19,5 @@ export const initialState: RootState = {
   availableEnvs: [],
   activeContainersByEnv: {},
   definedContainersByEnv: {},
+  globalLoadingBarState: false,
 }

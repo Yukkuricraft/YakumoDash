@@ -31,7 +31,6 @@ export class RootEffects {
       switchMap((data) => {
         return this.dockerApi.listDefined(data.env).pipe(
           concatLatestFrom(() => {
-            console.log("FETCHDEFINEDCONTAINERSFORENV - CONCATLATESTFROM")
             return of(data.env);
           }),
           map(([containers, env]) => setDefinedContainersForEnv({ env, containers }))
@@ -46,7 +45,6 @@ export class RootEffects {
       switchMap((data) => {
         return this.dockerApi.listActive(data.env).pipe(
           concatLatestFrom(() => {
-            console.log("FETCHACTIVECONTAINERSFORENV - CONCATLATESTFROM")
             return of(data.env);
           }),
           map(([containers, env]) => setActiveContainersForEnv({ env, containers }))

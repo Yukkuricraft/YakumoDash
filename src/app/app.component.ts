@@ -4,11 +4,12 @@ import { GoogleLoginProvider, SocialAuthService, SocialUser } from "@abacritt/an
 import { Store } from "@ngrx/store";
 import { sendMessageToMaster } from "@angular/compiler-cli/ngcc/src/execution/cluster/utils";
 import { initializeApp, setLoggedInUser } from "@app/store/root.actions";
-import { switchMap } from "rxjs";
+import { Observable, switchMap } from "rxjs";
 import { AuthService } from "@app/services/auth/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { selectGlobalLoadingBarState } from './store/root.selectors';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class AppComponent implements OnInit {
   title = 'main';
+  loadingBarActive$!: Observable<boolean>;
 
   constructor(
     private router: Router,
@@ -51,5 +53,7 @@ export class AppComponent implements OnInit {
         }
       }
     )
+
+    this.loadingBarActive$ = this.store.select(selectGlobalLoadingBarState);
   }
 }

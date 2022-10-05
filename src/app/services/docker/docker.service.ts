@@ -15,7 +15,6 @@ export class DockerService {
   constructor(private http: HttpClient) { }
 
   deleteEnv(env: Env) {
-    console.log("Deleting env")
     return this.http
       .delete(`${this.basePath}/server/${env.name}`)
   }
@@ -35,7 +34,6 @@ export class DockerService {
   }
 
   downEnv(env: Env) {
-    console.log("Downing")
     return this.http
       .get(`${this.basePath}/server/${env.name}/containers/down`)
   }

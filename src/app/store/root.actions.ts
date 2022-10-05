@@ -25,6 +25,14 @@ export const fetchContainerStatusForEnv = createAction(
   props<{ env: Env }>(),
 )
 
+export const setGlobalLoadingBarActive = createAction(
+  '[Root] Enabling Global Loading Bar',
+)
+
+export const setGlobalLoadingBarInactive = createAction(
+  '[Root] Disabling Global Loading Bar',
+)
+
 export const setAvailableEnvs = createAction(
   '[Root] Set Available Environments',
   props<{ envs: Env[] }>()
