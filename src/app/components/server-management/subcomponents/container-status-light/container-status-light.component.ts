@@ -31,9 +31,6 @@ export class ContainerStatusLightComponent implements OnInit {
 
     this.state$ = this.container$.pipe(
         map((container: ActiveContainer | null) => {
-          console.log('NEW CONTAINER STATE:::::')
-          console.log(container);
-
           if (container === null) {
             return ContainerStates.Down;
           } else {
