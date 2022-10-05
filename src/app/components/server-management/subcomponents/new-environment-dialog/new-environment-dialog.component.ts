@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DockerService } from "@app/services/docker/docker.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { fetchAvailableEnvs, initializeApp, setGlobalLoadingBarActive, setGlobalLoadingBarInactive } from '@app/store/root.actions';
+import { createNewEnv, fetchAvailableEnvs, initializeApp, setGlobalLoadingBarActive, setGlobalLoadingBarInactive, beginCreateNewEnv } from '@app/store/root.actions';
 import { Store } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -90,20 +90,8 @@ export class NewEnvironmentDialogComponent {
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-
-        // eslint-disable-next-line ngrx/avoid-dispatching-multiple-actions-sequentially
-        this.store.dispatch(setGlobalLoadingBarActive());
-
-        this.dockerApi.createEnv(parseInt(proxyPort), envAlias).subscribe(
-          (data) => {
-            this.snackbar.open(`Environment '${envAlias}' successfully created on port ${proxyPort}!`);
-            this.store.dispatch(fetchAvailableEnvs());
-            this.dialogRef.close();
-
-            // eslint-disable-next-line ngrx/avoid-dispatching-multiple-actions-sequentially
-            this.store.dispatch(setGlobalLoadingBarInactive());
-          }
-        );
+        this.store.dispatch(beginCreateNewEnv({ proxyPort: parseInt(proxyPort), envAlias }))
+        this.dialogRef.close();
       }
     });
   }

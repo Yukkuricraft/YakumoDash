@@ -20,7 +20,6 @@ export class EnvironmentsService {
         map((envs ) =>
           envs.map((env) => DomainConverter.fromDto(Env, env))
         ),
-        tap(console.log),
       )
   }
 }

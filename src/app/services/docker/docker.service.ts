@@ -3,7 +3,8 @@ import { map, Observable, tap } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { DomainConverter } from "@app/helpers/domain";
 import { lowercaseKeys } from "@app/helpers/case";
-import { Env } from "@app/models/env";
+import { Env, CreateEnvResponse } from "@app/models/env";
+import { DockerEnvActionResponse } from "@app/models/docker";
 import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 
 @Injectable({
@@ -17,6 +18,9 @@ export class DockerService {
   deleteEnv(env: Env) {
     return this.http
       .delete(`${this.basePath}/server/${env.name}`)
+      .pipe(map((data: any) =>
+        DomainConverter.fromDto(DockerEnvActionResponse, data)
+      ))
   }
 
   createEnv(proxyPort: number, envAlias: string) {
@@ -25,17 +29,25 @@ export class DockerService {
         PROXY_PORT: proxyPort,
         ENV_ALIAS: envAlias,
       })
+      .pipe(map((data: any) =>
+        DomainConverter.fromDto(CreateEnvResponse, data)
+      ))
   }
 
   upEnv(env: Env) {
     return this.http
       .get(`${this.basePath}/server/${env.name}/containers/up`)
-
+      .pipe(map((data: any) =>
+        DomainConverter.fromDto(DockerEnvActionResponse, data)
+      ))
   }
 
   downEnv(env: Env) {
     return this.http
       .get(`${this.basePath}/server/${env.name}/containers/down`)
+      .pipe(map((data: any) =>
+        DomainConverter.fromDto(DockerEnvActionResponse, data)
+      ))
   }
 
   restartEnv(env: Env) {
@@ -46,7 +58,7 @@ export class DockerService {
   listDefined(env: Env) {
     return this.http
       .get(`${this.basePath}/server/${env.name}/containers`)
-      .pipe(tap(console.log), map((data: any) =>
+      .pipe(map((data: any) =>
         data.map((obj: any) => DomainConverter.fromDto(ContainerDefinition, obj))
       ))
   }
@@ -56,6 +68,6 @@ export class DockerService {
       .get(`${this.basePath}/server/${env.name}/containers/active`)
       .pipe(map((data: any) =>
         data.map((obj: any) => DomainConverter.fromDto(ActiveContainer, lowercaseKeys(obj)))
-      ), tap(console.log))
+      ))
   }
 }
