@@ -23,11 +23,12 @@ export class DockerService {
       ))
   }
 
-  createEnv(proxyPort: number, envAlias: string) {
+  createEnv(proxyPort: number, envAlias: string, description?: string) {
     return this.http
       .post(`${this.basePath}/server/create-env`, {
         PROXY_PORT: proxyPort,
         ENV_ALIAS: envAlias,
+        DESCRIPTION: description,
       })
       .pipe(map((data: any) =>
         DomainConverter.fromDto(CreateEnvResponse, data)

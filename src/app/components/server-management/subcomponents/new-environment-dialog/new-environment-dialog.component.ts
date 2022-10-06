@@ -14,15 +14,21 @@ import { Env } from '@app/models/env';
   styleUrls: ['./new-environment-dialog.component.scss']
 })
 export class NewEnvironmentDialogComponent {
+  MIN_ALIAS_LEN = 3;        
+  MAX_ALIAS_LEN = 32;
+
+  MAX_DESCRIPTION_LEN = 2048;
+
   MIN_PORT = 25600;
   MAX_PORT = 25700;
+  
 
-  numbersReg = /\d+/;
+  numbersReg = /^\d+$/;
 
   form: FormGroup;
 
   get envAlias() { return this.form.controls['envAlias'] as FormControl; }
-
+  get description() { return this.form.controls['description'] as FormControl; }
   get proxyPort() { return this.form.controls['proxyPort'] as FormControl; }
 
   constructor(
@@ -35,7 +41,11 @@ export class NewEnvironmentDialogComponent {
     this.form = new FormGroup({
       envAlias: new FormControl('', [
         Validators.required,
-        Validators.minLength(1),
+        Validators.minLength(this.MIN_ALIAS_LEN),
+        Validators.maxLength(this.MAX_ALIAS_LEN),
+      ]),
+      description: new FormControl('', [
+        Validators.maxLength(this.MAX_DESCRIPTION_LEN),
       ]),
       proxyPort: new FormControl('', [
         Validators.required,
@@ -47,6 +57,8 @@ export class NewEnvironmentDialogComponent {
   }
 
   errorMessages = {
+    minlength: `You must enter a value longer than ${this.MIN_ALIAS_LEN} chars!`,
+    maxlength: `You must enter a value shorter than ${this.MAX_ALIAS_LEN} chars!`,
     required: 'You must enter a value!',
     min: `You must enter a value larger than ${this.MIN_PORT}!`,
     max: `You must enter a value smaller than ${this.MAX_PORT}!`,
@@ -54,7 +66,9 @@ export class NewEnvironmentDialogComponent {
   }
 
   getErrorMessage(formControl: FormControl) {
+    console.log(formControl);
     for(const [error, errorMessage] of Object.entries(this.errorMessages)) {
+      
       if (formControl.hasError(error)) {
         return errorMessage;
       }
@@ -83,14 +97,16 @@ export class NewEnvironmentDialogComponent {
       {
         data: {
           title: 'Confirm New Environment Creation',
-          description: `You are about to create a new environment called '${envAlias}' running on port '${proxyPort}'. Are you sure?`
+          description: `<p>You are about to create a new environment called <b>${envAlias}</b> running on port <b>${proxyPort}</b>.</p>
+          <br/>
+          <p>Are you sure?</p>`,
         },
-        width: '300px',
+        width: '400px',
       },
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.store.dispatch(beginCreateNewEnv({ proxyPort: parseInt(proxyPort), envAlias }))
+        this.store.dispatch(beginCreateNewEnv({ proxyPort: parseInt(proxyPort), envAlias, description: this.description.value }))
         this.dialogRef.close();
       }
     });

@@ -22,49 +22,58 @@
           </mat-card-title>
           <mat-card-content>
             <div class="env-info">
-              {{env}}
+              <div style="font-size: 0.8em;">
+                <ul style="margin-left: 1.5em;">
+                  <li>Running on Port: <span class="summary-val">{{env.config.proxyPort}}</span></li>
+                  <li>Server Version: <span class="summary-val">{{env.config.mcVersion}}</span></li>
+                  <li>Server Type: <span class="summary-val">{{env.config.serverType}}</span></li>
+                  <li>Server Build: <span class="summary-val">{{env.config.serverBuild}}</span></li>
+                </ul>
+              </div>
+              <div style="margin-top: 8px" [innerHtml]="env.getRenderedDescription()">
+              </div>
             </div>
+
             <div class="env-actions">
-              <button mat-icon-button>
-                <div>
-                  <button mat-icon-button
-                          matTooltip="Start Environment"
-                          (click)="startEnvironment()"
-                          [disabled]="startEnvironmentDisabled()">
-                    <mat-icon>
-                      play_circle_filled
-                    </mat-icon>
-                  </button>
-                  <button mat-icon-button
-                          matTooltip="Shut Down Environment"
-                          (click)="stopEnvironment()"
-                          [disabled]="stopEnvironmentDisabled()">
-                    <mat-icon>
-                      stop
-                    </mat-icon>
-                  </button>
-                  <button mat-icon-button
-                          matTooltip="Attempt to Restart Environment"
-                          (click)="restartEnvironment()"
-                          [disabled]="restartEnvironmentDisabled()">
-                    <mat-icon>
-                      replay
-                    </mat-icon>
-                  </button>
-                  <button mat-icon-button
-                          matTooltip="Edit Environment Config">
-                    <mat-icon>
-                      edit
-                    </mat-icon>
-                  </button>
-                  <button *ngIf="!(env.name === 'prod')"
-                          mat-icon-button
-                          (click)="deleteEnvironment()"
-                          matTooltip="DELETE ENVIRONMENT">
-                    <mat-icon svgIcon="trash" class="filter-to-white"></mat-icon>
-                  </button>
-                </div>
-              </button>
+              <div>
+                <button mat-icon-button
+                        matTooltip="Start Environment"
+                        (click)="startEnvironment()"
+                        [disabled]="startEnvironmentDisabled()">
+                  <mat-icon>
+                    play_circle_filled
+                  </mat-icon>
+                </button>
+                <button mat-icon-button
+                        matTooltip="Shut Down Environment"
+                        (click)="stopEnvironment()"
+                        [disabled]="stopEnvironmentDisabled()">
+                  <mat-icon>
+                    stop
+                  </mat-icon>
+                </button>
+                <button mat-icon-button
+                        matTooltip="Attempt to Restart Environment"
+                        (click)="restartEnvironment()"
+                        [disabled]="restartEnvironmentDisabled()">
+                  <mat-icon>
+                    replay
+                  </mat-icon>
+                </button>
+                <button mat-icon-button
+                        (click)="editEnvironment()"
+                        matTooltip="Edit Environment Config">
+                  <mat-icon>
+                    edit
+                  </mat-icon>
+                </button>
+                <button *ngIf="!(env.name === 'prod')"
+                        mat-icon-button
+                        (click)="deleteEnvironment()"
+                        matTooltip="DELETE ENVIRONMENT">
+                  <mat-icon svgIcon="trash" class="filter-to-white"></mat-icon>
+                </button>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>

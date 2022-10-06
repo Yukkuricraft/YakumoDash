@@ -1,4 +1,4 @@
-import { envTransformer } from "@app/helpers/dto-transformers";
+import { modelTransformer } from "@app/helpers/dto-transformers";
 import { Transform } from "class-transformer";
 import { ApiRunnerResponse, IApiRunnerResponse } from "./api";
 import { Env } from "./env";
@@ -9,6 +9,6 @@ export interface IDockerEnvActionResponse extends IApiRunnerResponse {
 }
   
 export class DockerEnvActionResponse extends ApiRunnerResponse implements IDockerEnvActionResponse {
-  @Transform(envTransformer)
+  @Transform(modelTransformer(Env))
   env = new Env();
 }

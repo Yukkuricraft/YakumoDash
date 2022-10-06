@@ -97,7 +97,7 @@ export class ServerManagementComponent {
           title: 'Confirm Shutdown of Environment',
           description: `This action will stop all containers and servers for the environment '${activeEnv.getFormattedLabel()}'.`
         },
-        width: '300px',
+        width: '400px',
       },
     );
     dialogRef.afterClosed().subscribe((result) => {
@@ -126,6 +126,15 @@ export class ServerManagementComponent {
     return false;
   }
 
+  editEnvironment() {
+    if (this.activeEnv === null) {
+      return;
+    }
+
+    const activeEnv = this.activeEnv as Env;
+    console.log(activeEnv);
+  }
+
   deleteEnvironment() {
     if (this.activeEnv === null) {
       return;
@@ -139,14 +148,13 @@ export class ServerManagementComponent {
           title: 'Confirm Environment Deletion',
           description: `This action will PERMANENTLY delete the environment '${activeEnv.getFormattedLabel()}'. Are you sure?`
         },
-        width: '300px',
+        width: '400px',
       },
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.store.dispatch(beginDeleteEnv({ env: activeEnv }))
         dialogRef.close();
-        
       }
     });
   }

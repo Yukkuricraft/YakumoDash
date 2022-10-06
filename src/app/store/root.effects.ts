@@ -44,7 +44,7 @@ export class RootEffects {
     return this.actions$.pipe(
       ofType(createNewEnv),
       switchMap((data) => {
-        return this.dockerApi.createEnv(data.proxyPort, data.envAlias)
+        return this.dockerApi.createEnv(data.proxyPort, data.envAlias, data.description);
       }),
       switchMap((result) => { 
         console.log("$#$$$$$ CREATED NEW ENV")

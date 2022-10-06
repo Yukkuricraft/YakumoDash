@@ -1,5 +1,6 @@
 import { CreatedEnv, Env } from '@app/models/env';
-import { TransformationType, TransformFnParams } from 'class-transformer';
+import { ClassConstructor, TransformationType, TransformFnParams } from 'class-transformer';
+import { DomainConverter } from './domain';
 
 export function dateStringTransformer({ type, value }: TransformFnParams): string | Date {
   if (!value) {
@@ -18,37 +19,22 @@ export function dateStringTransformer({ type, value }: TransformFnParams): strin
   }
 }
 
-export function envTransformer({ type, value }: TransformFnParams): string | Env {
-  if (!value) {
-    return value;
-  }
-
-  switch (type) {
-    case TransformationType.PLAIN_TO_CLASS:
-      console.log("CONVERTING PLAIN TO CLASS")
-      console.log(value)
-      return Env.createEnvFromObject(value);
-    case TransformationType.CLASS_TO_PLAIN:
-      return "no?";
-    default:
+export function modelTransformer<T>(model: ClassConstructor<T>) {
+  return ({ type, value }: TransformFnParams): string | T => {
+    if (!value) {
       return value;
-  }
-}
+    }
 
-export function createdEnvTransformer({ type, value }: TransformFnParams): string | CreatedEnv {
-  if (!value) {
-    return value;
-  }
-
-  switch (type) {
-    case TransformationType.PLAIN_TO_CLASS:
-      console.log("CONVERTING PLAIN TO CLASS")
-      console.log(value)
-      return CreatedEnv.createCreatedEnvFromObject(value);
-    case TransformationType.CLASS_TO_PLAIN:
-      return "no?";
-    default:
-      return value;
+    switch (type) {
+      case TransformationType.PLAIN_TO_CLASS:
+        console.log("CONVERTING PLAIN TO CLASS")
+        console.log(value)
+        return DomainConverter.objectToInstance(model, value);
+      case TransformationType.CLASS_TO_PLAIN:
+        return DomainConverter.toDto(model, value);
+      default:
+        return value;
+    }
   }
 }
 

@@ -11,14 +11,21 @@
         <mat-label>Environment Alias</mat-label>
         <mat-hint>Assign an alias to the environment so it's easier to know what it's for.</mat-hint>
         <input matInput placeholder="Enter Alias..." formControlName="envAlias" id="envAlias">
-        <mat-error *ngIf="envAlias.invalid">{{getErrorMessage(envAlias)}}</mat-error>
+        <mat-error *ngIf="envAlias.invalid && envAlias.value.length > 0">{{getErrorMessage(envAlias)}}</mat-error>
       </mat-form-field>
-
+      
       <mat-form-field>
         <mat-label>Minecraft Proxy Port</mat-label>
         <mat-hint>The port the proxy will run on. This will be the port you connect to in Minecraft. Port must be between 25600-25700 and not already used by another environment.</mat-hint>
         <input matInput placeholder="Enter Port..." formControlName="proxyPort" id="proxyPort">
-        <mat-error *ngIf="proxyPort.invalid">{{getErrorMessage(proxyPort)}}</mat-error>
+        <mat-error *ngIf="proxyPort.invalid && proxyPort.value.length > 0">{{getErrorMessage(proxyPort)}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="extra-spacer">
+        <mat-label>Environment Description <span class="minitext">(Optional)</span></mat-label>
+        <mat-hint>Add a description on what the environment is intended for.</mat-hint>
+        <textarea matInput placeholder="Enter Description..." formControlName="description" id="description"></textarea>
+        <mat-error *ngIf="description.invalid && description.value.length > 0">{{getErrorMessage(description)}}</mat-error>
       </mat-form-field>
     </mat-form>
     <button mat-raised-button (click)="createNewEnv()" color='primary'>

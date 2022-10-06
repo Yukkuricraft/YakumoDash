@@ -46,6 +46,7 @@ export const fetchAvailableEnvs = createAction(
 export interface NewEnvProps {
   proxyPort: number;
   envAlias: string;
+  description?: string;
 }
 export const beginCreateNewEnv = createAction(
   '[Env] Starting Creation',

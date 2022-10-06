@@ -1,57 +1,63 @@
-import { createdEnvTransformer } from "@app/helpers/dto-transformers";
+import { modelTransformer } from "@app/helpers/dto-transformers";
 import { Transform } from "class-transformer";
 import { ApiRunnerResponse, IApiRunnerResponse } from "./api";
 
-export interface IEnv {
-  name: string;
-  alias: string;
+export interface IEnvConfig {
+  proxyPort: number;
+  serverType: string;
+  serverBuild: string;
+  mcVersion: string;
+  fsRoot: string;
+}
 
+export class EnvConfig {
+  proxyPort = 0;
+  serverType = "";
+  serverBuild = "";
+  mcVersion = "";
+  fsRoot = "";
+}
+
+export interface IEnv {
   type: string;
   num: number | null;
+  config: IEnvConfig;
 
+  name: string;
+  description: string;
+  alias: string;
   formatted: string;
 }
 
 export class Env implements IEnv{
-  public static createEnvFromObject({ name, alias, type, num, formatted }: IEnv) {
-    let env = new Env();
-    env.name = name;
-    env.alias = alias;
-    env.type = type;
-    env.num = num;
-    env.formatted = formatted;
-    return env;
-  }
-
-  name = "";
-  alias = "";
-
   type = "";
   num: number | null = null;
+  port = 0;
 
+  @Transform(modelTransformer(EnvConfig))
+  config = new EnvConfig();
+
+  name = "";
+  description = "";
+  alias = "";
   formatted = "";
 
   getFormattedLabel() { return `${this.formatted} (${this.alias})`; }
+  getRenderedDescription() { return this.description.replace(/\n/g, "<br />");}
 }
 
 export interface ICreatedEnv {
   env: Env;
   alias: string;
   port: number;
+  description?: string;
 }
 
 export class CreatedEnv {
-  public static createCreatedEnvFromObject({ env, alias, port }: ICreatedEnv) {
-    let createdEnv = new CreatedEnv();
-    createdEnv.env = Env.createEnvFromObject(env);
-    createdEnv.alias = alias;
-    createdEnv.port = port;
-    return createdEnv;
-  }
-
   env = new Env();
   alias = "";
   port = 0;
+  description = "";
 }
 
 export interface ICreateEnvResponse extends IApiRunnerResponse {
@@ -59,6 +65,6 @@ export interface ICreateEnvResponse extends IApiRunnerResponse {
 }
 
 export class CreateEnvResponse extends ApiRunnerResponse implements ICreateEnvResponse {
-  @Transform(createdEnvTransformer)
+  @Transform(modelTransformer(CreatedEnv))
   createdEnv = new CreatedEnv();
 }
