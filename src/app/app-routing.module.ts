@@ -4,7 +4,7 @@ import { LoginComponent } from "./components/login/login.component";
 import { AuthGuard } from "@app/guards/auth/auth.guard";
 import { ContentWithSideNavComponent } from "@app/layouts/content-with-side-nav/content-with-side-nav.component";
 import { DashboardComponent } from "@app/components/dashboard/dashboard.component";
-import { ServerManagementComponent } from "@app/components/server-management/server-management.component";
+import { EnvironmentManagementComponent } from "@app/components/environment-management/environment-management.component";
 
 const routes: Routes = [
 	{
@@ -17,8 +17,8 @@ const routes: Routes = [
 				component: DashboardComponent,
 			},
 			{
-				path: "server-mgmt",
-				component: ServerManagementComponent,
+				path: "env-mgmt",
+				component: EnvironmentManagementComponent,
 			},
 		],
 	},

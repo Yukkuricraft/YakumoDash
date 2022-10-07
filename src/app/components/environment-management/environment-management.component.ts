@@ -22,7 +22,7 @@ import {
 } from "@app/store/root.actions";
 import { ContainerType } from "@app/models/container";
 import { MatDialog } from "@angular/material/dialog";
-import { NewEnvironmentDialogComponent } from "@app/components/server-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
+import { NewEnvironmentDialogComponent } from "@app/components/environment-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
 import {
 	ConfirmationDialogComponent,
 	ConfirmationDialogData,
@@ -37,13 +37,13 @@ import _ from "lodash";
 
 @Component({
 	selector: "app-server-management",
-	templateUrl: "./server-management.component.html",
-	styleUrls: ["./server-management.component.scss"],
+	templateUrl: "./environment-management.component.html",
+	styleUrls: ["./environment-management.component.scss"],
 })
-export class ServerManagementComponent {
+export class EnvironmentManagementComponent {
 	ContainerType = ContainerType;
 
-	pageType: string = "ServerManagement";
+	pageType: string = "EnvironmentManagement";
 	availableEnvs$: Observable<Env[]>;
 
 	activeTabIndex$!: Observable<number | undefined>;
@@ -127,6 +127,10 @@ export class ServerManagementComponent {
 		});
 		dialogRef.afterClosed().subscribe(result => {
 			if (result) {
+				this.snackbar.open(
+					"This might take a bit to complete. Girls are preparing.",
+					"Ok"
+				);
 				this.store.dispatch(beginShutdownEnv({ env: activeEnv }));
 			}
 		});

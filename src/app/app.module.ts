@@ -31,13 +31,13 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { MinecraftContainersTableComponent } from "./components/server-management/subcomponents/minecraft-containers-table/minecraft-containers-table.component";
+import { MinecraftContainersTableComponent } from "./components/environment-management/subcomponents/minecraft-containers-table/minecraft-containers-table.component";
 import { MonacoEditorModule } from "ngx-monaco-editor-v2";
-import { NewEnvironmentDialogComponent } from "./components/server-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
+import { NewEnvironmentDialogComponent } from "./components/environment-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
 import { NgModule, Type } from "@angular/core";
 import { RootEffects } from "@app/store/root.effects";
 import { rootReducer } from "@app/store/root.reducer";
-import { ServerManagementComponent } from "./components/server-management/server-management.component";
+import { EnvironmentManagementComponent } from "./components/environment-management/environment-management.component";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { TextEditorDialogComponent } from "./components/shared/text-editor-dialog/text-editor-dialog.component";
 import { TokenInterceptor } from "@app/interceptors/token/token.interceptor";
@@ -69,7 +69,7 @@ const effects: Type<any>[] = [RootEffects];
 		LoginComponent,
 		ContentWithSideNavComponent,
 		DashboardComponent,
-		ServerManagementComponent,
+		EnvironmentManagementComponent,
 		NewEnvironmentDialogComponent,
 		MinecraftContainersTableComponent,
 		ContainerActionsComponent,
