@@ -11,33 +11,13 @@ import { ActiveContainer, ContainerDefinition } from "@app/models/container";
   providedIn: 'root'
 })
 export class DockerService {
-  private basePath: string = 'https://api2.yukkuricraft.net';
+  private basePath: string = 'https://api2.yukkuricraft.net/server';
 
   constructor(private http: HttpClient) { }
 
-  deleteEnv(env: Env) {
-    return this.http
-      .delete(`${this.basePath}/server/${env.name}`)
-      .pipe(map((data: any) =>
-        DomainConverter.fromDto(DockerEnvActionResponse, data)
-      ))
-  }
-
-  createEnv(proxyPort: number, envAlias: string, description?: string) {
-    return this.http
-      .post(`${this.basePath}/server/create-env`, {
-        PROXY_PORT: proxyPort,
-        ENV_ALIAS: envAlias,
-        DESCRIPTION: description,
-      })
-      .pipe(map((data: any) =>
-        DomainConverter.fromDto(CreateEnvResponse, data)
-      ))
-  }
-
   upEnv(env: Env) {
     return this.http
-      .get(`${this.basePath}/server/${env.name}/containers/up`)
+      .get(`${this.basePath}/${env.name}/containers/up`)
       .pipe(map((data: any) =>
         DomainConverter.fromDto(DockerEnvActionResponse, data)
       ))
@@ -45,7 +25,7 @@ export class DockerService {
 
   downEnv(env: Env) {
     return this.http
-      .get(`${this.basePath}/server/${env.name}/containers/down`)
+      .get(`${this.basePath}/${env.name}/containers/down`)
       .pipe(map((data: any) =>
         DomainConverter.fromDto(DockerEnvActionResponse, data)
       ))
@@ -53,12 +33,12 @@ export class DockerService {
 
   restartEnv(env: Env) {
     return this.http
-      .get(`${this.basePath}/server/${env.name}/containers/restart`)
+      .get(`${this.basePath}/${env.name}/containers/restart`)
   }
 
   listDefined(env: Env) {
     return this.http
-      .get(`${this.basePath}/server/${env.name}/containers`)
+      .get(`${this.basePath}/${env.name}/containers`)
       .pipe(map((data: any) =>
         data.map((obj: any) => DomainConverter.fromDto(ContainerDefinition, obj))
       ))
@@ -66,7 +46,7 @@ export class DockerService {
 
   listActive(env: Env) {
     return this.http
-      .get(`${this.basePath}/server/${env.name}/containers/active`)
+      .get(`${this.basePath}/${env.name}/containers/active`)
       .pipe(map((data: any) =>
         data.map((obj: any) => DomainConverter.fromDto(ActiveContainer, lowercaseKeys(obj)))
       ))

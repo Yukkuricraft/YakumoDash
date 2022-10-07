@@ -27,8 +27,6 @@ export function modelTransformer<T>(model: ClassConstructor<T>) {
 
     switch (type) {
       case TransformationType.PLAIN_TO_CLASS:
-        console.log("CONVERTING PLAIN TO CLASS")
-        console.log(value)
         return DomainConverter.objectToInstance(model, value);
       case TransformationType.CLASS_TO_PLAIN:
         return DomainConverter.toDto(model, value);

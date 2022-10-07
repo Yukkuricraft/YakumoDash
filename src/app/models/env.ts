@@ -46,25 +46,33 @@ export class Env implements IEnv{
   getRenderedDescription() { return this.description.replace(/\n/g, "<br />");}
 }
 
-export interface ICreatedEnv {
+export interface IEnvField {
   env: Env;
+}
+  
+export class EnvField implements IEnvField {
+  @Transform(modelTransformer(Env))
+  env = new Env();
+}
+
+export interface ICreatedEnv extends IEnvField {
   alias: string;
   port: number;
   description?: string;
 }
 
-export class CreatedEnv {
-  env = new Env();
+export class CreatedEnv extends EnvField {
   alias = "";
   port = 0;
   description = "";
 }
 
-export interface ICreateEnvResponse extends IApiRunnerResponse {
+export interface ICreateEnvResponse {
   createdEnv: ICreatedEnv;
 }
 
-export class CreateEnvResponse extends ApiRunnerResponse implements ICreateEnvResponse {
+export class CreateEnvResponse implements ICreateEnvResponse {
   @Transform(modelTransformer(CreatedEnv))
   createdEnv = new CreatedEnv();
 }
+
