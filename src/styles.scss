@@ -1,53 +1,53 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
-@use 'theme' as custom-theme;
+@use "theme" as custom-theme;
 
 html {
-  box-sizing: border-box;
-  -webkit-text-size-adjust: 100%;
-  word-break: normal;
-  tab-size: 4;
-  font-family: mat.font-family(custom-theme.$custom-typography);
-  font-size: 16px;
-  height: 100%;
+	box-sizing: border-box;
+	-webkit-text-size-adjust: 100%;
+	word-break: normal;
+	tab-size: 4;
+	font-family: mat.font-family(custom-theme.$custom-typography);
+	font-size: 16px;
+	height: 100%;
 }
 
 body {
-  margin: 0;
-  height: 100%;
+	margin: 0;
+	height: 100%;
 }
 
 * {
-  padding: 0;
-  margin: 0;
+	padding: 0;
+	margin: 0;
 }
 
 *,
 :after,
 :before {
-  background-repeat: no-repeat;
-  box-sizing: inherit;
+	background-repeat: no-repeat;
+	box-sizing: inherit;
 }
 
 .spacer {
-  flex-grow: 1 !important;
+	flex-grow: 1 !important;
 }
 
 .container {
-  width: 100%;
-  padding: 12px;
-  margin-right: auto;
-  margin-left: auto;
+	width: 100%;
+	padding: 12px;
+	margin-right: auto;
+	margin-left: auto;
 }
 
 @media (min-width: 960px) {
-  .container {
-    max-width: 1000px;
-  }
+	.container {
+		max-width: 1000px;
+	}
 }
 
 @media (min-width: 1264px) {
-  .container {
-    max-width: 1185px;
-  }
+	.container {
+		max-width: 1185px;
+	}
 }

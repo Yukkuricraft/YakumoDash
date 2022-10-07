@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { EnvironmentsService } from './environments.service';
+import { EnvironmentsService } from "./environments.service";
 
-describe('EnvironmentsService', () => {
-  let service: EnvironmentsService;
+describe("EnvironmentsService", () => {
+	let service: EnvironmentsService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(EnvironmentsService);
-  });
+	beforeEach(() => {
+		TestBed.configureTestingModule({});
+		service = TestBed.inject(EnvironmentsService);
+	});
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+	it("should be created", () => {
+		expect(service).toBeTruthy();
+	});
 });

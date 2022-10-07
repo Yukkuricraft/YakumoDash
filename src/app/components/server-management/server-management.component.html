@@ -1,141 +1,141 @@
 <mat-toolbar>
-  <span>Server Management</span>
-  <button
-    mat-icon-button
-    (click)="openNewEnvDialog()"
-    matTooltip="Create New Environment"
-  >
-    <mat-icon> add_box </mat-icon>
-  </button>
+	<span>Server Management</span>
+	<button
+		mat-icon-button
+		(click)="openNewEnvDialog()"
+		matTooltip="Create New Environment"
+	>
+		<mat-icon> add_box </mat-icon>
+	</button>
 </mat-toolbar>
 
 <mat-tab-group
-  (selectedIndexChange)="selectedIndexChanged($event)"
-  [selectedIndex]="activeTabIndex$ | async"
+	(selectedIndexChange)="selectedIndexChanged($event)"
+	[selectedIndex]="activeTabIndex$ | async"
 >
-  <mat-tab
-    *ngFor="let env of availableEnvs$ | async"
-    [label]="env.getFormattedLabel()"
-  >
-    <div class="container-tab">
-      <div class="container-summary">
-        <h3>Overview</h3>
-        <mat-card>
-          <mat-card-title> Summary </mat-card-title>
-          <mat-card-content>
-            <div class="env-info">
-              <div style="font-size: 0.8em">
-                <ul class="ul-left-margin">
-                  <li>
-                    <span class="item-key">Running on Port: </span
-                    ><span class="item-val">{{ env.config.proxyPort }}</span>
-                  </li>
-                  <li>
-                    <span class="item-key">Server Version: </span
-                    ><span class="item-val">{{ env.config.mcVersion }}</span>
-                  </li>
-                  <li>
-                    <span class="item-key">Server Type: </span
-                    ><span class="item-val">{{ env.config.serverType }}</span>
-                  </li>
-                  <li>
-                    <span class="item-key">Server Build: </span
-                    ><span class="item-val">{{ env.config.serverBuild }}</span>
-                  </li>
-                </ul>
-              </div>
-              <div
-                style="margin-top: 8px"
-                [innerHtml]="env.getRenderedDescription()"
-              ></div>
-            </div>
+	<mat-tab
+		*ngFor="let env of availableEnvs$ | async"
+		[label]="env.getFormattedLabel()"
+	>
+		<div class="container-tab">
+			<div class="container-summary">
+				<h3>Overview</h3>
+				<mat-card>
+					<mat-card-title> Summary </mat-card-title>
+					<mat-card-content>
+						<div class="env-info">
+							<div style="font-size: 0.8em">
+								<ul class="ul-left-margin">
+									<li>
+										<span class="item-key">Running on Port: </span
+										><span class="item-val">{{ env.config.proxyPort }}</span>
+									</li>
+									<li>
+										<span class="item-key">Server Version: </span
+										><span class="item-val">{{ env.config.mcVersion }}</span>
+									</li>
+									<li>
+										<span class="item-key">Server Type: </span
+										><span class="item-val">{{ env.config.serverType }}</span>
+									</li>
+									<li>
+										<span class="item-key">Server Build: </span
+										><span class="item-val">{{ env.config.serverBuild }}</span>
+									</li>
+								</ul>
+							</div>
+							<div
+								style="margin-top: 8px"
+								[innerHtml]="env.getRenderedDescription()"
+							></div>
+						</div>
 
-            <div class="env-actions">
-              <div>
-                <button
-                  mat-icon-button
-                  matTooltip="Start Environment"
-                  (click)="startEnvironment()"
-                  [disabled]="startEnvironmentDisabled()"
-                >
-                  <mat-icon> play_circle_filled </mat-icon>
-                </button>
-                <button
-                  mat-icon-button
-                  matTooltip="Shut Down Environment"
-                  (click)="stopEnvironment()"
-                  [disabled]="stopEnvironmentDisabled()"
-                >
-                  <mat-icon> stop </mat-icon>
-                </button>
-                <button
-                  mat-icon-button
-                  matTooltip="Attempt to Restart Environment"
-                  (click)="restartEnvironment()"
-                  [disabled]="restartEnvironmentDisabled()"
-                >
-                  <mat-icon> replay </mat-icon>
-                </button>
-                <button
-                  mat-icon-button
-                  (click)="editEnvironment()"
-                  matTooltip="Edit Environment Config"
-                >
-                  <mat-icon> edit </mat-icon>
-                </button>
-                <button
-                  *ngIf="!(env.name === 'prod')"
-                  mat-icon-button
-                  (click)="deleteEnvironment()"
-                  matTooltip="DELETE ENVIRONMENT"
-                >
-                  <mat-icon svgIcon="trash" class="filter-to-white"></mat-icon>
-                </button>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
+						<div class="env-actions">
+							<div>
+								<button
+									mat-icon-button
+									matTooltip="Start Environment"
+									(click)="startEnvironment()"
+									[disabled]="startEnvironmentDisabled()"
+								>
+									<mat-icon> play_circle_filled </mat-icon>
+								</button>
+								<button
+									mat-icon-button
+									matTooltip="Shut Down Environment"
+									(click)="stopEnvironment()"
+									[disabled]="stopEnvironmentDisabled()"
+								>
+									<mat-icon> stop </mat-icon>
+								</button>
+								<button
+									mat-icon-button
+									matTooltip="Attempt to Restart Environment"
+									(click)="restartEnvironment()"
+									[disabled]="restartEnvironmentDisabled()"
+								>
+									<mat-icon> replay </mat-icon>
+								</button>
+								<button
+									mat-icon-button
+									(click)="editEnvironment()"
+									matTooltip="Edit Environment Config"
+								>
+									<mat-icon> edit </mat-icon>
+								</button>
+								<button
+									*ngIf="!(env.name === 'prod')"
+									mat-icon-button
+									(click)="deleteEnvironment()"
+									matTooltip="DELETE ENVIRONMENT"
+								>
+									<mat-icon svgIcon="trash" class="filter-to-white"></mat-icon>
+								</button>
+							</div>
+						</div>
+					</mat-card-content>
+				</mat-card>
+			</div>
 
-      <div class="aux-containers">
-        <h3>Aux Containers</h3>
-        <!-- Velocity -->
-        <div
-          *ngFor="
-            let container of getDefinedContainersForEnvAndType$(
-              env,
-              ContainerType.MCProxy
-            ) | async
-          "
-        >
-          <app-container-status-card
-            [containerDef]="container"
-          ></app-container-status-card>
-        </div>
-        <!-- MySQL -->
-        <div
-          *ngFor="
-            let container of getDefinedContainersForEnvAndType$(
-              env,
-              ContainerType.MySQL
-            ) | async
-          "
-        >
-          <app-container-status-card
-            [containerDef]="container"
-          ></app-container-status-card>
-        </div>
-      </div>
+			<div class="aux-containers">
+				<h3>Aux Containers</h3>
+				<!-- Velocity -->
+				<div
+					*ngFor="
+						let container of getDefinedContainersForEnvAndType$(
+							env,
+							ContainerType.MCProxy
+						) | async
+					"
+				>
+					<app-container-status-card
+						[containerDef]="container"
+					></app-container-status-card>
+				</div>
+				<!-- MySQL -->
+				<div
+					*ngFor="
+						let container of getDefinedContainersForEnvAndType$(
+							env,
+							ContainerType.MySQL
+						) | async
+					"
+				>
+					<app-container-status-card
+						[containerDef]="container"
+					></app-container-status-card>
+				</div>
+			</div>
 
-      <div class="mc-containers">
-        <!-- MC Containers -->
-        <h3>Server Containers</h3>
-        <app-minecraft-containers-table
-          [containers$]="
-            getDefinedContainersForEnvAndType$(env, ContainerType.Minecraft)
-          "
-        ></app-minecraft-containers-table>
-      </div>
-    </div>
-  </mat-tab>
+			<div class="mc-containers">
+				<!-- MC Containers -->
+				<h3>Server Containers</h3>
+				<app-minecraft-containers-table
+					[containers$]="
+						getDefinedContainersForEnvAndType$(env, ContainerType.Minecraft)
+					"
+				></app-minecraft-containers-table>
+			</div>
+		</div>
+	</mat-tab>
 </mat-tab-group>

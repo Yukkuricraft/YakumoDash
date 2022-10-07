@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   yakumo-dash:
@@ -11,7 +11,6 @@ services:
       LETSENCRYPT_HOST: yakumo.yukkuricraft.net
     volumes:
       - ./:/app
-
 
   nginx-proxy:
     container_name: nginx-proxy-yakumo-dash

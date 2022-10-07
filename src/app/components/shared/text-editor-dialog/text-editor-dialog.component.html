@@ -1,19 +1,32 @@
 <div class="dialog-content">
-  <div mat-dialog-title>{{ data?.title ?? 'File Editor'}}</div>
-  <div mat-dialog-content class="description">
-    <h3 class="filename">{{filename}}</h3>
-    <ngx-monaco-editor style="height: 100%" [options]="options" [(ngModel)]="editorContent">
-    </ngx-monaco-editor>
-  </div>
-  <div mat-dialog-actions>
-    <div class="extra-action-prompt" *ngIf="data?.extraActionPrompt">
-      <mat-checkbox [(ngModel)]="extraActionValue">
-        {{data?.extraActionPrompt}}
-      </mat-checkbox>
-    </div>
-    <div>
-      <button mat-button color="warn" type="button" (click)="onCancel()">Close and Discard Changes</button>
-      <button mat-button type="button" (click)="onSave()" [mat-dialog-close]="true">Save</button>
-    </div>
-  </div>
+	<div mat-dialog-title>{{ data?.title ?? "File Editor" }}</div>
+	<div mat-dialog-content class="description">
+		<h3 class="filename">{{ filename }}</h3>
+		<ngx-monaco-editor
+			style="height: 100%"
+			[options]="options"
+			[(ngModel)]="editorContent"
+		>
+		</ngx-monaco-editor>
+	</div>
+	<div mat-dialog-actions>
+		<div class="extra-action-prompt" *ngIf="data?.extraActionPrompt">
+			<mat-checkbox [(ngModel)]="extraActionValue">
+				{{ data?.extraActionPrompt }}
+			</mat-checkbox>
+		</div>
+		<div>
+			<button mat-button color="warn" type="button" (click)="onCancel()">
+				Close and Discard Changes
+			</button>
+			<button
+				mat-button
+				type="button"
+				(click)="onSave()"
+				[mat-dialog-close]="true"
+			>
+				Save
+			</button>
+		</div>
+	</div>
 </div>

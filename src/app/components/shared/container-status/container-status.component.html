@@ -1,22 +1,30 @@
 <div class="container-status">
-    <ul class="ul-left-margin">
-        <li>
-            <div class="status-and-info-toggle">
-                <div>
-                    <span class="item-key">Status: </span>
-                    <span class="item-value">{{getContainerStatus$(containerDef) | async}}</span>
-                </div>
-                <button mat-flat-button (click)="toggleExtraContainerStatus()">{{getExtraContainerToggleText()}}</button>
-            </div>
-        </li>
-        <li *ngIf="showExtraInfo">
-            <div style="display: flex; flex-direction: row;">
-                <div class="item-key">Ports: </div>
-                <div style="margin-left:4px;">
-                    <div *ngFor="let port of getContainerPorts$(containerDef) | async"
-                    class="item-value">{{port}}</div>
-                </div>
-            </div>
-        </li>
-    </ul>
+	<ul class="ul-left-margin">
+		<li>
+			<div class="status-and-info-toggle">
+				<div>
+					<span class="item-key">Status: </span>
+					<span class="item-value">{{
+						getContainerStatus$(containerDef) | async
+					}}</span>
+				</div>
+				<button mat-flat-button (click)="toggleExtraContainerStatus()">
+					{{ getExtraContainerToggleText() }}
+				</button>
+			</div>
+		</li>
+		<li *ngIf="showExtraInfo">
+			<div style="display: flex; flex-direction: row">
+				<div class="item-key">Ports:</div>
+				<div style="margin-left: 4px">
+					<div
+						*ngFor="let port of getContainerPorts$(containerDef) | async"
+						class="item-value"
+					>
+						{{ port }}
+					</div>
+				</div>
+			</div>
+		</li>
+	</ul>
 </div>

@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   yakumo-dash:
@@ -17,5 +17,3 @@ services:
 networks:
   yukkuricraft_yc-web-dev:
     external: true
-
-

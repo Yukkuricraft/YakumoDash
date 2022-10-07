@@ -1,17 +1,17 @@
-@import '../../../styles/common.scss';
+@import "../../../styles/common.scss";
 
 .status-and-info-toggle {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 
-    & button {
-        color: #c6c6ff;
-        font-size: 0.8em;
-        line-height: 1em;
+	& button {
+		color: #c6c6ff;
+		font-size: 0.8em;
+		line-height: 1em;
 
-        min-width: unset;
-        text-align: right;
-        padding: 0;
-    }
+		min-width: unset;
+		text-align: right;
+		padding: 0;
+	}
 }

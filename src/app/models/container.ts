@@ -1,124 +1,124 @@
 import {
-  dateStringTransformer,
-  dockerStringArrayTransformer,
-} from '@app/helpers/dto-transformers';
-import { Transform } from 'class-transformer';
-import _ from 'lodash';
+	dateStringTransformer,
+	dockerStringArrayTransformer,
+} from "@app/helpers/dto-transformers";
+import { Transform } from "class-transformer";
+import _ from "lodash";
 
 export enum ContainerType {
-  Minecraft = 'mc',
-  MySQL = 'mysql',
-  MCProxy = 'MCProxy',
-  Unknown = 'unknown',
+	Minecraft = "mc",
+	MySQL = "mysql",
+	MCProxy = "MCProxy",
+	Unknown = "unknown",
 }
 
 /**
  * Possible "states" corresponding to docker container states.
  */
 export enum DockerContainerState {
-  Created = 'created',
-  Restarting = 'restarting',
-  Running = 'running',
-  Paused = 'paused',
-  Exited = 'exited',
-  Dead = 'dead',
-  Uninitialized = 'uninitialized',
+	Created = "created",
+	Restarting = "restarting",
+	Running = "running",
+	Paused = "paused",
+	Exited = "exited",
+	Dead = "dead",
+	Uninitialized = "uninitialized",
 }
 
 export interface ContainerTypeToActiveContainerMapping {
-  [containerType: string]: ActiveContainer[];
+	[containerType: string]: ActiveContainer[];
 }
 
 export interface EnvToActiveContainerMapping {
-  [env: string]: ContainerTypeToActiveContainerMapping;
+	[env: string]: ContainerTypeToActiveContainerMapping;
 }
 
 export interface ContainerTypeToContainerDefinitionMapping {
-  [containerType: string]: ContainerDefinition[];
+	[containerType: string]: ContainerDefinition[];
 }
 
 export interface EnvToDefinedContainerMapping {
-  [env: string]: ContainerTypeToContainerDefinitionMapping;
+	[env: string]: ContainerTypeToContainerDefinitionMapping;
 }
 
 export interface IContainerDefinition {
-  image: string;
-  labels: string[];
-  names: string[];
-  mounts: string[];
-  networks: string[];
-  ports: string[];
+	image: string;
+	labels: string[];
+	names: string[];
+	mounts: string[];
+	networks: string[];
+	ports: string[];
 }
 
 export class ContainerDefinition implements IContainerDefinition {
-  NameLabel = 'net.yukkuricraft.container_name';
-  TypeLabel = 'net.yukkuricraft.container_type';
-  EnvLabel = 'net.yukkuricraft.env';
+	NameLabel = "net.yukkuricraft.container_name";
+	TypeLabel = "net.yukkuricraft.container_type";
+	EnvLabel = "net.yukkuricraft.env";
 
-  getLabelValue(targetLabel: string) {
-    const filteredLabels = this.labels.filter((label: string) =>
-      label.includes(targetLabel)
-    );
-    const label = filteredLabels ? filteredLabels[0] : '';
-    const splitLabel = label.split('=');
-    return splitLabel.length > 1 ? splitLabel[1] : '';
-  }
+	getLabelValue(targetLabel: string) {
+		const filteredLabels = this.labels.filter((label: string) =>
+			label.includes(targetLabel)
+		);
+		const label = filteredLabels ? filteredLabels[0] : "";
+		const splitLabel = label.split("=");
+		return splitLabel.length > 1 ? splitLabel[1] : "";
+	}
 
-  getContainerName() {
-    const serviceLabel = this.getLabelValue(this.NameLabel);
-    return serviceLabel ? serviceLabel : this.names[0];
-  }
+	getContainerName() {
+		const serviceLabel = this.getLabelValue(this.NameLabel);
+		return serviceLabel ? serviceLabel : this.names[0];
+	}
 
-  getFormattedContainerName() {
-    return _.capitalize(this.getContainerName());
-  }
+	getFormattedContainerName() {
+		return _.capitalize(this.getContainerName());
+	}
 
-  labelsToContainerType(labels: string[]) {
-    let containerType = ContainerType.Unknown;
-    if (_.includes(labels, `${this.TypeLabel}=minecraft`)) {
-      containerType = ContainerType.Minecraft;
-    } else if (_.includes(labels, `${this.TypeLabel}=velocity`)) {
-      containerType = ContainerType.MCProxy;
-    } else if (_.includes(labels, `${this.TypeLabel}=mysql`)) {
-      containerType = ContainerType.MySQL;
-    }
+	labelsToContainerType(labels: string[]) {
+		let containerType = ContainerType.Unknown;
+		if (_.includes(labels, `${this.TypeLabel}=minecraft`)) {
+			containerType = ContainerType.Minecraft;
+		} else if (_.includes(labels, `${this.TypeLabel}=velocity`)) {
+			containerType = ContainerType.MCProxy;
+		} else if (_.includes(labels, `${this.TypeLabel}=mysql`)) {
+			containerType = ContainerType.MySQL;
+		}
 
-    return containerType;
-  }
+		return containerType;
+	}
 
-  getContainerEnvString(): string {
-    return this.getLabelValue(this.EnvLabel);
-  }
+	getContainerEnvString(): string {
+		return this.getLabelValue(this.EnvLabel);
+	}
 
-  getContainerType(): ContainerType {
-    return this.labelsToContainerType(this.labels);
-  }
+	getContainerType(): ContainerType {
+		return this.labelsToContainerType(this.labels);
+	}
 
-  getContainerState(): string {
-    // If we're running getContainerState() on a ContainerDefinition it means we don't have
-    // an analogous ActiveContainer, meaning it's not active, meaning it's down.
-    return ContainerStates.Down;
-  }
+	getContainerState(): string {
+		// If we're running getContainerState() on a ContainerDefinition it means we don't have
+		// an analogous ActiveContainer, meaning it's not active, meaning it's down.
+		return ContainerStates.Down;
+	}
 
-  // ContainerDefinitions come back as proper arrays becausse Python handles those.
-  // This is not true for ActiveContainer which we get directly from `docker ps` output.
-  image = '';
-  labels: string[] = [];
-  names: string[] = [];
-  mounts: string[] = [];
-  networks: string[] = [];
-  ports: string[] = [];
+	// ContainerDefinitions come back as proper arrays becausse Python handles those.
+	// This is not true for ActiveContainer which we get directly from `docker ps` output.
+	image = "";
+	labels: string[] = [];
+	names: string[] = [];
+	mounts: string[] = [];
+	networks: string[] = [];
+	ports: string[] = [];
 }
 
 export interface IActiveContainer extends IContainerDefinition {
-  command: string;
-  createdAt: Date;
-  id: string;
-  localVolumes: number;
-  runningFor: string;
-  size: string;
-  state: DockerContainerState;
-  status: string;
+	command: string;
+	createdAt: Date;
+	id: string;
+	localVolumes: number;
+	runningFor: string;
+	size: string;
+	state: DockerContainerState;
+	status: string;
 }
 
 /**
@@ -126,87 +126,87 @@ export interface IActiveContainer extends IContainerDefinition {
  * essentially a "summary" of docker states.
  */
 export enum ContainerStates {
-  Up = 'up',
-  Down = 'down',
-  Transitioning = 'transitioning',
-  Unknown = 'unknown',
+	Up = "up",
+	Down = "down",
+	Transitioning = "transitioning",
+	Unknown = "unknown",
 }
 export interface ActiveContainerStateMapping {
-  [state: string]: {
-    desc: string;
-    condition: (container: ActiveContainer) => boolean;
-  };
+	[state: string]: {
+		desc: string;
+		condition: (container: ActiveContainer) => boolean;
+	};
 }
 export const StateMapping: ActiveContainerStateMapping = {
-  [ContainerStates.Up]: {
-    desc: 'Container is running.',
-    condition: (container) => {
-      return (container ?? {}).state == DockerContainerState.Running;
-    },
-  },
-  [ContainerStates.Down]: {
-    desc: 'Container is down.',
-    condition: (container) => {
-      const downStates = [
-        DockerContainerState.Dead,
-        DockerContainerState.Exited,
-        DockerContainerState.Paused,
-      ];
-      return _.includes(downStates, (container ?? {}).state);
-    },
-  },
-  [ContainerStates.Transitioning]: {
-    desc: 'Container is changing waiting for changes...',
-    condition: (container) => {
-      const transitioningStates = [
-        DockerContainerState.Uninitialized,
-        DockerContainerState.Restarting,
-        DockerContainerState.Created,
-      ];
-      return _.includes(transitioningStates, (container ?? {}).state);
-    },
-  },
-  [ContainerStates.Unknown]: {
-    // Ensure this is always last in the list of states
-    desc: 'Unknown...',
-    condition(container) {
-      return true;
-    },
-  },
+	[ContainerStates.Up]: {
+		desc: "Container is running.",
+		condition: container => {
+			return (container ?? {}).state == DockerContainerState.Running;
+		},
+	},
+	[ContainerStates.Down]: {
+		desc: "Container is down.",
+		condition: container => {
+			const downStates = [
+				DockerContainerState.Dead,
+				DockerContainerState.Exited,
+				DockerContainerState.Paused,
+			];
+			return _.includes(downStates, (container ?? {}).state);
+		},
+	},
+	[ContainerStates.Transitioning]: {
+		desc: "Container is changing waiting for changes...",
+		condition: container => {
+			const transitioningStates = [
+				DockerContainerState.Uninitialized,
+				DockerContainerState.Restarting,
+				DockerContainerState.Created,
+			];
+			return _.includes(transitioningStates, (container ?? {}).state);
+		},
+	},
+	[ContainerStates.Unknown]: {
+		// Ensure this is always last in the list of states
+		desc: "Unknown...",
+		condition(container) {
+			return true;
+		},
+	},
 };
 
 export class ActiveContainer
-  extends ContainerDefinition
-  implements IActiveContainer
+	extends ContainerDefinition
+	implements IActiveContainer
 {
-  override getContainerState(): ContainerStates {
-    for (let state in StateMapping) {
-      if (StateMapping[state].condition(this)) {
-        return state as ContainerStates;
-      }
-    }
-    return ContainerStates.Unknown;
-  }
+	override getContainerState(): ContainerStates {
+		for (let state in StateMapping) {
+			if (StateMapping[state].condition(this)) {
+				return state as ContainerStates;
+			}
+		}
+		return ContainerStates.Unknown;
+	}
 
-  command = '';
-  id = '';
-  localVolumes = -1;
-  runningFor = '';
-  size = '';
-  state = DockerContainerState.Uninitialized;
-  status = '';
+	command = "";
+	id = "";
+	localVolumes = -1;
+	runningFor = "";
+	size = "";
+	state = DockerContainerState.Uninitialized;
+	status = "";
 
-  @Transform(dockerStringArrayTransformer)
-  override labels: string[] = [];
-  @Transform(dockerStringArrayTransformer)
-  override names: string[] = [];
-  @Transform(dockerStringArrayTransformer)
-  override mounts: string[] = [];
-  @Transform(dockerStringArrayTransformer)
-  override networks: string[] = [];
-  @Transform(dockerStringArrayTransformer)
-  override ports: string[] = [];
+	@Transform(dockerStringArrayTransformer)
+	override labels: string[] = [];
+	@Transform(dockerStringArrayTransformer)
+	override names: string[] = [];
+	@Transform(dockerStringArrayTransformer)
+	override mounts: string[] = [];
+	@Transform(dockerStringArrayTransformer)
+	override networks: string[] = [];
+	@Transform(dockerStringArrayTransformer)
+	override ports: string[] = [];
 
-  @Transform(dateStringTransformer)
-  createdAt = new Date();
+	@Transform(dateStringTransformer)
+	createdAt = new Date();
 }

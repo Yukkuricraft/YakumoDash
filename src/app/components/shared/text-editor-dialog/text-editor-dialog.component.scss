@@ -1,25 +1,25 @@
 .filename {
-    margin-bottom: 8px;
+	margin-bottom: 8px;
 }
 .dialog-content {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 .description {
-    height: 100%;
-    flex-grow: 99;
+	height: 100%;
+	flex-grow: 99;
 }
 
 .mat-dialog-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    flex-wrap: nowrap;
-    gap: 8px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	flex-wrap: nowrap;
+	gap: 8px;
 
-    & .extra-action-prompt {
-        font-size: 0.8em;
-    }
+	& .extra-action-prompt {
+		font-size: 0.8em;
+	}
 }

@@ -1,22 +1,22 @@
 .new-env-configuration {
-  margin: 32px 0 48px 0;
-  display: flex;
-  flex-direction: column;
+	margin: 32px 0 48px 0;
+	display: flex;
+	flex-direction: column;
 }
 
 .minitext {
-  font-size: 0.7em;
+	font-size: 0.7em;
 }
 
 .extra-spacer {
-  margin-top: 40px !important; // Eh...
+	margin-top: 40px !important; // Eh...
 }
 
 mat-label {
-  font-size: 1.1em;
-  color: #f1f1f1;
+	font-size: 1.1em;
+	color: #f1f1f1;
 }
 
 mat-form-field + mat-form-field {
-  margin-top: 12px;
+	margin-top: 12px;
 }

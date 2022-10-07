@@ -1,45 +1,54 @@
 <mat-drawer-container style="height: 100%">
-  <mat-drawer #drawer mode="over" (click)="closeSideNav()">
-    <mat-nav-list>
-      <mat-list-item>
-        <a routerLink="/">
-          <mat-icon>home</mat-icon>
-          <span>Home</span>
-        </a>
-      </mat-list-item>
+	<mat-drawer #drawer mode="over" (click)="closeSideNav()">
+		<mat-nav-list>
+			<mat-list-item>
+				<a routerLink="/">
+					<mat-icon>home</mat-icon>
+					<span>Home</span>
+				</a>
+			</mat-list-item>
 
-      <mat-list-item>
-        <a routerLink="/server-mgmt">
-          <mat-icon>person</mat-icon>
-          <span>Server Management</span>
-        </a>
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-drawer>
+			<mat-list-item>
+				<a routerLink="/server-mgmt">
+					<mat-icon>person</mat-icon>
+					<span>Server Management</span>
+				</a>
+			</mat-list-item>
+		</mat-nav-list>
+	</mat-drawer>
 
-  <mat-drawer-content>
-    <mat-toolbar color="primary">
-      <button mat-icon-button aria-label="Menu" type="button" (click)="drawer.toggle()">
-        <mat-icon>menu</mat-icon>
-      </button>
+	<mat-drawer-content>
+		<mat-toolbar color="primary">
+			<button
+				mat-icon-button
+				aria-label="Menu"
+				type="button"
+				(click)="drawer.toggle()"
+			>
+				<mat-icon>menu</mat-icon>
+			</button>
 
-      <div class="toolbar-heading">
-        <div>
-          <a routerLink="/" style="color: white; text-decoration: none; margin-left: 10px">Home</a>
-        </div>
+			<div class="toolbar-heading">
+				<div>
+					<a
+						routerLink="/"
+						style="color: white; text-decoration: none; margin-left: 10px"
+						>Home</a
+					>
+				</div>
 
-        <div>
-          <span>YakumoDash</span>
-        </div>
+				<div>
+					<span>YakumoDash</span>
+				</div>
 
-        <button mat-icon-button type="button" (click)="logout()">
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </div>
-    </mat-toolbar>
+				<button mat-icon-button type="button" (click)="logout()">
+					<mat-icon>cancel</mat-icon>
+				</button>
+			</div>
+		</mat-toolbar>
 
-    <div class="container container--fluid">
-      <router-outlet></router-outlet>
-    </div>
-  </mat-drawer-content>
+		<div class="container container--fluid">
+			<router-outlet></router-outlet>
+		</div>
+	</mat-drawer-content>
 </mat-drawer-container>

@@ -1,16 +1,26 @@
-<mat-card class="container"
-          [ngClass]="{'minecraft-containers': containerDef.getContainerType() === ContainerType.Minecraft,
-                      'aux-containers': containerDef.getContainerType() !== ContainerType.Minecraft}">
-    <mat-card-title>
-        <div class="container-name">
-            <div class="">{{containerDef.getFormattedContainerName()}}</div>
-            <div>
-                <app-container-status-light [containerDef]="containerDef"></app-container-status-light>
-            </div>
-        </div>
-    </mat-card-title>
-    <mat-card-content>
-        <app-container-status [containerDef]="containerDef"></app-container-status>
-        <app-container-actions [containerDef]="containerDef"></app-container-actions>
-    </mat-card-content>
+<mat-card
+	class="container"
+	[ngClass]="{
+		'minecraft-containers':
+			containerDef.getContainerType() === ContainerType.Minecraft,
+		'aux-containers':
+			containerDef.getContainerType() !== ContainerType.Minecraft
+	}"
+>
+	<mat-card-title>
+		<div class="container-name">
+			<div class="">{{ containerDef.getFormattedContainerName() }}</div>
+			<div>
+				<app-container-status-light
+					[containerDef]="containerDef"
+				></app-container-status-light>
+			</div>
+		</div>
+	</mat-card-title>
+	<mat-card-content>
+		<app-container-status [containerDef]="containerDef"></app-container-status>
+		<app-container-actions
+			[containerDef]="containerDef"
+		></app-container-actions>
+	</mat-card-content>
 </mat-card>

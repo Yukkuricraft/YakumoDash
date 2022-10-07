@@ -1,3 +1,3 @@
 export enum Features {
-  Root = 'root',
+	Root = "root",
 }
