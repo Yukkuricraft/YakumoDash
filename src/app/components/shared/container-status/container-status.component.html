@@ -1,5 +1,6 @@
 <div class="container-status">
 	<ul class="ul-left-margin">
+		<!-- Status -->
 		<li>
 			<div class="status-and-info-toggle">
 				<div>
@@ -13,8 +14,25 @@
 				</button>
 			</div>
 		</li>
-		<li *ngIf="showExtraInfo">
-			<div style="display: flex; flex-direction: row">
+
+		<!-- Name -->
+		<li *ngIf="showExtraExtraInfo" class="show-extra-extra-info">
+			<div class="flex-row">
+				<div class="item-key">Name:</div>
+				<div style="margin-left: 4px">
+					<div
+						*ngFor="let port of getContainerNames$(containerDef) | async"
+						class="item-value"
+					>
+						{{ port }}
+					</div>
+				</div>
+			</div>
+		</li>
+
+		<!-- Ports -->
+		<li *ngIf="showExtraInfo" class="show-extra-info">
+			<div class="flex-row">
 				<div class="item-key">Ports:</div>
 				<div style="margin-left: 4px">
 					<div
@@ -22,6 +40,21 @@
 						class="item-value"
 					>
 						{{ port }}
+					</div>
+				</div>
+			</div>
+		</li>
+
+		<!-- Mounts -->
+		<li *ngIf="showExtraInfo" class="show-extra-info">
+			<div class="flex-row">
+				<div class="item-key">Mounts:</div>
+				<div style="margin-left: 4px">
+					<div
+						*ngFor="let port of getContainerPorts$(containerDef) | async"
+						class="item-value"
+					>
+						{{ foo$ | async }}
 					</div>
 				</div>
 			</div>

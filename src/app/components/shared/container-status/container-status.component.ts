@@ -2,30 +2,67 @@ import { Component, Input, OnInit } from "@angular/core";
 import { ContainerDefinition } from "@app/models/container";
 import { selectActiveContainerByContainerDef } from "@app/store/root.selectors";
 import { Store } from "@ngrx/store";
-import { map } from "rxjs";
+import { map, Observable } from "rxjs";
 
 @Component({
 	selector: "app-container-status",
 	templateUrl: "./container-status.component.html",
 	styleUrls: ["./container-status.component.scss"],
 })
-export class ContainerStatusComponent {
+export class ContainerStatusComponent implements OnInit {
 	@Input() containerDef!: ContainerDefinition;
 
-	showExtraInfo: boolean = false;
-
-	constructor(private store: Store) {}
+	maxExtraInfoLevels = 3; // zero up to and not including max
+	extraInfoLevel: number = 0;
+	get showExtraInfo() {
+		return this.extraInfoLevel >= 1;
+	}
+	get showExtraExtraInfo() {
+		return this.extraInfoLevel >= 2;
+	}
 
 	toggleExtraContainerStatus() {
-		this.showExtraInfo = !this.showExtraInfo;
+		this.extraInfoLevel = (this.extraInfoLevel + 1) % this.maxExtraInfoLevels;
 	}
 
 	getExtraContainerToggleText() {
-		if (this.showExtraInfo) {
+		if (this.extraInfoLevel === 0) {
+			return "Show More";
+		} else if (this.extraInfoLevel === 1) {
+			return "Show MORE";
+		} else if (this.extraInfoLevel === this.maxExtraInfoLevels - 1) {
 			return "Hide";
 		} else {
-			return "Show More";
+			throw Error(
+				`Got an impossible 'extraInfoLevel' (${this.extraInfoLevel}) greater than max (${this.maxExtraInfoLevels}).`
+			);
 		}
+	}
+
+	foo$!: Observable<any>;
+	constructor(private store: Store) {}
+
+	ngOnInit() {
+		this.foo$ = this.store
+			.select(selectActiveContainerByContainerDef(this.containerDef))
+			.pipe(
+				// eslint-disable-next-line ngrx/avoid-mapping-selectors
+				map(activeContainer => {
+					console.log(activeContainer);
+					return activeContainer;
+				})
+			);
+	}
+
+	getContainerNames$(containerDef: ContainerDefinition) {
+		return this.store
+			.select(selectActiveContainerByContainerDef(containerDef))
+			.pipe(
+				// eslint-disable-next-line ngrx/avoid-mapping-selectors
+				map(activeContainer => {
+					return activeContainer?.names ?? [];
+				})
+			);
 	}
 
 	getContainerPorts$(containerDef: ContainerDefinition) {
