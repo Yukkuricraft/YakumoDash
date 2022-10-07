@@ -42,6 +42,8 @@ import { MatTableModule } from "@angular/material/table";
 import { ContainerStatusLightComponent } from './components/server-management/subcomponents/container-status-light/container-status-light.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TextEditorDialogComponent } from './components/shared/text-editor-dialog/text-editor-dialog.component';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 
 const reducers: ActionReducerMap<AppState> = {
@@ -63,6 +65,7 @@ const effects: Type<any>[] = [RootEffects]
     ContainerActionsComponent,
     ContainerStatusLightComponent,
     ConfirmationDialogComponent,
+    TextEditorDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,6 +73,8 @@ const effects: Type<any>[] = [RootEffects]
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({ maxAge: 50 }),
     EffectsModule.forRoot(effects),
+    MonacoEditorModule.forRoot(),
+
     AppRoutingModule,
     BrowserAnimationsModule,
     MatProgressBarModule,

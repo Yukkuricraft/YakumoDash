@@ -14,6 +14,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { NewEnvironmentDialogComponent } from "@app/components/server-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
 import { ConfirmationDialogComponent, ConfirmationDialogData } from '../shared/confirmation-dialog/confirmation-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TextEditorDialogComponent, TextEditorDialogData } from '../shared/text-editor-dialog/text-editor-dialog.component';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-server-management',
@@ -50,7 +52,10 @@ export class ServerManagementComponent {
     this.activeEnv$.subscribe(
       (env) => {
         this.activeEnv = env;
-        this.refreshContainersForEnv(env);
+
+        if (!_.isNil(env)) {
+          this.refreshContainersForEnv(env);
+        }
       }
     )
   }
@@ -103,7 +108,6 @@ export class ServerManagementComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.store.dispatch(beginShutdownEnv({ env: activeEnv }))
-        dialogRef.close();
       }
     });
   }
@@ -133,6 +137,24 @@ export class ServerManagementComponent {
 
     const activeEnv = this.activeEnv as Env;
     console.log(activeEnv);
+
+    const dialogRef = this.dialog.open<TextEditorDialogComponent, TextEditorDialogData, boolean>(
+      TextEditorDialogComponent,
+      {
+        data: { 
+          title: 'Edit Environment Config',
+          uri: 'env/prod.toml',
+        },
+        width: '100vw',
+        height: '100vh',
+      },
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log(result);
+      }
+    });
+
   }
 
   deleteEnvironment() {
@@ -154,7 +176,6 @@ export class ServerManagementComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.store.dispatch(beginDeleteEnv({ env: activeEnv }))
-        dialogRef.close();
       }
     });
   }

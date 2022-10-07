@@ -24,10 +24,10 @@
             <div class="env-info">
               <div style="font-size: 0.8em;">
                 <ul style="margin-left: 1.5em;">
-                  <li>Running on Port: <span class="summary-val">{{env.config.proxyPort}}</span></li>
-                  <li>Server Version: <span class="summary-val">{{env.config.mcVersion}}</span></li>
-                  <li>Server Type: <span class="summary-val">{{env.config.serverType}}</span></li>
-                  <li>Server Build: <span class="summary-val">{{env.config.serverBuild}}</span></li>
+                  <li><span class="summary-key">Running on Port: </span><span class="summary-val">{{env.config.proxyPort}}</span></li>
+                  <li><span class="summary-key">Server Version: </span><span class="summary-val">{{env.config.mcVersion}}</span></li>
+                  <li><span class="summary-key">Server Type: </span><span class="summary-val">{{env.config.serverType}}</span></li>
+                  <li><span class="summary-key">Server Build: </span><span class="summary-val">{{env.config.serverBuild}}</span></li>
                 </ul>
               </div>
               <div style="margin-top: 8px" [innerHtml]="env.getRenderedDescription()">

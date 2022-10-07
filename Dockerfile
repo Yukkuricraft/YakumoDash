@@ -8,8 +8,8 @@ COPY . /app
 RUN yarn install
 
 # Build Ng
-FROM node AS build
-RUN yarn run build
+FROM node AS dev
+RUN yarn build
 
 # Nginx
 

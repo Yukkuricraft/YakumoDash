@@ -7,7 +7,7 @@ build: build_nginx
 .PHONY: build_dev
 build_dev:
 	docker build -f Dockerfile . \
-	--target node \
+	--target dev \
 	--tag=yukkuricraft/yakumo-dash-dev
 
 .PHONY: build_nginx
