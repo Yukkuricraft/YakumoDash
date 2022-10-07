@@ -8,9 +8,7 @@
   </mat-card-title>
   <mat-card-content>
     <div class="container-status">
-<!--      <div>-->
-<!--        {{container.status}}-->
-<!--      </div>-->
+      <app-container-status [containerDef]="containerDef"></app-container-status>
     </div>
     <app-container-actions [containerDef]="containerDef"></app-container-actions>
   </mat-card-content>

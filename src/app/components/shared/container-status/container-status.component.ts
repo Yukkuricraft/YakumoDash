@@ -1,16 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActiveContainer, ContainerDefinition } from "@app/models/container";
+import { ContainerDefinition } from '@app/models/container';
 import { selectActiveContainerByContainerDef } from '@app/store/root.selectors';
 import { Store } from '@ngrx/store';
-import { map, Observable } from "rxjs";
+import { map } from 'rxjs';
 
 @Component({
-  selector: 'app-minecraft-containers-table',
-  templateUrl: './minecraft-containers-table.component.html',
-  styleUrls: ['./minecraft-containers-table.component.scss']
+  selector: 'app-container-status',
+  templateUrl: './container-status.component.html',
+  styleUrls: ['./container-status.component.scss']
 })
-export class MinecraftContainersTableComponent {
-  @Input() containers$!: Observable<ContainerDefinition[]>;
+export class ContainerStatusComponent {
+  @Input() containerDef!: ContainerDefinition;
+
+  constructor(
+    private store: Store,
+  ) { }
 
   getContainerPorts$(containerDef: ContainerDefinition) {
     return this.store.select(selectActiveContainerByContainerDef(containerDef)).pipe(
@@ -33,9 +37,4 @@ export class MinecraftContainersTableComponent {
       ),
     )
   }
-
-  constructor(
-    private store: Store,
-  ) { }
-
 }

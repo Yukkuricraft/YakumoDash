@@ -1,0 +1,17 @@
+<div class="container-status">
+    <ul class="ul-left-margin">
+    <li>
+        <span class="item-key">Status: </span>
+        <span class="item-value">{{getContainerStatus$(containerDef) | async}}</span>
+    </li>
+    <li>
+        <div style="display: flex; flex-direction: row;">
+        <div class="item-key">Ports: </div>
+        <div style="margin-left:4px;">
+            <div *ngFor="let port of getContainerPorts$(containerDef) | async"
+            class="item-value">{{port}}</div>
+        </div>
+        </div>
+    </li>
+    </ul>
+</div>

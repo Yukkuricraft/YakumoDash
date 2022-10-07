@@ -39,11 +39,12 @@ import { AuxContainerCardComponent } from './components/server-management/subcom
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MinecraftContainersTableComponent } from './components/server-management/subcomponents/minecraft-containers-table/minecraft-containers-table.component';
 import { MatTableModule } from "@angular/material/table";
-import { ContainerStatusLightComponent } from './components/server-management/subcomponents/container-status-light/container-status-light.component';
+import { ContainerStatusLightComponent } from './components/shared/container-status-light/container-status-light.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TextEditorDialogComponent } from './components/shared/text-editor-dialog/text-editor-dialog.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { ContainerStatusComponent } from './components/shared/container-status/container-status.component';
 
 
 const reducers: ActionReducerMap<AppState> = {
@@ -66,6 +67,7 @@ const effects: Type<any>[] = [RootEffects]
     ContainerStatusLightComponent,
     ConfirmationDialogComponent,
     TextEditorDialogComponent,
+    ContainerStatusComponent,
   ],
   imports: [
     BrowserModule,

@@ -50,7 +50,7 @@ export interface IContainerDefinition {
   ports: string[];
 }
 
-export class ContainerDefinition {
+export class ContainerDefinition implements IContainerDefinition {
   NameLabel = "net.yukkuricraft.container_name";
   TypeLabel = "net.yukkuricraft.container_type";
   EnvLabel = "net.yukkuricraft.env";
@@ -101,11 +101,11 @@ export class ContainerDefinition {
   // ContainerDefinitions come back as proper arrays becausse Python handles those.
   // This is not true for ActiveContainer which we get directly from `docker ps` output.
   image = '';
-  labels = [];
-  names = [];
-  mounts = [];
-  networks = [];
-  ports = [];
+  labels: string[] = [];
+  names: string[] = [];
+  mounts: string[] = [];
+  networks: string[] = [];
+  ports: string[] = [];
 }
 
 export interface IActiveContainer extends IContainerDefinition {
@@ -193,15 +193,15 @@ export class ActiveContainer extends ContainerDefinition implements IActiveConta
   status = '';
 
   @Transform(dockerStringArrayTransformer)
-  override labels = [];
+  override labels: string[] = [];
   @Transform(dockerStringArrayTransformer)
-  override names = [];
+  override names: string[] = [];
   @Transform(dockerStringArrayTransformer)
-  override mounts = [];
+  override mounts: string[] = [];
   @Transform(dockerStringArrayTransformer)
-  override networks = [];
+  override networks: string[] = [];
   @Transform(dockerStringArrayTransformer)
-  override ports = [];
+  override ports: string[] = [];
 
   @Transform(dateStringTransformer)
   createdAt = new Date();
