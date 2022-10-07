@@ -15,15 +15,14 @@ export class TextEditorDialogComponent {
   options = {
     automaticLayout: true,
     theme: 'vs-dark',
-    dimension: {
-      height: '500px',
-    },
+    wordWrap: true,
     contextmenu: true,
     minimap: {
       enabled: true,
     }
   }
 
+  filename: string = "";
   editorContent: string = "";
 
   constructor(
@@ -35,6 +34,7 @@ export class TextEditorDialogComponent {
 
     this.fileService.readFile(file).subscribe(
       (result: any) => {
+        this.filename = file;
         console.log("GOT BACK:")
         console.log(result)
         this.editorContent = result.content.toString() ?? '[]';
@@ -44,5 +44,12 @@ export class TextEditorDialogComponent {
 
   onCancel() {
     this.dialogRef.close(false);
+  }
+
+  onSave() {
+    console.log(this.editorContent);
+    this.fileService.writeFile(this.filename, this.editorContent).subscribe(
+      console.log
+    );
   }
 }

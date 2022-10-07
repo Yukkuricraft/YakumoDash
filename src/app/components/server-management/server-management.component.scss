@@ -1,3 +1,5 @@
+@import '../../styles/common.scss';
+
 h3 {
   margin-bottom: 8px;
 }
@@ -11,12 +13,6 @@ h3 {
   }
 }
 
-.summary-key {
-  color: rgb(230, 230, 230, 0.75);
-}
-.summary-val {
-  font-style: italic;
-}
 
 .filter-to-white {
   filter: brightness(0) saturate(100%) invert(100%);

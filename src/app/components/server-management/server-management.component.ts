@@ -8,7 +8,7 @@ import {
   selectCurrentTabIndex, selectDefinedContainersByEnvAndType
 } from "@app/store/root.selectors";
 import { Env } from "@app/models/env";
-import { fetchAvailableEnvs, fetchContainerStatusForEnv, setGlobalLoadingBarActive, setGlobalLoadingBarInactive, setTabIndexForPage, beginDeleteEnv, beginSpinupEnv, beginShutdownEnv } from "@app/store/root.actions";
+import { fetchAvailableEnvs, fetchContainerStatusForEnv, setGlobalLoadingBarActive, setGlobalLoadingBarInactive, setTabIndexForPage, beginDeleteEnv, beginSpinupEnv, beginShutdownEnv, initializeApp } from "@app/store/root.actions";
 import { ContainerType } from "@app/models/container";
 import { MatDialog } from "@angular/material/dialog";
 import { NewEnvironmentDialogComponent } from "@app/components/server-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
@@ -38,7 +38,6 @@ export class ServerManagementComponent {
     private dockerApi: DockerService,
     private snackbar: MatSnackBar,
     private envsApi: EnvironmentsService,
-    
   ) {
     this.availableEnvs$ = this.store.select(selectAvailableEnvs);
     this.activeTabIndex$ = this.store.select(selectCurrentTabIndex(this.pageType))
@@ -143,15 +142,17 @@ export class ServerManagementComponent {
       {
         data: { 
           title: 'Edit Environment Config',
-          uri: 'env/prod.toml',
+          uri: `env/${activeEnv.name}.toml`,
         },
         width: '100vw',
-        height: '100vh',
+        height: '90vh',
+        disableClose: true,
       },
     );
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log(result);
+        this.store.dispatch(initializeApp());
       }
     });
 

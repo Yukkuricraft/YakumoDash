@@ -23,11 +23,11 @@
           <mat-card-content>
             <div class="env-info">
               <div style="font-size: 0.8em;">
-                <ul style="margin-left: 1.5em;">
-                  <li><span class="summary-key">Running on Port: </span><span class="summary-val">{{env.config.proxyPort}}</span></li>
-                  <li><span class="summary-key">Server Version: </span><span class="summary-val">{{env.config.mcVersion}}</span></li>
-                  <li><span class="summary-key">Server Type: </span><span class="summary-val">{{env.config.serverType}}</span></li>
-                  <li><span class="summary-key">Server Build: </span><span class="summary-val">{{env.config.serverBuild}}</span></li>
+                <ul class="ul-left-margin">
+                  <li><span class="item-key">Running on Port: </span><span class="item-val">{{env.config.proxyPort}}</span></li>
+                  <li><span class="item-key">Server Version: </span><span class="item-val">{{env.config.mcVersion}}</span></li>
+                  <li><span class="item-key">Server Type: </span><span class="item-val">{{env.config.serverType}}</span></li>
+                  <li><span class="item-key">Server Build: </span><span class="item-val">{{env.config.serverBuild}}</span></li>
                 </ul>
               </div>
               <div style="margin-top: 8px" [innerHtml]="env.getRenderedDescription()">
