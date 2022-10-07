@@ -10,11 +10,22 @@ export class DomainConverter {
     return plainToInstance<T, any>(domain, plain, { ignoreDecorators: true });
   }
 
-  static fromDto<T>(domain: ClassConstructor<T>, dto: any, options?: FromDtoOptions): T {
-    return plainToInstance<T, any>(domain, camelizeKeys(dto, options?.caseOptions));
+  static fromDto<T>(
+    domain: ClassConstructor<T>,
+    dto: any,
+    options?: FromDtoOptions
+  ): T {
+    return plainToInstance<T, any>(
+      domain,
+      camelizeKeys(dto, options?.caseOptions)
+    );
   }
 
-  static toDto<T>(domain: ClassConstructor<T>, instance: any, options?: ToDtoOptions) {
+  static toDto<T>(
+    domain: ClassConstructor<T>,
+    instance: any,
+    options?: ToDtoOptions
+  ) {
     if (!(instance instanceof domain)) {
       instance = DomainConverter.objectToInstance<T>(domain, instance);
     }

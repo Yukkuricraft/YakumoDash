@@ -1,6 +1,6 @@
-import { modelTransformer } from "@app/helpers/dto-transformers";
-import { Transform } from "class-transformer";
-import { ApiRunnerResponse, IApiRunnerResponse } from "./api";
+import { modelTransformer } from '@app/helpers/dto-transformers';
+import { Transform } from 'class-transformer';
+import { ApiRunnerResponse, IApiRunnerResponse } from './api';
 
 export interface IEnvConfig {
   proxyPort: number;
@@ -12,10 +12,10 @@ export interface IEnvConfig {
 
 export class EnvConfig {
   proxyPort = 0;
-  serverType = "";
-  serverBuild = "";
-  mcVersion = "";
-  fsRoot = "";
+  serverType = '';
+  serverBuild = '';
+  mcVersion = '';
+  fsRoot = '';
 }
 
 export interface IEnv {
@@ -29,27 +29,31 @@ export interface IEnv {
   formatted: string;
 }
 
-export class Env implements IEnv{
-  type = "";
+export class Env implements IEnv {
+  type = '';
   num: number | null = null;
   port = 0;
 
   @Transform(modelTransformer(EnvConfig))
   config = new EnvConfig();
 
-  name = "";
-  description = "";
-  alias = "";
-  formatted = "";
+  name = '';
+  description = '';
+  alias = '';
+  formatted = '';
 
-  getFormattedLabel() { return `${this.formatted} (${this.alias})`; }
-  getRenderedDescription() { return this.description.replace(/\n/g, "<br />");}
+  getFormattedLabel() {
+    return `${this.formatted} (${this.alias})`;
+  }
+  getRenderedDescription() {
+    return this.description.replace(/\n/g, '<br />');
+  }
 }
 
 export interface IEnvField {
   env: Env;
 }
-  
+
 export class EnvField implements IEnvField {
   @Transform(modelTransformer(Env))
   env = new Env();
@@ -62,9 +66,9 @@ export interface ICreatedEnv extends IEnvField {
 }
 
 export class CreatedEnv extends EnvField {
-  alias = "";
+  alias = '';
   port = 0;
-  description = "";
+  description = '';
 }
 
 export interface ICreateEnvResponse {
@@ -75,4 +79,3 @@ export class CreateEnvResponse implements ICreateEnvResponse {
   @Transform(modelTransformer(CreatedEnv))
   createdEnv = new CreatedEnv();
 }
-

@@ -1,8 +1,15 @@
 import { CreatedEnv, Env } from '@app/models/env';
-import { ClassConstructor, TransformationType, TransformFnParams } from 'class-transformer';
+import {
+  ClassConstructor,
+  TransformationType,
+  TransformFnParams,
+} from 'class-transformer';
 import { DomainConverter } from './domain';
 
-export function dateStringTransformer({ type, value }: TransformFnParams): string | Date {
+export function dateStringTransformer({
+  type,
+  value,
+}: TransformFnParams): string | Date {
   if (!value) {
     return value;
   }
@@ -12,7 +19,7 @@ export function dateStringTransformer({ type, value }: TransformFnParams): strin
       return new Date(Date.parse(value));
 
     case TransformationType.CLASS_TO_PLAIN:
-      return "Fuck You Javascript";
+      return 'Fuck You Javascript';
 
     default:
       return value;
@@ -33,19 +40,22 @@ export function modelTransformer<T>(model: ClassConstructor<T>) {
       default:
         return value;
     }
-  }
+  };
 }
 
-export function dockerStringArrayTransformer({ type, value }: TransformFnParams): string | string[] {
+export function dockerStringArrayTransformer({
+  type,
+  value,
+}: TransformFnParams): string | string[] {
   if (!value) {
     return value;
   }
 
   switch (type) {
     case TransformationType.PLAIN_TO_CLASS:
-      return value.split(",");
+      return value.split(',');
     case TransformationType.CLASS_TO_PLAIN:
-      return value.join(",");
+      return value.join(',');
     default:
       return value;
   }

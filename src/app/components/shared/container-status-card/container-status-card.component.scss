@@ -1,0 +1,44 @@
+@import '../../../styles/common.scss';
+
+mat-card.aux-containers {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  max-width: 350px;
+
+  padding: 14px 16px 14px 16px;
+}
+
+mat-card.minecraft-containers {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2px;
+
+  padding: 8px 12px 10px 12px;
+
+  mat-card-title {
+    margin-bottom: 4px;
+  }
+
+  h3 {
+    margin-bottom: 8px;
+  }
+
+  app-container-status-light {
+    font-size: 1.5em;
+  }
+
+  .container-name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 1em;
+    opacity: 0.8;
+  }
+
+  .container-status {
+    font-size: 0.8em;
+  }
+}
+

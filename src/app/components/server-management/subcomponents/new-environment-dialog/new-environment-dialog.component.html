@@ -13,7 +13,7 @@
         <input matInput placeholder="Enter Alias..." formControlName="envAlias" id="envAlias">
         <mat-error *ngIf="envAlias.invalid && envAlias.value.length > 0">{{getErrorMessage(envAlias)}}</mat-error>
       </mat-form-field>
-      
+
       <mat-form-field>
         <mat-label>Minecraft Proxy Port</mat-label>
         <mat-hint>The port the proxy will run on. This will be the port you connect to in Minecraft. Port must be between 25600-25700 and not already used by another environment.</mat-hint>

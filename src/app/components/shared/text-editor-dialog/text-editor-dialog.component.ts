@@ -2,7 +2,16 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FilesService } from '@app/services/files/files.service';
 
-export type TextEditorDialogData = { title?: string; uri?: string; };
+export type TextEditorDialogData = {
+  title?: string;
+  uri?: string;
+  extraActionPrompt?: string;
+};
+
+export type TextEditorDialogReturn = {
+  result: boolean;
+  extraActionResult: boolean | null;
+}
 
 @Component({
   selector: 'app-text-editor-dialog',
@@ -24,10 +33,11 @@ export class TextEditorDialogComponent {
 
   filename: string = "";
   editorContent: string = "";
+  extraActionValue: boolean | null = null;
 
   constructor(
     private fileService: FilesService,
-    public dialogRef: MatDialogRef<TextEditorDialogComponent, boolean>,
+    public dialogRef: MatDialogRef<TextEditorDialogComponent, TextEditorDialogReturn>,
     @Inject(MAT_DIALOG_DATA) public data?: TextEditorDialogData,
   ) {
     let file = data?.uri ?? 'Foo.txt';
@@ -43,7 +53,10 @@ export class TextEditorDialogComponent {
   }
 
   onCancel() {
-    this.dialogRef.close(false);
+    this.dialogRef.close({
+      result: false,
+      extraActionResult: this.extraActionValue,
+    });
   }
 
   onSave() {
@@ -51,5 +64,9 @@ export class TextEditorDialogComponent {
     this.fileService.writeFile(this.filename, this.editorContent).subscribe(
       console.log
     );
+    this.dialogRef.close({
+      result: true,
+      extraActionResult: this.extraActionValue,
+    });
   }
 }

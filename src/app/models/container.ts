@@ -1,9 +1,9 @@
 import {
   dateStringTransformer,
-  dockerStringArrayTransformer
-} from "@app/helpers/dto-transformers";
-import { Transform } from "class-transformer";
-import _ from "lodash";
+  dockerStringArrayTransformer,
+} from '@app/helpers/dto-transformers';
+import { Transform } from 'class-transformer';
+import _ from 'lodash';
 
 export enum ContainerType {
   Minecraft = 'mc',
@@ -26,19 +26,19 @@ export enum DockerContainerState {
 }
 
 export interface ContainerTypeToActiveContainerMapping {
-  [containerType: string]: ActiveContainer[],
+  [containerType: string]: ActiveContainer[];
 }
 
 export interface EnvToActiveContainerMapping {
-  [env: string]: ContainerTypeToActiveContainerMapping
+  [env: string]: ContainerTypeToActiveContainerMapping;
 }
 
 export interface ContainerTypeToContainerDefinitionMapping {
-  [containerType: string]: ContainerDefinition[],
+  [containerType: string]: ContainerDefinition[];
 }
 
 export interface EnvToDefinedContainerMapping {
-  [env: string]: ContainerTypeToContainerDefinitionMapping
+  [env: string]: ContainerTypeToContainerDefinitionMapping;
 }
 
 export interface IContainerDefinition {
@@ -51,15 +51,17 @@ export interface IContainerDefinition {
 }
 
 export class ContainerDefinition implements IContainerDefinition {
-  NameLabel = "net.yukkuricraft.container_name";
-  TypeLabel = "net.yukkuricraft.container_type";
-  EnvLabel = "net.yukkuricraft.env";
+  NameLabel = 'net.yukkuricraft.container_name';
+  TypeLabel = 'net.yukkuricraft.container_type';
+  EnvLabel = 'net.yukkuricraft.env';
 
   getLabelValue(targetLabel: string) {
-    const filteredLabels = this.labels.filter((label: string) => label.includes(targetLabel));
-    const label = filteredLabels ? filteredLabels[0] : "";
-    const splitLabel = label.split("=");
-    return splitLabel.length > 1 ? splitLabel[1] : "";
+    const filteredLabels = this.labels.filter((label: string) =>
+      label.includes(targetLabel)
+    );
+    const label = filteredLabels ? filteredLabels[0] : '';
+    const splitLabel = label.split('=');
+    return splitLabel.length > 1 ? splitLabel[1] : '';
   }
 
   getContainerName() {
@@ -68,7 +70,7 @@ export class ContainerDefinition implements IContainerDefinition {
   }
 
   getFormattedContainerName() {
-    return _.capitalize(this.getContainerName())
+    return _.capitalize(this.getContainerName());
   }
 
   labelsToContainerType(labels: string[]) {
@@ -93,7 +95,7 @@ export class ContainerDefinition implements IContainerDefinition {
   }
 
   getContainerState(): string {
-  // If we're running getContainerState() on a ContainerDefinition it means we don't have
+    // If we're running getContainerState() on a ContainerDefinition it means we don't have
     // an analogous ActiveContainer, meaning it's not active, meaning it's down.
     return ContainerStates.Down;
   }
@@ -126,21 +128,21 @@ export interface IActiveContainer extends IContainerDefinition {
 export enum ContainerStates {
   Up = 'up',
   Down = 'down',
-  Transitioning ='transitioning',
+  Transitioning = 'transitioning',
   Unknown = 'unknown',
 }
 export interface ActiveContainerStateMapping {
   [state: string]: {
-    desc: string,
-    condition: (container: ActiveContainer) => boolean
-  },
+    desc: string;
+    condition: (container: ActiveContainer) => boolean;
+  };
 }
 export const StateMapping: ActiveContainerStateMapping = {
   [ContainerStates.Up]: {
     desc: 'Container is running.',
     condition: (container) => {
-      return (container ?? {}).state == DockerContainerState.Running ;
-    }
+      return (container ?? {}).state == DockerContainerState.Running;
+    },
   },
   [ContainerStates.Down]: {
     desc: 'Container is down.',
@@ -149,9 +151,9 @@ export const StateMapping: ActiveContainerStateMapping = {
         DockerContainerState.Dead,
         DockerContainerState.Exited,
         DockerContainerState.Paused,
-      ]
+      ];
       return _.includes(downStates, (container ?? {}).state);
-    }
+    },
   },
   [ContainerStates.Transitioning]: {
     desc: 'Container is changing waiting for changes...',
@@ -160,26 +162,28 @@ export const StateMapping: ActiveContainerStateMapping = {
         DockerContainerState.Uninitialized,
         DockerContainerState.Restarting,
         DockerContainerState.Created,
-      ]
+      ];
       return _.includes(transitioningStates, (container ?? {}).state);
-    }
+    },
   },
   [ContainerStates.Unknown]: {
     // Ensure this is always last in the list of states
     desc: 'Unknown...',
-    condition (container) {
+    condition(container) {
       return true;
     },
-  }
-}
+  },
+};
 
-
-export class ActiveContainer extends ContainerDefinition implements IActiveContainer {
+export class ActiveContainer
+  extends ContainerDefinition
+  implements IActiveContainer
+{
   override getContainerState(): ContainerStates {
     for (let state in StateMapping) {
       if (StateMapping[state].condition(this)) {
         return state as ContainerStates;
-       }
+      }
     }
     return ContainerStates.Unknown;
   }

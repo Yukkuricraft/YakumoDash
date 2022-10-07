@@ -9,5 +9,17 @@
 }
 .description {
     height: 100%;
-    flex-grow: 4;
+    flex-grow: 99;
+}
+
+.mat-dialog-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    gap: 8px;
+
+    & .extra-action-prompt {
+        font-size: 0.8em;
+    }
 }

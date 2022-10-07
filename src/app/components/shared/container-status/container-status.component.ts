@@ -12,9 +12,23 @@ import { map } from 'rxjs';
 export class ContainerStatusComponent {
   @Input() containerDef!: ContainerDefinition;
 
+  showExtraInfo: boolean = false;
+
   constructor(
     private store: Store,
   ) { }
+
+  toggleExtraContainerStatus() {
+    this.showExtraInfo = !this.showExtraInfo;
+  }
+
+  getExtraContainerToggleText() {
+    if (this.showExtraInfo) {
+      return "Hide";
+    } else {
+      return "Show More";
+    }
+  }
 
   getContainerPorts$(containerDef: ContainerDefinition) {
     return this.store.select(selectActiveContainerByContainerDef(containerDef)).pipe(
@@ -32,7 +46,7 @@ export class ContainerStatusComponent {
       // eslint-disable-next-line ngrx/avoid-mapping-selectors
       map(
         (activeContainer) => {
-          return activeContainer?.status ?? "Unknown";
+          return activeContainer?.status ?? "Offline";
         }
       ),
     )
