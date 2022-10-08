@@ -97,44 +97,46 @@
 				</mat-card>
 			</div>
 
-			<div class="aux-containers">
-				<h3>Aux Containers</h3>
-				<!-- Velocity -->
-				<div
-					*ngFor="
-						let container of getDefinedContainersForEnvAndType$(
-							env,
-							ContainerType.MCProxy
-						) | async
-					"
-				>
-					<app-container-status-card
-						[containerDef]="container"
-					></app-container-status-card>
+			<div class="containers">
+				<div class="aux-containers">
+					<h3>Aux Containers</h3>
+					<!-- Velocity -->
+					<div
+						*ngFor="
+							let container of getDefinedContainersForEnvAndType$(
+								env,
+								ContainerType.MCProxy
+							) | async
+						"
+					>
+						<app-container-status-card
+							[containerDef]="container"
+						></app-container-status-card>
+					</div>
+					<!-- MySQL -->
+					<div
+						*ngFor="
+							let container of getDefinedContainersForEnvAndType$(
+								env,
+								ContainerType.MySQL
+							) | async
+						"
+					>
+						<app-container-status-card
+							[containerDef]="container"
+						></app-container-status-card>
+					</div>
 				</div>
-				<!-- MySQL -->
-				<div
-					*ngFor="
-						let container of getDefinedContainersForEnvAndType$(
-							env,
-							ContainerType.MySQL
-						) | async
-					"
-				>
-					<app-container-status-card
-						[containerDef]="container"
-					></app-container-status-card>
-				</div>
-			</div>
 
-			<div class="mc-containers">
-				<!-- MC Containers -->
-				<h3>Server Containers</h3>
-				<app-minecraft-containers-table
-					[containers$]="
-						getDefinedContainersForEnvAndType$(env, ContainerType.Minecraft)
-					"
-				></app-minecraft-containers-table>
+				<div class="mc-containers">
+					<!-- MC Containers -->
+					<h3>Server Containers</h3>
+					<app-minecraft-containers-table
+						[containers$]="
+							getDefinedContainersForEnvAndType$(env, ContainerType.Minecraft)
+						"
+					></app-minecraft-containers-table>
+				</div>
 			</div>
 		</div>
 	</mat-tab>

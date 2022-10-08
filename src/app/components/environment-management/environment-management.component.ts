@@ -6,8 +6,8 @@ import { map, Observable, switchMap } from "rxjs";
 import {
 	selectAvailableEnvs,
 	selectCurrentTabIndex,
-	selectDefinedContainersByEnvAndType,
 } from "@app/store/root.selectors";
+import { selectDefinedContainersByEnvAndType } from "@app/store/root.selectors.containers";
 import { Env } from "@app/models/env";
 import {
 	EnvActions,

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { ContainerDefinition } from "@app/models/container";
-import { selectActiveContainerByContainerDef } from "@app/store/root.selectors";
+import { selectActiveContainerByContainerDef } from "@app/store/root.selectors.containers";
 import { Store } from "@ngrx/store";
 import { map } from "rxjs";
 
@@ -41,36 +41,7 @@ export class ContainerStatusComponent {
 
 	constructor(private store: Store) {}
 
-	getContainerNames$(containerDef: ContainerDefinition) {
-		return this.store
-			.select(selectActiveContainerByContainerDef(containerDef))
-			.pipe(
-				// eslint-disable-next-line ngrx/avoid-mapping-selectors
-				map(activeContainer => {
-					return activeContainer?.names ?? [];
-				})
-			);
-	}
-
-	getContainerPorts$(containerDef: ContainerDefinition) {
-		return this.store
-			.select(selectActiveContainerByContainerDef(containerDef))
-			.pipe(
-				// eslint-disable-next-line ngrx/avoid-mapping-selectors
-				map(activeContainer => {
-					return activeContainer?.ports ?? [];
-				})
-			);
-	}
-
-	getContainerStatus$(containerDef: ContainerDefinition) {
-		return this.store
-			.select(selectActiveContainerByContainerDef(containerDef))
-			.pipe(
-				// eslint-disable-next-line ngrx/avoid-mapping-selectors
-				map(activeContainer => {
-					return activeContainer?.status ?? "Offline";
-				})
-			);
+	getActiveContainer$(containerDef: ContainerDefinition) {
+		return this.store.select(selectActiveContainerByContainerDef(containerDef));
 	}
 }

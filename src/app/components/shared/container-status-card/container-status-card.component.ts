@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { ContainerDefinition, ContainerType } from "@app/models/container";
-import { selectActiveContainerByContainerDef } from "@app/store/root.selectors";
+import { selectActiveContainerByContainerDef } from "@app/store/root.selectors.containers";
 import { Store } from "@ngrx/store";
 import { map } from "rxjs";
 

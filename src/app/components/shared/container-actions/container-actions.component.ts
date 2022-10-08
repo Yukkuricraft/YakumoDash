@@ -22,6 +22,10 @@ export class ContainerActionsComponent {
 		console.log("Starting container", this.containerDef);
 	}
 
+	editContainerConfig() {
+		console.log("Hm?");
+	}
+
 	restartContainerDisabled() {
 		return this.containerDef.getContainerState() !== ContainerStates.Up;
 	}
