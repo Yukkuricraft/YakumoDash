@@ -9,14 +9,14 @@ const selectRootState = createFeatureSelector<RootState>(Features.Root);
 export const selectUser = createSelector(selectRootState, state => state.user);
 
 export const selectGlobalLoadingBarState = createSelector(
-	selectRootState,
-	state => state.globalLoadingBarState
+  selectRootState,
+  state => state.globalLoadingBarState
 );
 
 export const selectAvailableEnvs = createSelector(
-	selectRootState,
-	state => state.availableEnvs
+  selectRootState,
+  state => state.availableEnvs
 );
 
 export const selectCurrentTabIndex = (pageType: string) =>
-	createSelector(selectRootState, state => state.tabIndex[pageType] ?? 0);
+  createSelector(selectRootState, state => state.tabIndex[pageType] ?? 0);

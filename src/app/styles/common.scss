@@ -1,30 +1,30 @@
 .center-contents {
-	display: flex;
-	align-items: center;
-	justify-content: space-evenly;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .container-name {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-	font-size: 1em;
-	opacity: 0.8;
+  font-size: 1em;
+  opacity: 0.8;
 }
 
 .container-status {
-	font-size: 0.8em;
+  font-size: 0.8em;
 }
 
 .item-key {
-	color: rgb(230, 230, 230, 0.75);
+  color: rgb(230, 230, 230, 0.75);
 }
 
 .item-val {
-	font-style: italic;
+  font-style: italic;
 }
 
 .ul-left-margin {
-	margin-left: 1.5em;
+  margin-left: 1.5em;
 }

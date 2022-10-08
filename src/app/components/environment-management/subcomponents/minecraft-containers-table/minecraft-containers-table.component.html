@@ -1,9 +1,9 @@
 <div class="container-table">
-	<div
-		*ngFor="let containerDef of containers$ | async"
-		class="minecraft-container"
-	>
-		<app-container-status-card [containerDef]="containerDef">
-		</app-container-status-card>
-	</div>
+  <div
+    *ngFor="let containerDef of containers$ | async"
+    class="minecraft-container"
+  >
+    <app-container-status-card [containerDef]="containerDef">
+    </app-container-status-card>
+  </div>
 </div>

@@ -7,29 +7,29 @@ import { DashboardComponent } from "@app/components/dashboard/dashboard.componen
 import { EnvironmentManagementComponent } from "@app/components/environment-management/environment-management.component";
 
 const routes: Routes = [
-	{
-		path: "",
-		canActivate: [AuthGuard],
-		component: ContentWithSideNavComponent,
-		children: [
-			{
-				path: "",
-				component: DashboardComponent,
-			},
-			{
-				path: "env-mgmt",
-				component: EnvironmentManagementComponent,
-			},
-		],
-	},
-	{
-		path: "login",
-		component: LoginComponent,
-	},
+  {
+    path: "",
+    canActivate: [AuthGuard],
+    component: ContentWithSideNavComponent,
+    children: [
+      {
+        path: "",
+        component: DashboardComponent,
+      },
+      {
+        path: "env-mgmt",
+        component: EnvironmentManagementComponent,
+      },
+    ],
+  },
+  {
+    path: "login",
+    component: LoginComponent,
+  },
 ];
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes)],
-	exports: [RouterModule],
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}

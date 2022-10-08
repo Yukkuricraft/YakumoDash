@@ -7,25 +7,25 @@ import { CreateEnvResponse, Env } from "@app/models/env";
 import { DockerEnvActionResponse } from "@app/models/docker";
 
 @Injectable({
-	providedIn: "root",
+  providedIn: "root",
 })
 export class FilesService {
-	private basePath: string = "https://api2.yukkuricraft.net/files";
+  private basePath: string = "https://api2.yukkuricraft.net/files";
 
-	constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-	writeFile(file: string, content: string) {
-		console.log(file, content);
-		return this.http.post(`${this.basePath}/write`, {
-			FILE_PATH: file,
-			CONTENT: content,
-		});
-	}
+  writeFile(file: string, content: string) {
+    console.log(file, content);
+    return this.http.post(`${this.basePath}/write`, {
+      FILE_PATH: file,
+      CONTENT: content,
+    });
+  }
 
-	readFile(file: string) {
-		console.log(file);
-		return this.http.post(`${this.basePath}/read`, {
-			FILE_PATH: file,
-		});
-	}
+  readFile(file: string) {
+    console.log(file);
+    return this.http.post(`${this.basePath}/read`, {
+      FILE_PATH: file,
+    });
+  }
 }

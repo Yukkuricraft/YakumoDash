@@ -5,13 +5,13 @@ import { Store } from "@ngrx/store";
 import { map } from "rxjs";
 
 @Component({
-	selector: "app-container-status-card",
-	templateUrl: "./container-status-card.component.html",
-	styleUrls: ["./container-status-card.component.scss"],
+  selector: "app-container-status-card",
+  templateUrl: "./container-status-card.component.html",
+  styleUrls: ["./container-status-card.component.scss"],
 })
 export class ContainerStatusCardComponent {
-	ContainerType = ContainerType;
-	@Input() containerDef!: ContainerDefinition;
+  ContainerType = ContainerType;
+  @Input() containerDef!: ContainerDefinition;
 
-	constructor() {}
+  constructor() {}
 }

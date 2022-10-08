@@ -1,9 +1,9 @@
 export interface IUser {
-	sub: string;
-	email: string;
+  sub: string;
+  email: string;
 }
 
 export class User implements IUser {
-	sub = "";
-	email = "";
+  sub = "";
+  email = "";
 }

@@ -4,34 +4,34 @@
 @import "../../../../theme.scss";
 
 .flex-row {
-	display: flex;
-	flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .show-extra-info {
-	&::marker {
-		color: map.get($my-custom-primary, A100);
-	}
+  &::marker {
+    color: map.get($my-custom-primary, A100);
+  }
 }
 
 .show-extra-extra-info {
-	margin-left: 4px;
-	&::marker {
-		color: map.get($my-custom-primary, A200);
-	}
+  margin-left: 4px;
+  &::marker {
+    color: map.get($my-custom-primary, A200);
+  }
 }
 
 .status-and-info-toggle {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 
-	& button {
-		color: #c6c6ff;
-		line-height: 1em;
+  & button {
+    color: #c6c6ff;
+    line-height: 1em;
 
-		min-width: unset;
-		text-align: right;
-		padding: 0;
-	}
+    min-width: unset;
+    text-align: right;
+    padding: 0;
+  }
 }

@@ -1,9 +1,9 @@
 <div style="height: 100vh; margin: 0" class="mat-app-background">
-	<router-outlet></router-outlet>
-	<mat-progress-bar
-		*ngIf="loadingBarActive$ | async"
-		class="progress-bar"
-		mode="indeterminate"
-	>
-	</mat-progress-bar>
+  <router-outlet></router-outlet>
+  <mat-progress-bar
+    *ngIf="loadingBarActive$ | async"
+    class="progress-bar"
+    mode="indeterminate"
+  >
+  </mat-progress-bar>
 </div>

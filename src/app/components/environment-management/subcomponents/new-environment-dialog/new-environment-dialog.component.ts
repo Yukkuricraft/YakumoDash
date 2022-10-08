@@ -2,132 +2,132 @@ import { Component, OnInit } from "@angular/core";
 import { DockerService } from "@app/services/docker/docker.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import {
-	initializeApp,
-	EnvActions,
-	setGlobalLoadingBarActive,
-	setGlobalLoadingBarInactive,
+  initializeApp,
+  EnvActions,
+  setGlobalLoadingBarActive,
+  setGlobalLoadingBarInactive,
 } from "@app/store/root.actions";
 import { Store } from "@ngrx/store";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import {
-	ConfirmationDialogComponent,
-	ConfirmationDialogData,
+  ConfirmationDialogComponent,
+  ConfirmationDialogData,
 } from "@app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Env } from "@app/models/env";
 
 @Component({
-	selector: "app-new-environment-dialog",
-	templateUrl: "./new-environment-dialog.component.html",
-	styleUrls: ["./new-environment-dialog.component.scss"],
+  selector: "app-new-environment-dialog",
+  templateUrl: "./new-environment-dialog.component.html",
+  styleUrls: ["./new-environment-dialog.component.scss"],
 })
 export class NewEnvironmentDialogComponent {
-	MIN_ALIAS_LEN = 3;
-	MAX_ALIAS_LEN = 32;
+  MIN_ALIAS_LEN = 3;
+  MAX_ALIAS_LEN = 32;
 
-	MAX_DESCRIPTION_LEN = 2048;
+  MAX_DESCRIPTION_LEN = 2048;
 
-	MIN_PORT = 25600;
-	MAX_PORT = 25700;
+  MIN_PORT = 25600;
+  MAX_PORT = 25700;
 
-	numbersReg = /^\d+$/;
+  numbersReg = /^\d+$/;
 
-	form: FormGroup;
+  form: FormGroup;
 
-	get envAlias() {
-		return this.form.controls["envAlias"] as FormControl;
-	}
-	get description() {
-		return this.form.controls["description"] as FormControl;
-	}
-	get proxyPort() {
-		return this.form.controls["proxyPort"] as FormControl;
-	}
+  get envAlias() {
+    return this.form.controls["envAlias"] as FormControl;
+  }
+  get description() {
+    return this.form.controls["description"] as FormControl;
+  }
+  get proxyPort() {
+    return this.form.controls["proxyPort"] as FormControl;
+  }
 
-	constructor(
-		private dockerApi: DockerService,
-		private snackbar: MatSnackBar,
-		private dialog: MatDialog,
-		private store: Store,
-		private dialogRef: MatDialogRef<NewEnvironmentDialogComponent>
-	) {
-		this.form = new FormGroup({
-			envAlias: new FormControl("", [
-				Validators.required,
-				Validators.minLength(this.MIN_ALIAS_LEN),
-				Validators.maxLength(this.MAX_ALIAS_LEN),
-			]),
-			description: new FormControl("", [
-				Validators.maxLength(this.MAX_DESCRIPTION_LEN),
-			]),
-			proxyPort: new FormControl("", [
-				Validators.required,
-				Validators.min(this.MIN_PORT),
-				Validators.max(this.MAX_PORT),
-				Validators.pattern(this.numbersReg),
-			]),
-		});
-	}
+  constructor(
+    private dockerApi: DockerService,
+    private snackbar: MatSnackBar,
+    private dialog: MatDialog,
+    private store: Store,
+    private dialogRef: MatDialogRef<NewEnvironmentDialogComponent>
+  ) {
+    this.form = new FormGroup({
+      envAlias: new FormControl("", [
+        Validators.required,
+        Validators.minLength(this.MIN_ALIAS_LEN),
+        Validators.maxLength(this.MAX_ALIAS_LEN),
+      ]),
+      description: new FormControl("", [
+        Validators.maxLength(this.MAX_DESCRIPTION_LEN),
+      ]),
+      proxyPort: new FormControl("", [
+        Validators.required,
+        Validators.min(this.MIN_PORT),
+        Validators.max(this.MAX_PORT),
+        Validators.pattern(this.numbersReg),
+      ]),
+    });
+  }
 
-	errorMessages = {
-		minlength: `You must enter a value longer than ${this.MIN_ALIAS_LEN} chars!`,
-		maxlength: `You must enter a value shorter than ${this.MAX_ALIAS_LEN} chars!`,
-		required: "You must enter a value!",
-		min: `You must enter a value larger than ${this.MIN_PORT}!`,
-		max: `You must enter a value smaller than ${this.MAX_PORT}!`,
-		pattern: "You must enter a numeric value!",
-	};
+  errorMessages = {
+    minlength: `You must enter a value longer than ${this.MIN_ALIAS_LEN} chars!`,
+    maxlength: `You must enter a value shorter than ${this.MAX_ALIAS_LEN} chars!`,
+    required: "You must enter a value!",
+    min: `You must enter a value larger than ${this.MIN_PORT}!`,
+    max: `You must enter a value smaller than ${this.MAX_PORT}!`,
+    pattern: "You must enter a numeric value!",
+  };
 
-	getErrorMessage(formControl: FormControl) {
-		console.log(formControl);
-		for (const [error, errorMessage] of Object.entries(this.errorMessages)) {
-			if (formControl.hasError(error)) {
-				return errorMessage;
-			}
-		}
+  getErrorMessage(formControl: FormControl) {
+    console.log(formControl);
+    for (const [error, errorMessage] of Object.entries(this.errorMessages)) {
+      if (formControl.hasError(error)) {
+        return errorMessage;
+      }
+    }
 
-		return "Unknown error!";
-	}
+    return "Unknown error!";
+  }
 
-	createNewEnv() {
-		const proxyPort = this.proxyPort?.value ?? null;
-		const envAlias = this.envAlias?.value ?? null;
-		if (proxyPort === null) {
-			throw Error("Proxy port form not defined.");
-		} else if (envAlias === null) {
-			throw Error("EnvAlias form not defined.");
-		}
+  createNewEnv() {
+    const proxyPort = this.proxyPort?.value ?? null;
+    const envAlias = this.envAlias?.value ?? null;
+    if (proxyPort === null) {
+      throw Error("Proxy port form not defined.");
+    } else if (envAlias === null) {
+      throw Error("EnvAlias form not defined.");
+    }
 
-		if (this.proxyPort?.invalid) {
-			throw Error(this.getErrorMessage(this.proxyPort));
-		} else if (this.envAlias?.invalid) {
-			throw Error(this.getErrorMessage(this.envAlias));
-		}
+    if (this.proxyPort?.invalid) {
+      throw Error(this.getErrorMessage(this.proxyPort));
+    } else if (this.envAlias?.invalid) {
+      throw Error(this.getErrorMessage(this.envAlias));
+    }
 
-		const dialogRef = this.dialog.open<
-			ConfirmationDialogComponent,
-			ConfirmationDialogData,
-			boolean
-		>(ConfirmationDialogComponent, {
-			data: {
-				title: "Confirm New Environment Creation",
-				description: `<p>You are about to create a new environment called <b>${envAlias}</b> running on port <b>${proxyPort}</b>.</p>
+    const dialogRef = this.dialog.open<
+      ConfirmationDialogComponent,
+      ConfirmationDialogData,
+      boolean
+    >(ConfirmationDialogComponent, {
+      data: {
+        title: "Confirm New Environment Creation",
+        description: `<p>You are about to create a new environment called <b>${envAlias}</b> running on port <b>${proxyPort}</b>.</p>
           <br/>
           <p>Are you sure?</p>`,
-			},
-			width: "400px",
-		});
-		dialogRef.afterClosed().subscribe(result => {
-			if (result) {
-				this.store.dispatch(
-					EnvActions.beginCreateNewEnv({
-						proxyPort: parseInt(proxyPort),
-						envAlias,
-						description: this.description.value,
-					})
-				);
-				this.dialogRef.close();
-			}
-		});
-	}
+      },
+      width: "400px",
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.store.dispatch(
+          EnvActions.beginCreateNewEnv({
+            proxyPort: parseInt(proxyPort),
+            envAlias,
+            description: this.description.value,
+          })
+        );
+        this.dialogRef.close();
+      }
+    });
+  }
 }

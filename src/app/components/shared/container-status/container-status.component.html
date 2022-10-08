@@ -1,98 +1,98 @@
 <div class="container-status">
-	<ul class="ul-left-margin">
-		<!-- Status -->
-		<li>
-			<div class="status-and-info-toggle">
-				<div>
-					<span class="item-key">Status: </span>
-					<span class="item-value">{{
-						(getActiveContainer$(containerDef) | async)?.status ?? "Offline"
-					}}</span>
-				</div>
-				<button mat-flat-button (click)="toggleExtraContainerStatus()">
-					{{ getExtraContainerToggleText() }}
-				</button>
-			</div>
-		</li>
+  <ul class="ul-left-margin">
+    <!-- Status -->
+    <li>
+      <div class="status-and-info-toggle">
+        <div>
+          <span class="item-key">Status: </span>
+          <span class="item-value">{{
+            (getActiveContainer$(containerDef) | async)?.status ?? "Offline"
+          }}</span>
+        </div>
+        <button mat-flat-button (click)="toggleExtraContainerStatus()">
+          {{ getExtraContainerToggleText() }}
+        </button>
+      </div>
+    </li>
 
-		<!-- Command -->
-		<li *ngIf="showExtraInfo" class="show-extra-info">
-			<div class="flex-row">
-				<div class="item-key">Entrypoint Command :</div>
-				<div style="margin-left: 4px">
-					{{ (getActiveContainer$(containerDef) | async)?.command }}
-				</div>
-			</div>
-		</li>
+    <!-- Command -->
+    <li *ngIf="showExtraInfo" class="show-extra-info">
+      <div class="flex-row">
+        <div class="item-key">Entrypoint Command :</div>
+        <div style="margin-left: 4px">
+          {{ (getActiveContainer$(containerDef) | async)?.command }}
+        </div>
+      </div>
+    </li>
 
-		<!-- Name -->
-		<li *ngIf="showExtraInfo" class="show-extra-info">
-			<div class="flex-row">
-				<div class="item-key">Container Name:</div>
-				<div style="margin-left: 4px">
-					<div
-						*ngFor="
-							let name of (getActiveContainer$(containerDef) | async)?.names ??
-								[]
-						"
-						class="item-value"
-					>
-						{{ name }}
-					</div>
-				</div>
-			</div>
-		</li>
+    <!-- Name -->
+    <li *ngIf="showExtraInfo" class="show-extra-info">
+      <div class="flex-row">
+        <div class="item-key">Container Name:</div>
+        <div style="margin-left: 4px">
+          <div
+            *ngFor="
+              let name of (getActiveContainer$(containerDef) | async)?.names ??
+                []
+            "
+            class="item-value"
+          >
+            {{ name }}
+          </div>
+        </div>
+      </div>
+    </li>
 
-		<!-- networks -->
-		<li *ngIf="showExtraInfo" class="show-extra-info">
-			<div class="flex-row">
-				<div class="item-key">Networks:</div>
-				<div style="margin-left: 4px">
-					<div
-						*ngFor="
-							let name of (getActiveContainer$(containerDef) | async)
-								?.networks ?? []
-						"
-						class="item-value"
-					>
-						{{ name }}
-					</div>
-				</div>
-			</div>
-		</li>
+    <!-- networks -->
+    <li *ngIf="showExtraInfo" class="show-extra-info">
+      <div class="flex-row">
+        <div class="item-key">Networks:</div>
+        <div style="margin-left: 4px">
+          <div
+            *ngFor="
+              let name of (getActiveContainer$(containerDef) | async)
+                ?.networks ?? []
+            "
+            class="item-value"
+          >
+            {{ name }}
+          </div>
+        </div>
+      </div>
+    </li>
 
-		<!-- Ports -->
-		<li *ngIf="showExtraExtraInfo" class="show-extra-extra-info">
-			<div class="flex-row">
-				<div class="item-key">Ports:</div>
-				<div style="margin-left: 4px">
-					<div
-						*ngFor="
-							let port of (getActiveContainer$(containerDef) | async)?.ports
-						"
-						class="item-value"
-					>
-						{{ port }}
-					</div>
-				</div>
-			</div>
-		</li>
+    <!-- Ports -->
+    <li *ngIf="showExtraExtraInfo" class="show-extra-extra-info">
+      <div class="flex-row">
+        <div class="item-key">Ports:</div>
+        <div style="margin-left: 4px">
+          <div
+            *ngFor="
+              let port of (getActiveContainer$(containerDef) | async)?.ports
+            "
+            class="item-value"
+          >
+            {{ port }}
+          </div>
+        </div>
+      </div>
+    </li>
 
-		<!-- Mounts -->
-		<li *ngIf="showExtraExtraInfo" class="show-extra-extra-info">
-			<div class="flex-row">
-				<div class="item-key">Mounts:</div>
-				<div style="margin-left: 4px">
-					<div
-						*ngFor="
-							let mount of (getActiveContainer$(containerDef) | async)?.mounts
-						"
-						class="item-value"
-					>
-						{{ mount }}
-					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
+    <!-- Mounts -->
+    <li *ngIf="showExtraExtraInfo" class="show-extra-extra-info">
+      <div class="flex-row">
+        <div class="item-key">Mounts:</div>
+        <div style="margin-left: 4px">
+          <div
+            *ngFor="
+              let mount of (getActiveContainer$(containerDef) | async)?.mounts
+            "
+            class="item-value"
+          >
+            {{ mount }}
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
 </div>
