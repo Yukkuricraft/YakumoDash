@@ -2,12 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { DockerService } from "@app/services/docker/docker.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import {
-	createNewEnv,
-	fetchAvailableEnvs,
 	initializeApp,
+	EnvActions,
 	setGlobalLoadingBarActive,
 	setGlobalLoadingBarInactive,
-	beginCreateNewEnv,
 } from "@app/store/root.actions";
 import { Store } from "@ngrx/store";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -122,7 +120,7 @@ export class NewEnvironmentDialogComponent {
 		dialogRef.afterClosed().subscribe(result => {
 			if (result) {
 				this.store.dispatch(
-					beginCreateNewEnv({
+					EnvActions.beginCreateNewEnv({
 						proxyPort: parseInt(proxyPort),
 						envAlias,
 						description: this.description.value,

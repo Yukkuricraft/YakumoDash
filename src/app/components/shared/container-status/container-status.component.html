@@ -21,10 +21,10 @@
 				<div class="item-key">Name:</div>
 				<div style="margin-left: 4px">
 					<div
-						*ngFor="let port of getContainerNames$(containerDef) | async"
+						*ngFor="let name of getContainerNames$(containerDef) | async"
 						class="item-value"
 					>
-						{{ port }}
+						{{ name }}
 					</div>
 				</div>
 			</div>
@@ -54,7 +54,7 @@
 						*ngFor="let port of getContainerPorts$(containerDef) | async"
 						class="item-value"
 					>
-						{{ foo$ | async }}
+						{{ port }}
 					</div>
 				</div>
 			</div>

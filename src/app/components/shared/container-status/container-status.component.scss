@@ -15,6 +15,7 @@
 }
 
 .show-extra-extra-info {
+	margin-left: 4px;
 	&::marker {
 		color: map.get($my-custom-primary, A200);
 	}

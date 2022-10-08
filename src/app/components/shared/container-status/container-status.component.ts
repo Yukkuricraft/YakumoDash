@@ -2,14 +2,14 @@ import { Component, Input, OnInit } from "@angular/core";
 import { ContainerDefinition } from "@app/models/container";
 import { selectActiveContainerByContainerDef } from "@app/store/root.selectors";
 import { Store } from "@ngrx/store";
-import { map, Observable } from "rxjs";
+import { map } from "rxjs";
 
 @Component({
 	selector: "app-container-status",
 	templateUrl: "./container-status.component.html",
 	styleUrls: ["./container-status.component.scss"],
 })
-export class ContainerStatusComponent implements OnInit {
+export class ContainerStatusComponent {
 	@Input() containerDef!: ContainerDefinition;
 
 	maxExtraInfoLevels = 3; // zero up to and not including max
@@ -39,20 +39,7 @@ export class ContainerStatusComponent implements OnInit {
 		}
 	}
 
-	foo$!: Observable<any>;
 	constructor(private store: Store) {}
-
-	ngOnInit() {
-		this.foo$ = this.store
-			.select(selectActiveContainerByContainerDef(this.containerDef))
-			.pipe(
-				// eslint-disable-next-line ngrx/avoid-mapping-selectors
-				map(activeContainer => {
-					console.log(activeContainer);
-					return activeContainer;
-				})
-			);
-	}
 
 	getContainerNames$(containerDef: ContainerDefinition) {
 		return this.store

@@ -1,23 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import {
-	createNewEnv,
-	NewEnvProps,
-	fetchAvailableEnvs,
+	EnvActions,
 	fetchContainerStatusForEnv,
 	initializeApp,
-	setActiveContainersForEnv,
-	setAvailableEnvs,
-	setDefinedContainersForEnv,
 	setGlobalLoadingBarActive,
 	setGlobalLoadingBarInactive,
-	beginCreateNewEnv,
-	beginDeleteEnv,
-	deleteEnv,
-	beginSpinupEnv,
-	spinupEnv,
-	beginShutdownEnv,
-	shutdownEnv,
 } from "@app/store/root.actions";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import {
@@ -47,25 +35,28 @@ export class RootEffects {
 
 	setAvailableEnvs$ = createEffect(() => {
 		return this.actions$.pipe(
-			ofType(initializeApp, fetchAvailableEnvs),
+			ofType(initializeApp, EnvActions.fetchAvailableEnvs),
 			switchMap(() => this.envsApi.listEnvsWithConfigs()),
-			map((envs: Env[]) => setAvailableEnvs({ envs }))
+			map((envs: Env[]) => EnvActions.setAvailableEnvs({ envs }))
 		);
 	});
 
 	/** CREATE NEW ENV */
 	beginCreateNewEnv$ = createEffect(() => {
 		return this.actions$.pipe(
-			ofType(beginCreateNewEnv),
+			ofType(EnvActions.beginCreateNewEnv),
 			switchMap(data => {
-				return [setGlobalLoadingBarActive(), createNewEnv(data)];
+				return [
+					setGlobalLoadingBarActive(),
+					EnvActions.finishCreateNewEnv(data),
+				];
 			})
 		);
 	});
 
-	createNewEnv$ = createEffect(() => {
+	finishCreateNewEnv$ = createEffect(() => {
 		return this.actions$.pipe(
-			ofType(createNewEnv),
+			ofType(EnvActions.finishCreateNewEnv),
 			switchMap(data => {
 				return this.envsApi.createEnv(
 					data.proxyPort,
@@ -81,7 +72,7 @@ export class RootEffects {
 					}'`
 				);
 
-				return [fetchAvailableEnvs(), setGlobalLoadingBarInactive()];
+				return [EnvActions.fetchAvailableEnvs(), setGlobalLoadingBarInactive()];
 			})
 		);
 	});
@@ -89,16 +80,16 @@ export class RootEffects {
 	/** DELETE ENV */
 	beginDeleteEnv$ = createEffect(() => {
 		return this.actions$.pipe(
-			ofType(beginDeleteEnv),
+			ofType(EnvActions.beginDeleteEnv),
 			switchMap(data => {
-				return [setGlobalLoadingBarActive(), deleteEnv(data)];
+				return [setGlobalLoadingBarActive(), EnvActions.finishDeleteEnv(data)];
 			})
 		);
 	});
 
 	deleteEnv$ = createEffect(() => {
 		return this.actions$.pipe(
-			ofType(deleteEnv),
+			ofType(EnvActions.finishDeleteEnv),
 			switchMap(data => {
 				return this.envsApi.deleteEnv(data.env);
 			}),
@@ -109,7 +100,7 @@ export class RootEffects {
 					`Done deleting env '${result.env.getFormattedLabel()}'`
 				);
 
-				return [fetchAvailableEnvs(), setGlobalLoadingBarInactive()];
+				return [EnvActions.fetchAvailableEnvs(), setGlobalLoadingBarInactive()];
 			})
 		);
 	});
@@ -117,16 +108,16 @@ export class RootEffects {
 	/** START ENV */
 	beginSpinupEnv$ = createEffect(() => {
 		return this.actions$.pipe(
-			ofType(beginSpinupEnv),
+			ofType(EnvActions.beginSpinupEnv),
 			switchMap(data => {
-				return [setGlobalLoadingBarActive(), spinupEnv(data)];
+				return [setGlobalLoadingBarActive(), EnvActions.finishSpinupEnv(data)];
 			})
 		);
 	});
 
 	spinupEnv$ = createEffect(() => {
 		return this.actions$.pipe(
-			ofType(spinupEnv),
+			ofType(EnvActions.finishSpinupEnv),
 			switchMap(data => {
 				return this.dockerApi.upEnv(data.env);
 			}),
@@ -146,16 +137,19 @@ export class RootEffects {
 	/** SHUTDOWN ENV */
 	beginShutdownEnv$ = createEffect(() => {
 		return this.actions$.pipe(
-			ofType(beginShutdownEnv),
+			ofType(EnvActions.beginShutdownEnv),
 			switchMap(data => {
-				return [setGlobalLoadingBarActive(), shutdownEnv(data)];
+				return [
+					setGlobalLoadingBarActive(),
+					EnvActions.finishShutdownEnv(data),
+				];
 			})
 		);
 	});
 
 	shutdownEnv$ = createEffect(() => {
 		return this.actions$.pipe(
-			ofType(shutdownEnv),
+			ofType(EnvActions.finishShutdownEnv),
 			switchMap(data => {
 				return this.dockerApi.downEnv(data.env);
 			}),
@@ -181,7 +175,7 @@ export class RootEffects {
 						return of(data.env);
 					}),
 					map(([containers, env]) =>
-						setDefinedContainersForEnv({ env, containers })
+						EnvActions.setDefinedContainersForEnv({ env, containers })
 					)
 				);
 			})
@@ -197,7 +191,7 @@ export class RootEffects {
 						return of(data.env);
 					}),
 					map(([containers, env]) =>
-						setActiveContainersForEnv({ env, containers })
+						EnvActions.setActiveContainersForEnv({ env, containers })
 					)
 				);
 			})

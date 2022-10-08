@@ -10,14 +10,11 @@ import {
 } from "@app/store/root.selectors";
 import { Env } from "@app/models/env";
 import {
-	fetchAvailableEnvs,
+	EnvActions,
 	fetchContainerStatusForEnv,
 	setGlobalLoadingBarActive,
 	setGlobalLoadingBarInactive,
 	setTabIndexForPage,
-	beginDeleteEnv,
-	beginSpinupEnv,
-	beginShutdownEnv,
 	initializeApp,
 } from "@app/store/root.actions";
 import { ContainerType } from "@app/models/container";
@@ -102,7 +99,7 @@ export class EnvironmentManagementComponent {
 			return;
 		}
 		const activeEnv = this.activeEnv as Env;
-		this.store.dispatch(beginSpinupEnv({ env: activeEnv }));
+		this.store.dispatch(EnvActions.beginSpinupEnv({ env: activeEnv }));
 	}
 	startEnvironmentDisabled() {
 		return false;
@@ -131,7 +128,7 @@ export class EnvironmentManagementComponent {
 					"This might take a bit to complete. Girls are preparing.",
 					"Ok"
 				);
-				this.store.dispatch(beginShutdownEnv({ env: activeEnv }));
+				this.store.dispatch(EnvActions.beginShutdownEnv({ env: activeEnv }));
 			}
 		});
 	}
@@ -214,7 +211,7 @@ export class EnvironmentManagementComponent {
 		});
 		dialogRef.afterClosed().subscribe(result => {
 			if (result) {
-				this.store.dispatch(beginDeleteEnv({ env: activeEnv }));
+				this.store.dispatch(EnvActions.beginDeleteEnv({ env: activeEnv }));
 			}
 		});
 	}

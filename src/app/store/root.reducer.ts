@@ -1,9 +1,7 @@
 import { initialState, RootState } from "@app/store/root.state";
 import { ActionReducer, createReducer, MetaReducer, on } from "@ngrx/store";
 import {
-	setActiveContainersForEnv,
-	setAvailableEnvs,
-	setDefinedContainersForEnv,
+	EnvActions,
 	setGlobalLoadingBarActive,
 	setGlobalLoadingBarInactive,
 	setLoggedInUser,
@@ -31,51 +29,57 @@ export const rootReducer = createReducer(
 	on(setGlobalLoadingBarInactive, (state): RootState => {
 		return { ...state, globalLoadingBarState: false };
 	}),
-	on(setAvailableEnvs, (state, { envs }): RootState => {
+	on(EnvActions.setAvailableEnvs, (state, { envs }): RootState => {
 		return { ...state, availableEnvs: envs };
 	}),
-	on(setDefinedContainersForEnv, (state, { env, containers }): RootState => {
-		let currEnvContainers: ContainerTypeToContainerDefinitionMapping = {};
+	on(
+		EnvActions.setDefinedContainersForEnv,
+		(state, { env, containers }): RootState => {
+			let currEnvContainers: ContainerTypeToContainerDefinitionMapping = {};
 
-		for (const container of containers) {
-			let containerType: ContainerType = container.labelsToContainerType(
-				container.labels
-			);
-			currEnvContainers[containerType] = [
-				...(currEnvContainers[containerType] ?? []),
-				container,
-			];
+			for (const container of containers) {
+				let containerType: ContainerType = container.labelsToContainerType(
+					container.labels
+				);
+				currEnvContainers[containerType] = [
+					...(currEnvContainers[containerType] ?? []),
+					container,
+				];
+			}
+
+			return {
+				...state,
+				definedContainersByEnv: {
+					...state.definedContainersByEnv,
+					[env.name]: currEnvContainers,
+				},
+			};
 		}
+	),
+	on(
+		EnvActions.setActiveContainersForEnv,
+		(state, { env, containers }): RootState => {
+			let currEnvContainers: ContainerTypeToActiveContainerMapping = {};
 
-		return {
-			...state,
-			definedContainersByEnv: {
-				...state.definedContainersByEnv,
-				[env.name]: currEnvContainers,
-			},
-		};
-	}),
-	on(setActiveContainersForEnv, (state, { env, containers }): RootState => {
-		let currEnvContainers: ContainerTypeToActiveContainerMapping = {};
+			for (const container of containers) {
+				let containerType: ContainerType = container.labelsToContainerType(
+					container.labels
+				);
+				currEnvContainers[containerType] = [
+					...(currEnvContainers[containerType] ?? []),
+					container,
+				];
+			}
 
-		for (const container of containers) {
-			let containerType: ContainerType = container.labelsToContainerType(
-				container.labels
-			);
-			currEnvContainers[containerType] = [
-				...(currEnvContainers[containerType] ?? []),
-				container,
-			];
+			return {
+				...state,
+				activeContainersByEnv: {
+					...state.activeContainersByEnv,
+					[env.name]: currEnvContainers,
+				},
+			};
 		}
-
-		return {
-			...state,
-			activeContainersByEnv: {
-				...state.activeContainersByEnv,
-				[env.name]: currEnvContainers,
-			},
-		};
-	}),
+	),
 	on(setTabIndexForPage, (state, { pageType, tabIndex }): RootState => {
 		return {
 			...state,
