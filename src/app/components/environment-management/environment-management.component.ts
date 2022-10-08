@@ -30,7 +30,7 @@ import {
   TextEditorDialogData,
   TextEditorDialogReturn,
 } from "../shared/text-editor-dialog/text-editor-dialog.component";
-import _ from "lodash";
+import { isNil } from "lodash";
 
 @Component({
   selector: "app-server-management",
@@ -68,7 +68,7 @@ export class EnvironmentManagementComponent {
     this.activeEnv$.subscribe(env => {
       this.activeEnv = env;
 
-      if (!_.isNil(env)) {
+      if (!isNil(env)) {
         this.refreshContainersForEnv(env);
       }
     });
@@ -146,7 +146,7 @@ export class EnvironmentManagementComponent {
     this.dockerApi.restartEnv(activeEnv).subscribe(console.log);
   }
   restartEnvironmentDisabled() {
-    return false;
+    return true;
   }
 
   editEnvironment() {

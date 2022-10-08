@@ -1,23 +1,24 @@
-@use "sass:map";
 @import "../../../styles/common.scss";
-@import "../../../../palette.scss";
-@import "../../../../theme.scss";
 
 .flex-row {
   display: flex;
   flex-direction: row;
+
+  div + div {
+    margin-left: 4px;
+  }
 }
 
 .show-extra-info {
   &::marker {
-    color: map.get($my-custom-primary, A100);
+    color: var(--my-primary-A100);
   }
 }
 
 .show-extra-extra-info {
   margin-left: 4px;
   &::marker {
-    color: map.get($my-custom-primary, A200);
+    color: var(--my-primary-A200);
   }
 }
 

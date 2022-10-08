@@ -13,7 +13,6 @@ import {
   ContainerTypeToActiveContainerMapping,
   ContainerTypeToContainerDefinitionMapping,
 } from "@app/models/container";
-import _ from "lodash";
 
 export const rootReducer = createReducer(
   initialState,

@@ -8,3 +8,7 @@ button {
   line-height: 30px;
   margin-right: 8px;
 }
+
+.filter-to-white {
+  filter: invert(100%);
+}

@@ -7,7 +7,7 @@ import {
   ContainerDefinition,
   ContainerType,
 } from "@app/models/container";
-import _ from "lodash";
+import { has, isNil, includes } from "lodash";
 
 const selectRootState = createFeatureSelector<RootState>(Features.Root);
 
@@ -24,7 +24,7 @@ export const selectActiveContainersByEnvAndType = (
 ) =>
   createSelector(selectRootState, state => {
     const containersInEnv = state.activeContainersByEnv[env.name];
-    if (!containersInEnv || !_.has(containersInEnv, type)) {
+    if (!containersInEnv || !has(containersInEnv, type)) {
       return [];
     }
     return containersInEnv[type];
@@ -53,11 +53,11 @@ export const selectActiveContainerByEnvTypeAndName = (
   name: string
 ) =>
   createSelector(selectActiveContainersByEnvAndType(env, type), containers => {
-    if (_.isNil(containers)) {
+    if (isNil(containers)) {
       return null;
     }
     for (let container of containers) {
-      if (_.includes(container.labels, `${container.NameLabel}=${name}`)) {
+      if (includes(container.labels, `${container.NameLabel}=${name}`)) {
         return container;
       }
     }

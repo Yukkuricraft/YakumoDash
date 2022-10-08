@@ -1,3 +1,4 @@
+@use "sass:map" as map;
 @use "@angular/material" as mat;
 @use "palette" as custom-palette;
 
@@ -48,3 +49,8 @@ $my-custom-theme: mat.define-dark-theme(
 
 /* Apply themes */
 @include mat.all-component-themes($my-custom-theme);
+
+:root {
+  --my-primary-A100: map.get($my-custom-primary, A100);
+  --my-primary-A200: map.get($my-custom-primary, A200);
+}

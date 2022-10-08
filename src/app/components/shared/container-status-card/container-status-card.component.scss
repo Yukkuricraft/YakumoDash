@@ -3,20 +3,11 @@
 mat-card {
   display: flex;
   flex-direction: column;
+  margin-bottom: 2px;
 
-  &.aux-containers {
-    margin-bottom: 8px;
-
-    padding: 14px 16px 14px 16px;
-  }
+  padding: 8px 12px 10px 12px;
 
   &.minecraft-containers {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 2px;
-
-    padding: 8px 12px 10px 12px;
-
     mat-card-title {
       margin-bottom: 4px;
     }

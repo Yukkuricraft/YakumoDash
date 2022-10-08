@@ -41,6 +41,13 @@ export class AppComponent implements OnInit {
       )
     );
 
+    this.matIconRegistry.addSvgIcon(
+      "console",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "../assets/icons/code_console.svg"
+      )
+    );
+
     // Attempt login on load, not guaranteed to work if auth is expired
     this.store.dispatch(initializeApp());
 

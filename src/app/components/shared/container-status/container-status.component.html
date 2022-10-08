@@ -19,7 +19,7 @@
     <li *ngIf="showExtraInfo" class="show-extra-info">
       <div class="flex-row">
         <div class="item-key">Entrypoint Command :</div>
-        <div style="margin-left: 4px">
+        <div class="item-value mono">
           {{ (getActiveContainer$(containerDef) | async)?.command }}
         </div>
       </div>
@@ -29,13 +29,12 @@
     <li *ngIf="showExtraInfo" class="show-extra-info">
       <div class="flex-row">
         <div class="item-key">Container Name:</div>
-        <div style="margin-left: 4px">
+        <div class="item-value mono">
           <div
             *ngFor="
               let name of (getActiveContainer$(containerDef) | async)?.names ??
                 []
             "
-            class="item-value"
           >
             {{ name }}
           </div>
@@ -47,13 +46,12 @@
     <li *ngIf="showExtraInfo" class="show-extra-info">
       <div class="flex-row">
         <div class="item-key">Networks:</div>
-        <div style="margin-left: 4px">
+        <div class="item-value mono">
           <div
             *ngFor="
               let name of (getActiveContainer$(containerDef) | async)
                 ?.networks ?? []
             "
-            class="item-value"
           >
             {{ name }}
           </div>
@@ -65,12 +63,11 @@
     <li *ngIf="showExtraExtraInfo" class="show-extra-extra-info">
       <div class="flex-row">
         <div class="item-key">Ports:</div>
-        <div style="margin-left: 4px">
+        <div class="item-value mono">
           <div
             *ngFor="
               let port of (getActiveContainer$(containerDef) | async)?.ports
             "
-            class="item-value"
           >
             {{ port }}
           </div>
@@ -82,12 +79,11 @@
     <li *ngIf="showExtraExtraInfo" class="show-extra-extra-info">
       <div class="flex-row">
         <div class="item-key">Mounts:</div>
-        <div style="margin-left: 4px">
+        <div class="item-value mono">
           <div
             *ngFor="
               let mount of (getActiveContainer$(containerDef) | async)?.mounts
             "
-            class="item-value"
           >
             {{ mount }}
           </div>

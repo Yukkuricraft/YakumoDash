@@ -2,7 +2,6 @@ import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { RootState } from "@app/store/root.state";
 import { Features } from "@app/store/index";
 import { Env } from "@app/models/env";
-import _ from "lodash";
 
 const selectRootState = createFeatureSelector<RootState>(Features.Root);
 

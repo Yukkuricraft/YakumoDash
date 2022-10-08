@@ -32,4 +32,8 @@ export class ContainerActionsComponent {
   restartContainer() {
     console.log("Restarting container", this.containerDef);
   }
+
+  openServerConsole() {
+    console.log("Nyooom");
+  }
 }

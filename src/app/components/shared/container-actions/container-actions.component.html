@@ -15,7 +15,19 @@
   >
     <mat-icon> replay </mat-icon>
   </button>
-  <button mat-icon-button matTooltip="Edit filesystem and configs">
+  <button
+    mat-icon-button
+    matTooltip="Edit filesystem and configs"
+    (click)="editContainerConfig()"
+  >
     <mat-icon> edit </mat-icon>
+  </button>
+  <button
+    *ngIf="containerDef.isMinecraftContainer"
+    mat-icon-button
+    matTooltip="Connect to this world group's server console."
+    (click)="openServerConsole()"
+  >
+    <mat-icon svgIcon="console" class="filter-to-white"></mat-icon>
   </button>
 </div>

@@ -3,7 +3,7 @@ import {
   dockerStringArrayTransformer,
 } from "@app/helpers/dto-transformers";
 import { Transform } from "class-transformer";
-import _ from "lodash";
+import { capitalize, includes } from "lodash";
 
 export enum ContainerType {
   Minecraft = "mc",
@@ -70,16 +70,16 @@ export class ContainerDefinition implements IContainerDefinition {
   }
 
   getFormattedContainerName() {
-    return _.capitalize(this.getContainerName());
+    return capitalize(this.getContainerName());
   }
 
   labelsToContainerType(labels: string[]) {
     let containerType = ContainerType.Unknown;
-    if (_.includes(labels, `${this.TypeLabel}=minecraft`)) {
+    if (includes(labels, `${this.TypeLabel}=minecraft`)) {
       containerType = ContainerType.Minecraft;
-    } else if (_.includes(labels, `${this.TypeLabel}=velocity`)) {
+    } else if (includes(labels, `${this.TypeLabel}=velocity`)) {
       containerType = ContainerType.MCProxy;
-    } else if (_.includes(labels, `${this.TypeLabel}=mysql`)) {
+    } else if (includes(labels, `${this.TypeLabel}=mysql`)) {
       containerType = ContainerType.MySQL;
     }
 
@@ -92,6 +92,15 @@ export class ContainerDefinition implements IContainerDefinition {
 
   getContainerType(): ContainerType {
     return this.labelsToContainerType(this.labels);
+  }
+  get isMinecraftContainer() {
+    return this.getContainerType() === ContainerType.Minecraft;
+  }
+  get isAuxContainer() {
+    return includes(
+      [ContainerType.MCProxy, ContainerType.MySQL],
+      this.getContainerType()
+    );
   }
 
   getContainerState(): string {
@@ -152,7 +161,7 @@ export const StateMapping: ActiveContainerStateMapping = {
         DockerContainerState.Exited,
         DockerContainerState.Paused,
       ];
-      return _.includes(downStates, (container ?? {}).state);
+      return includes(downStates, (container ?? {}).state);
     },
   },
   [ContainerStates.Transitioning]: {
@@ -163,7 +172,7 @@ export const StateMapping: ActiveContainerStateMapping = {
         DockerContainerState.Restarting,
         DockerContainerState.Created,
       ];
-      return _.includes(transitioningStates, (container ?? {}).state);
+      return includes(transitioningStates, (container ?? {}).state);
     },
   },
   [ContainerStates.Unknown]: {

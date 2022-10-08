@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { map, Observable, tap } from "rxjs";
-import _ from "lodash";
 import { DomainConverter } from "@app/helpers/domain";
 import { CreateEnvResponse, Env } from "@app/models/env";
 import { DockerEnvActionResponse } from "@app/models/docker";

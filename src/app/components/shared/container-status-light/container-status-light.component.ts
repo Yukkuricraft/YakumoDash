@@ -6,7 +6,6 @@ import {
   DockerContainerState,
   StateMapping,
 } from "@app/models/container";
-import _ from "lodash";
 import { selectActiveContainerByContainerDef } from "@app/store/root.selectors.containers";
 import { Store } from "@ngrx/store";
 import { map, Observable } from "rxjs";
