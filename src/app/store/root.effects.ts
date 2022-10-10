@@ -33,6 +33,9 @@ export class RootEffects {
     private snackbar: MatSnackBar
   ) {}
 
+  // connectWebSocket$ = createEffect(() => {
+  // })
+
   setAvailableEnvs$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(initializeApp, EnvActions.fetchAvailableEnvs),

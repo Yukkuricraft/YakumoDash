@@ -42,6 +42,15 @@ export interface CreateEnvProps {
   description?: string;
 }
 
+export const SocketActions = createActionGroup({
+  source: "Environment",
+  events: {
+    "Connect To Websocket": props<{ endpoint: string }>(),
+    "Disconnect To Websocket": props<{ endpoint: string }>(),
+    "Send Message": props<{ endpoint: string; data: any }>(),
+  },
+});
+
 export interface DeleteEnvProps {
   env: Env;
 }

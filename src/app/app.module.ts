@@ -34,6 +34,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MinecraftContainersTableComponent } from "./components/environment-management/subcomponents/minecraft-containers-table/minecraft-containers-table.component";
 import { MonacoEditorModule } from "ngx-monaco-editor-v2";
 import { NewEnvironmentDialogComponent } from "./components/environment-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
+import { ServerConsoleDialogComponent } from "./components/shared/server-console-dialog/server-console-dialog.component";
 import { NgModule, Type } from "@angular/core";
 import { RootEffects } from "@app/store/root.effects";
 import { rootReducer } from "@app/store/root.reducer";
@@ -41,6 +42,8 @@ import { EnvironmentManagementComponent } from "./components/environment-managem
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { TextEditorDialogComponent } from "./components/shared/text-editor-dialog/text-editor-dialog.component";
 import { TokenInterceptor } from "@app/interceptors/token/token.interceptor";
+import { SocketIoModule } from "ngx-socket-io";
+import { config as socketioConfig } from "./services/socketio/socketio.service";
 
 import {
   HTTP_INTERCEPTORS,
@@ -71,6 +74,7 @@ const effects: Type<any>[] = [RootEffects];
     DashboardComponent,
     EnvironmentManagementComponent,
     NewEnvironmentDialogComponent,
+    ServerConsoleDialogComponent,
     MinecraftContainersTableComponent,
     ContainerActionsComponent,
     ContainerStatusLightComponent,
@@ -86,6 +90,7 @@ const effects: Type<any>[] = [RootEffects];
     StoreDevtoolsModule.instrument({ maxAge: 50 }),
     EffectsModule.forRoot(effects),
     MonacoEditorModule.forRoot(),
+    SocketIoModule.forRoot(socketioConfig),
 
     AppRoutingModule,
     BrowserAnimationsModule,

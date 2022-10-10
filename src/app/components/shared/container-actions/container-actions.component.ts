@@ -1,9 +1,16 @@
+import { MatSnackBar } from "@angular/material/snack-bar";
+import {
+  ServerConsoleDialogComponent,
+  ServerConsoleDialogData,
+} from "./../server-console-dialog/server-console-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 import { Component, Input, OnInit } from "@angular/core";
 import {
   ActiveContainer,
   ContainerDefinition,
   ContainerStates,
 } from "@app/models/container";
+import { Env } from "@app/models/env";
 
 @Component({
   selector: "app-container-actions",
@@ -11,9 +18,10 @@ import {
   styleUrls: ["./container-actions.component.scss"],
 })
 export class ContainerActionsComponent {
+  @Input() env!: Env;
   @Input() containerDef!: ContainerDefinition;
 
-  constructor() {}
+  constructor(private dialog: MatDialog, private snackbar: MatSnackBar) {}
 
   startContainerDisabled() {
     return this.containerDef.getContainerState() === ContainerStates.Up;
@@ -35,5 +43,27 @@ export class ContainerActionsComponent {
 
   openServerConsole() {
     console.log("Nyooom");
+    if (this.env === null) {
+      return;
+    }
+
+    const activeEnv = this.env as Env;
+    const dialogRef = this.dialog.open<
+      ServerConsoleDialogComponent,
+      ServerConsoleDialogData,
+      boolean
+    >(ServerConsoleDialogComponent, {
+      data: {
+        env: activeEnv,
+        containerDef: this.containerDef,
+      },
+      width: "400px",
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.snackbar.open("Closing console.");
+      }
+    });
   }
 }

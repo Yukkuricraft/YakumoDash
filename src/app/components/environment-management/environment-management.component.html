@@ -96,7 +96,6 @@
           </mat-card-content>
         </mat-card>
       </div>
-
       <div class="containers">
         <div class="aux-containers">
           <h3>Aux Containers</h3>
@@ -110,6 +109,7 @@
             "
           >
             <app-container-status-card
+              [env]="env"
               [containerDef]="container"
             ></app-container-status-card>
           </div>
@@ -123,6 +123,7 @@
             "
           >
             <app-container-status-card
+              [env]="env"
               [containerDef]="container"
             ></app-container-status-card>
           </div>
