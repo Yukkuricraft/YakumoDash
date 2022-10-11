@@ -1,3 +1,4 @@
+import { forceNavigateToLogin } from "./root.actions";
 import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import {
@@ -22,19 +23,28 @@ import { DockerService } from "@app/services/docker/docker.service";
 import { ContainerDefinition } from "@app/models/container";
 import { Store } from "@ngrx/store";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class RootEffects {
   constructor(
     private actions$: Actions,
     private dockerApi: DockerService,
+    private router: Router,
     private store: Store,
     private envsApi: EnvironmentsService,
     private snackbar: MatSnackBar
   ) {}
 
-  // connectWebSocket$ = createEffect(() => {
-  // })
+  forceNavigateToLogin$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(forceNavigateToLogin),
+        tap(() => this.router.navigateByUrl("/login")),
+        map(() => setGlobalLoadingBarInactive())
+      ),
+    { dispatch: false }
+  );
 
   setAvailableEnvs$ = createEffect(() => {
     return this.actions$.pipe(

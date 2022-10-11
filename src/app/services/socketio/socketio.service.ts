@@ -14,11 +14,12 @@ export const config: SocketIoConfig = {
 export class SocketioService {
   message$ = this.socket.fromEvent<any>("message");
   event$ = this.socket.fromEvent<string>("event");
+  logFromConsole$ = this.socket.fromEvent<string>("log from console");
 
   constructor(private socket: Socket) {}
 
   connect(env: Env, container: ActiveContainer) {
-    this.socket.emit("poop", { env, container });
+    this.socket.emit("connect to console", { env, container });
   }
 
   message1(msg: any) {

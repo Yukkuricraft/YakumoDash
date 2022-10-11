@@ -9,6 +9,10 @@ import { Env } from "@app/models/env";
 import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 import { MatDialogRef } from "@angular/material/dialog";
 
+export const forceNavigateToLogin = createAction(
+  "[Root] Force navigation to login page"
+);
+
 export const initializeApp = createAction("[Root] Initializing YakumoDash");
 
 export const setLoggedInUser = createAction(

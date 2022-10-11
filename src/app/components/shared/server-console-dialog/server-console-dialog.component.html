@@ -1,11 +1,14 @@
 <mat-card>
-  <mat-card-title> Poop </mat-card-title>
+  <mat-card-title>Server Console</mat-card-title>
   <mat-card-content>
-    <div>Aaa</div>
     <div>
-      {{ serverSocketEvent$ | async }}
+      <!-- <ng-terminal #term [draggable]="true"></ng-terminal> -->
+      <div #myTerminal></div>
+      <textarea #terminalInput style="width: 100%" rows="1"></textarea>
     </div>
-
+    <textarea>
+      {{ logFromConsole$ | async }}
+    </textarea>
     <button (click)="button1Clicked()">message1</button>
     <button (click)="button2Clicked()">message2</button>
   </mat-card-content>

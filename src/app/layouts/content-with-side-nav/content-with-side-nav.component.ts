@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDrawer } from "@angular/material/sidenav";
 import { AuthService } from "@app/services/auth/auth.service";
 import { Router } from "@angular/router";
+import { forceNavigateToLogin } from "@app/store/root.actions";
+import { Store } from "@ngrx/store";
 
 @Component({
   selector: "app-content-with-side-nav",
@@ -11,11 +13,11 @@ import { Router } from "@angular/router";
 export class ContentWithSideNavComponent {
   @ViewChild("drawer") sideNav: MatDrawer | undefined;
 
-  constructor(private ycAuth: AuthService, private router: Router) {}
+  constructor(private ycAuth: AuthService, private store: Store) {}
 
   logout() {
     this.ycAuth.logout().subscribe(resp => {
-      this.router.navigateByUrl("/login");
+      this.store.dispatch(forceNavigateToLogin());
     });
   }
 

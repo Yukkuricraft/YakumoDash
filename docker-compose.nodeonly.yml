@@ -10,7 +10,7 @@ services:
       VIRTUAL_PORT: 25699
       LETSENCRYPT_HOST: yakumo2.yukkuricraft.net
     volumes:
-      - ./:/app
+      - ./src:/app/src
     networks:
       - yukkuricraft_yc-web-dev
 

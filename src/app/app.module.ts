@@ -44,6 +44,7 @@ import { TextEditorDialogComponent } from "./components/shared/text-editor-dialo
 import { TokenInterceptor } from "@app/interceptors/token/token.interceptor";
 import { SocketIoModule } from "ngx-socket-io";
 import { config as socketioConfig } from "./services/socketio/socketio.service";
+// import { NgTerminalModule } from "ng-terminal";
 
 import {
   HTTP_INTERCEPTORS,
@@ -97,6 +98,7 @@ const effects: Type<any>[] = [RootEffects];
     FormsModule,
     FormsModule,
     HttpClientModule,
+    // NgTerminalModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,

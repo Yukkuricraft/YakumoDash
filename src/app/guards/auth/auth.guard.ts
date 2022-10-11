@@ -12,12 +12,16 @@ import { Store } from "@ngrx/store";
 import { selectUser } from "@app/store/root.selectors";
 import { AuthService } from "@app/services/auth/auth.service";
 import { SocialUser } from "@abacritt/angularx-social-login";
+import {
+  forceNavigateToLogin,
+  setGlobalLoadingBarInactive,
+} from "@app/store/root.actions";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthGuard implements CanActivate, CanActivateChild {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private store: Store, private authService: AuthService) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -26,10 +30,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     return this.authService.me().pipe(
       map(data => {
         console.log("I AM:", data);
-
-        if (data === null) {
-          this.router.navigateByUrl("/login");
-        }
 
         return data !== null;
       })

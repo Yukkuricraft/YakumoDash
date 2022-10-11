@@ -10,7 +10,7 @@ services:
       VIRTUAL_PORT: 25699
       LETSENCRYPT_HOST: yakumo.yukkuricraft.net
     volumes:
-      - ./:/app
+      - ./src:/app/src
 
   nginx-proxy:
     container_name: nginx-proxy-yakumo-dash
@@ -45,3 +45,4 @@ volumes:
   html:
   vhost:
   acme:
+
