@@ -1,6 +1,10 @@
 <mat-card>
   <mat-card-title>Server Console</mat-card-title>
   <mat-card-content>
+    <h3>
+      <!-- {{ (activeContainer$ | async)?.names[0] ?? "Unknown Container" }} -->
+      {{ (activeContainer$ | async)?.names?.[0] ?? "Unknown Container" }}
+    </h3>
     <div>
       <!-- <ng-terminal #term [draggable]="true"></ng-terminal> -->
       <div #myTerminal></div>

@@ -5137,6 +5137,17 @@ neo-async@^2.6.2:
   resolved "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+ng-terminal@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/ng-terminal/-/ng-terminal-5.2.0.tgz#b7d8322b2d3f7ff319d373cd6bd508be70898fc1"
+  integrity sha512-4sXGVHaAhPTzHYZ/byqnZaXtCmkmWF2RnIuJLKpAuegXviqRAzD/MPfwB7IgbTteOlVRS/1O6jcpxFxTXHt8AA==
+  dependencies:
+    "@juggle/resize-observer" "^3.4.0"
+    angular-resizable-element "^5.0.0"
+    tslib "^2.0.0"
+    xterm "^4.19.0"
+    xterm-addon-fit "^0.5.0"
+
 ngrx-store-localstorage@^14.0.0:
   version "14.0.0"
   resolved "https://registry.npmjs.org/ngrx-store-localstorage/-/ngrx-store-localstorage-14.0.0.tgz"
@@ -7352,6 +7363,16 @@ xmlhttprequest-ssl@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/xmlhttprequest-ssl/-/xmlhttprequest-ssl-2.0.0.tgz#91360c86b914e67f44dce769180027c0da618c67"
   integrity sha512-QKxVRxiRACQcVuQEYFsI1hhkrMlrXHPegbbd1yn9UHOmRxY+si12nQYzri3vbzt8VdTTRviqcKxcyllFas5z2A==
+
+xterm-addon-fit@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/xterm-addon-fit/-/xterm-addon-fit-0.5.0.tgz#2d51b983b786a97dcd6cde805e700c7f913bc596"
+  integrity sha512-DsS9fqhXHacEmsPxBJZvfj2la30Iz9xk+UKjhQgnYNkrUIN5CYLbw7WEfz117c7+S86S/tpHPfvNxJsF5/G8wQ==
+
+xterm@^4.19.0:
+  version "4.19.0"
+  resolved "https://registry.yarnpkg.com/xterm/-/xterm-4.19.0.tgz#c0f9d09cd61de1d658f43ca75f992197add9ef6d"
+  integrity sha512-c3Cp4eOVsYY5Q839dR5IejghRPpxciGmLWWaP9g+ppfMeBChMeLa1DCA+pmX/jyDZ+zxFOmlJL/82qVdayVoGQ==
 
 xterm@^5.0.0:
   version "5.0.0"

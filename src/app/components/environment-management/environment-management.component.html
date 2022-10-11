@@ -133,6 +133,7 @@
           <!-- MC Containers -->
           <h3>Server Containers</h3>
           <app-minecraft-containers-table
+            [env]="env"
             [containers$]="
               getDefinedContainersForEnvAndType$(env, ContainerType.Minecraft)
             "

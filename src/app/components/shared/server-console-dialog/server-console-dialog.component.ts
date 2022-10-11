@@ -1,3 +1,4 @@
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { SocketioService } from "@app/services/socketio/socketio.service";
 import { Env } from "@app/models/env";
 import {
@@ -5,6 +6,7 @@ import {
   Component,
   ElementRef,
   Input,
+  Inject,
   OnInit,
   ViewChild,
   ViewEncapsulation,
@@ -48,10 +50,21 @@ export class ServerConsoleDialogComponent implements AfterViewInit {
   maxContentLen = 50;
   contentLen = 0;
   _consoleContent: string[] = [];
-  constructor(private socketioApi: SocketioService) {
-    socketioApi.connect({} as Env, {} as ActiveContainer);
+  constructor(
+    private store: Store,
+    private socketioApi: SocketioService,
+    public dialogRef: MatDialogRef<ServerConsoleDialogComponent, boolean>,
+    @Inject(MAT_DIALOG_DATA) public data?: ServerConsoleDialogData
+  ) {
+    console.log("DATA FOR SERVER CONSOLE");
+    console.log(data);
+    socketioApi.connectToConsole(
+      data?.env as Env,
+      data?.containerDef as ContainerDefinition
+    );
 
     socketioApi.logFromConsole$.subscribe(log => {
+      console.log(`GOT LOGLINE FROM CONSOLE: ${log}`);
       if (this.contentLen == this.maxContentLen) {
         this._consoleContent.shift();
       }
@@ -63,6 +76,14 @@ export class ServerConsoleDialogComponent implements AfterViewInit {
         this.contentLen += 1;
       }
     });
+  }
+
+  get activeContainer$() {
+    return this.store.select(
+      selectActiveContainerByContainerDef(
+        this.data?.containerDef as ContainerDefinition
+      )
+    );
   }
 
   ngAfterViewInit() {

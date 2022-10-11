@@ -64,6 +64,11 @@ export class ContainerDefinition implements IContainerDefinition {
     return splitLabel.length > 1 ? splitLabel[1] : "";
   }
 
+  /**
+   * Defaults to returning the label-based container_name first.
+   *  - labels.net.yukkuricraft.container_name: {thisvalue}
+   * @returns
+   */
   getContainerName() {
     const serviceLabel = this.getLabelValue(this.NameLabel);
     return serviceLabel ? serviceLabel : this.names[0];
@@ -109,7 +114,7 @@ export class ContainerDefinition implements IContainerDefinition {
     return ContainerStates.Down;
   }
 
-  // ContainerDefinitions come back as proper arrays becausse Python handles those.
+  // ContainerDefinitions come back as proper arrays because Python handles those.
   // This is not true for ActiveContainer which we get directly from `docker ps` output.
   image = "";
   labels: string[] = [];

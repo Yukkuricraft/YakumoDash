@@ -12,10 +12,7 @@ import { Store } from "@ngrx/store";
 import { selectUser } from "@app/store/root.selectors";
 import { AuthService } from "@app/services/auth/auth.service";
 import { SocialUser } from "@abacritt/angularx-social-login";
-import {
-  forceNavigateToLogin,
-  setGlobalLoadingBarInactive,
-} from "@app/store/root.actions";
+import { setGlobalLoadingBarInactive } from "@app/store/root.actions";
 
 @Injectable({
   providedIn: "root",

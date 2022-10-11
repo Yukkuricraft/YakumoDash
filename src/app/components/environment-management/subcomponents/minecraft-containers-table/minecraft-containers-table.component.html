@@ -3,7 +3,7 @@
     *ngFor="let containerDef of containers$ | async"
     class="minecraft-container"
   >
-    <app-container-status-card [containerDef]="containerDef">
+    <app-container-status-card [env]="env" [containerDef]="containerDef">
     </app-container-status-card>
   </div>
 </div>

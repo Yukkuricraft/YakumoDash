@@ -2,7 +2,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import {
   ServerConsoleDialogComponent,
   ServerConsoleDialogData,
-} from "./../server-console-dialog/server-console-dialog.component";
+} from "../server-console-dialog/server-console-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { Component, Input, OnInit } from "@angular/core";
 import {
@@ -48,6 +48,7 @@ export class ContainerActionsComponent {
     }
 
     const activeEnv = this.env as Env;
+    console.log(activeEnv);
     const dialogRef = this.dialog.open<
       ServerConsoleDialogComponent,
       ServerConsoleDialogData,

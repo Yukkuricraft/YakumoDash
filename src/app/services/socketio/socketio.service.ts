@@ -1,6 +1,8 @@
+import { selectActiveContainerByContainerDef } from "@app/store/root.selectors.containers";
 import { Injectable } from "@angular/core";
-import { ActiveContainer } from "@app/models/container";
+import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 import { Env } from "@app/models/env";
+import { Store } from "@ngrx/store";
 import { Socket, SocketIoConfig } from "ngx-socket-io";
 
 export const config: SocketIoConfig = {
@@ -16,10 +18,24 @@ export class SocketioService {
   event$ = this.socket.fromEvent<string>("event");
   logFromConsole$ = this.socket.fromEvent<string>("log from console");
 
-  constructor(private socket: Socket) {}
+  constructor(private socket: Socket, private store: Store) {}
 
-  connect(env: Env, container: ActiveContainer) {
-    this.socket.emit("connect to console", { env, container });
+  connectToConsole(env: Env, containerDef: ContainerDefinition) {
+    this.store
+      .select(selectActiveContainerByContainerDef(containerDef))
+      .subscribe(activeContainer => {
+        if (activeContainer === null) {
+          throw Error(
+            "Tried connecting with ContainerDefinition that didn't have a valid ActiveContainer. Aborting."
+          );
+        }
+        const payload = {
+          env: env.name,
+          world_group_name: activeContainer.getContainerName(),
+        };
+        console.log(payload);
+        this.socket.emit("connect to console", payload);
+      });
   }
 
   message1(msg: any) {

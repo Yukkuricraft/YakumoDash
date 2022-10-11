@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDrawer } from "@angular/material/sidenav";
 import { AuthService } from "@app/services/auth/auth.service";
 import { Router } from "@angular/router";
-import { forceNavigateToLogin } from "@app/store/root.actions";
+import { beginForceNavigateToLogin } from "@app/store/root.actions";
 import { Store } from "@ngrx/store";
 
 @Component({
@@ -17,7 +17,7 @@ export class ContentWithSideNavComponent {
 
   logout() {
     this.ycAuth.logout().subscribe(resp => {
-      this.store.dispatch(forceNavigateToLogin());
+      this.store.dispatch(beginForceNavigateToLogin());
     });
   }
 

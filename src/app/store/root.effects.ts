@@ -1,7 +1,8 @@
-import { forceNavigateToLogin } from "./root.actions";
 import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import {
+  beginForceNavigateToLogin,
+  finishForceNavigateToLogin,
   EnvActions,
   fetchContainerStatusForEnv,
   initializeApp,
@@ -36,12 +37,20 @@ export class RootEffects {
     private snackbar: MatSnackBar
   ) {}
 
-  forceNavigateToLogin$ = createEffect(
+  beginForceNavigateToLogin$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(beginForceNavigateToLogin),
+      switchMap(() => [
+        setGlobalLoadingBarInactive(),
+        finishForceNavigateToLogin(),
+      ])
+    )
+  );
+  finishForceNavigateToLogin$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(forceNavigateToLogin),
-        tap(() => this.router.navigateByUrl("/login")),
-        map(() => setGlobalLoadingBarInactive())
+        ofType(finishForceNavigateToLogin),
+        tap(() => this.router.navigateByUrl("/login"))
       ),
     { dispatch: false }
   );

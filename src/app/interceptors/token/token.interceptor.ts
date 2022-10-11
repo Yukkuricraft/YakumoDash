@@ -10,7 +10,7 @@ import { Store } from "@ngrx/store";
 import { AuthService } from "@app/services/auth/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { forceNavigateToLogin } from "@app/store/root.actions";
+import { beginForceNavigateToLogin } from "@app/store/root.actions";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -44,7 +44,7 @@ export class TokenInterceptor implements HttpInterceptor {
           this.snackbar.open(
             "Could not authenticate you. Redirecting to Login Page"
           );
-          this.store.dispatch(forceNavigateToLogin());
+          this.store.dispatch(beginForceNavigateToLogin());
         }
 
         return throwError(error);
