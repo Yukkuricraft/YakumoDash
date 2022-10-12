@@ -7,7 +7,9 @@ import { Socket, SocketIoConfig } from "ngx-socket-io";
 
 export const config: SocketIoConfig = {
   url: "wss://api2.yukkuricraft.net",
-  options: {},
+  options: {
+    autoConnect: false,
+  },
 };
 
 @Injectable({
@@ -36,6 +38,16 @@ export class SocketioService {
         console.log(payload);
         this.socket.emit("connect to console", payload);
       });
+  }
+
+  connect() {
+    console.log("EMITTING CONNECT");
+    this.socket.connect();
+  }
+
+  disconnect() {
+    console.log("EMITTING DISCONNECT");
+    this.socket.disconnect();
   }
 
   message1(msg: any) {

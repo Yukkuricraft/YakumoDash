@@ -10,6 +10,7 @@ import {
   OnInit,
   ViewChild,
   ViewEncapsulation,
+  OnDestroy,
 } from "@angular/core";
 import {
   ActiveContainer,
@@ -18,7 +19,7 @@ import {
 } from "@app/models/container";
 import { selectActiveContainerByContainerDef } from "@app/store/root.selectors.containers";
 import { Store } from "@ngrx/store";
-import { map } from "rxjs";
+import { map, Subscription } from "rxjs";
 import { ITerminalOptions, Terminal } from "xterm";
 
 export type ServerConsoleDialogData = {
@@ -32,7 +33,7 @@ export type ServerConsoleDialogData = {
   styleUrls: ["./server-console-dialog.component.scss"],
   encapsulation: ViewEncapsulation.None,
 })
-export class ServerConsoleDialogComponent implements AfterViewInit {
+export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
   @ViewChild("myTerminal", { static: true }) terminalDiv!: ElementRef;
   terminal!: Terminal;
 
@@ -47,6 +48,8 @@ export class ServerConsoleDialogComponent implements AfterViewInit {
     scrollback: Number.MAX_SAFE_INTEGER,
   };
 
+  subscriptions: Subscription[] = [];
+
   maxContentLen = 50;
   contentLen = 0;
   _consoleContent: string[] = [];
@@ -56,6 +59,8 @@ export class ServerConsoleDialogComponent implements AfterViewInit {
     public dialogRef: MatDialogRef<ServerConsoleDialogComponent, boolean>,
     @Inject(MAT_DIALOG_DATA) public data?: ServerConsoleDialogData
   ) {
+    socketioApi.connect();
+
     console.log("DATA FOR SERVER CONSOLE");
     console.log(data);
     socketioApi.connectToConsole(
@@ -63,19 +68,21 @@ export class ServerConsoleDialogComponent implements AfterViewInit {
       data?.containerDef as ContainerDefinition
     );
 
-    socketioApi.logFromConsole$.subscribe(log => {
-      console.log(`GOT LOGLINE FROM CONSOLE: ${log}`);
-      if (this.contentLen == this.maxContentLen) {
-        this._consoleContent.shift();
-      }
+    this.subscriptions.push(
+      socketioApi.logFromConsole$.subscribe(log => {
+        console.log(`GOT LOGLINE FROM CONSOLE: ${log}`);
+        if (this.contentLen == this.maxContentLen) {
+          this._consoleContent.shift();
+        }
 
-      this._consoleContent.push(log);
-      this.terminal.writeln(log);
+        this._consoleContent.push(log);
+        this.terminal.writeln(log);
 
-      if (this.contentLen < this.maxContentLen) {
-        this.contentLen += 1;
-      }
-    });
+        if (this.contentLen < this.maxContentLen) {
+          this.contentLen += 1;
+        }
+      })
+    );
   }
 
   get activeContainer$() {
@@ -105,12 +112,17 @@ export class ServerConsoleDialogComponent implements AfterViewInit {
   }
 
   button1Clicked() {
-    console.log("aaaaa");
     this.socketioApi.message1("aaaaa");
   }
 
   button2Clicked() {
-    console.log("aaaaa");
     this.socketioApi.message2("aaaaa");
+  }
+
+  ngOnDestroy() {
+    this.dialogRef.close(true);
+    this.socketioApi.disconnect();
+
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

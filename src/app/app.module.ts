@@ -42,9 +42,10 @@ import { EnvironmentManagementComponent } from "./components/environment-managem
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { TextEditorDialogComponent } from "./components/shared/text-editor-dialog/text-editor-dialog.component";
 import { TokenInterceptor } from "@app/interceptors/token/token.interceptor";
-import { SocketIoModule } from "ngx-socket-io";
+
 import { config as socketioConfig } from "./services/socketio/socketio.service";
 // import { NgTerminalModule } from "ng-terminal";
+import { SocketIoModule } from "ngx-socket-io";
 
 import {
   HTTP_INTERCEPTORS,

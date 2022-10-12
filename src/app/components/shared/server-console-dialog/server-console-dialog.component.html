@@ -3,16 +3,13 @@
   <mat-card-content>
     <h3>
       <!-- {{ (activeContainer$ | async)?.names[0] ?? "Unknown Container" }} -->
-      {{ (activeContainer$ | async)?.names?.[0] ?? "Unknown Container" }}
+      {{ (activeContainer$ | async)?.names?.[0] ?? "Inactive Container" }}
     </h3>
     <div>
       <!-- <ng-terminal #term [draggable]="true"></ng-terminal> -->
       <div #myTerminal></div>
       <textarea #terminalInput style="width: 100%" rows="1"></textarea>
     </div>
-    <textarea>
-      {{ logFromConsole$ | async }}
-    </textarea>
     <button (click)="button1Clicked()">message1</button>
     <button (click)="button2Clicked()">message2</button>
   </mat-card-content>
