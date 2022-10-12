@@ -65,17 +65,29 @@ export class ContainerDefinition implements IContainerDefinition {
   }
 
   /**
-   * Defaults to returning the label-based container_name first.
+   * Returns the label-based container_name.
    *  - labels.net.yukkuricraft.container_name: {thisvalue}
+   * This is equivalent to world group names
+   * @returns
+   */
+  getContainerNameLabel() {
+    return this.getLabelValue(this.NameLabel);
+  }
+  /**
+   * Returns the docker-context container name, ie what you would use with
+   * docker <subcommand> <container_name>
+   * Eg,
+   * - YC-lobby-prod
+   * - yakumo-dash-dev
+   * - etc
    * @returns
    */
   getContainerName() {
-    const serviceLabel = this.getLabelValue(this.NameLabel);
-    return serviceLabel ? serviceLabel : this.names[0];
+    return this.names.length > 0 ? this.names[0] : "Undefined";
   }
 
   getFormattedContainerName() {
-    return capitalize(this.getContainerName());
+    return capitalize(this.getContainerNameLabel());
   }
 
   labelsToContainerType(labels: string[]) {

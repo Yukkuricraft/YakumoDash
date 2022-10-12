@@ -31,10 +31,13 @@ export class SocketioService {
             "Tried connecting with ContainerDefinition that didn't have a valid ActiveContainer. Aborting."
           );
         }
+
         const payload = {
           env: env.name,
-          world_group_name: activeContainer.getContainerName(),
+          // eslint-disable-next-line camelcase
+          world_group_name: activeContainer.getContainerNameLabel(),
         };
+
         console.log(payload);
         this.socket.emit("connect to console", payload);
       });
@@ -48,6 +51,22 @@ export class SocketioService {
   disconnect() {
     console.log("EMITTING DISCONNECT");
     this.socket.disconnect();
+  }
+
+  execCommandOnServer(activeContainer: ActiveContainer, command: string) {
+    console.log("SENDING COMMAND TO CONTAINER");
+    console.log(activeContainer);
+    console.log(command);
+
+    const env = activeContainer.EnvLabel;
+    const containerName = activeContainer.getContainerName();
+
+    const payload = {
+      container_name: containerName,
+      command,
+    };
+
+    this.socket.emit("exec server command", payload);
   }
 
   message1(msg: any) {

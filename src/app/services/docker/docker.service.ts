@@ -15,6 +15,23 @@ export class DockerService {
 
   constructor(private http: HttpClient) {}
 
+  sendCommandToContainer(activeContainer: ActiveContainer, command: string) {
+    console.log("SENDING COMMAND TO CONTAINER");
+    console.log(activeContainer);
+    console.log(command);
+
+    const env = activeContainer.EnvLabel;
+    const containerName = activeContainer.getContainerNameLabel();
+
+    return this.http.post(
+      `${this.basePath}/${env}/containers/exec-server-command`,
+      {
+        container_name: containerName,
+        command,
+      }
+    );
+  }
+
   upEnv(env: Env) {
     return this.http
       .get(`${this.basePath}/${env.name}/containers/up`)

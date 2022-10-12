@@ -34,6 +34,8 @@ export type ServerConsoleDialogData = {
   encapsulation: ViewEncapsulation.None,
 })
 export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
+  @ViewChild("myTerminalInput", { static: true })
+  myTerminalInputDiv!: ElementRef;
   @ViewChild("myTerminal", { static: true }) terminalDiv!: ElementRef;
   terminal!: Terminal;
 
@@ -117,6 +119,28 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
 
   button2Clicked() {
     this.socketioApi.message2("aaaaa");
+  }
+
+  handleConsoleInput(event: KeyboardEvent) {
+    console.log(event);
+    const keyCode = event.keyCode;
+    if (keyCode === 13) {
+      // On enter key press
+      // - disable the enter-key input into the textarea
+      // - send current textarea contents to console backend
+      // - clear the textarea
+      event.preventDefault();
+
+      const command = this.myTerminalInputDiv.nativeElement.value;
+      this.activeContainer$.subscribe(activeContainer => {
+        this.socketioApi.execCommandOnServer(
+          activeContainer as ActiveContainer,
+          command
+        );
+
+        this.myTerminalInputDiv.nativeElement.value = "";
+      });
+    }
   }
 
   ngOnDestroy() {

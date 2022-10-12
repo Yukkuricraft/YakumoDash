@@ -35,7 +35,7 @@ export const selectActiveContainerByContainerDef = (
 ) => {
   const envString = containerDef.getContainerEnvString();
   const type = containerDef.getContainerType();
-  const name = containerDef.getContainerName();
+  const name = containerDef.getContainerNameLabel();
 
   return createSelector(
     selectActiveContainerByEnvTypeAndName(

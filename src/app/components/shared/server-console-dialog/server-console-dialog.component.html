@@ -8,7 +8,12 @@
     <div>
       <!-- <ng-terminal #term [draggable]="true"></ng-terminal> -->
       <div #myTerminal></div>
-      <textarea #terminalInput style="width: 100%" rows="1"></textarea>
+      <textarea
+        #myTerminalInput
+        (keypress)="handleConsoleInput($event)"
+        style="width: 100%"
+        rows="1"
+      ></textarea>
     </div>
     <button (click)="button1Clicked()">message1</button>
     <button (click)="button2Clicked()">message2</button>
