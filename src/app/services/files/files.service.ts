@@ -4,6 +4,7 @@ import { map, Observable, tap } from "rxjs";
 import { DomainConverter } from "@app/helpers/domain";
 import { CreateEnvResponse, Env } from "@app/models/env";
 import { DockerEnvActionResponse } from "@app/models/docker";
+import { FileListResponse } from "@app/models/file";
 
 @Injectable({
   providedIn: "root",
@@ -15,9 +16,13 @@ export class FilesService {
 
   listFiles(path: string) {
     console.log(path);
-    return this.http.post(`${this.basePath}/list`, {
-      PATH: path,
-    });
+    return this.http
+      .post(`${this.basePath}/list`, {
+        PATH: path,
+      })
+      .pipe(
+        map((data: any) => DomainConverter.fromDto(FileListResponse, data))
+      );
   }
 
   writeFile(file: string, content: string) {

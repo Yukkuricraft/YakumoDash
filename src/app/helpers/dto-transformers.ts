@@ -1,3 +1,4 @@
+import { ExecutableModeBit, FileTypeBit } from "@app/models/file";
 import { CreatedEnv, Env } from "@app/models/env";
 import {
   ClassConstructor,
@@ -5,6 +6,27 @@ import {
   TransformFnParams,
 } from "class-transformer";
 import { DomainConverter } from "./domain";
+
+export function dateEpochTransformer({
+  type,
+  value,
+}: TransformFnParams): number | Date {
+  if (!value) {
+    return value;
+  }
+
+  switch (type) {
+    case TransformationType.PLAIN_TO_CLASS:
+      const epochInMs = parseInt(value) * 1000;
+      return new Date(epochInMs);
+
+    case TransformationType.CLASS_TO_PLAIN:
+      return 0;
+
+    default:
+      return value;
+  }
+}
 
 export function dateStringTransformer({
   type,
