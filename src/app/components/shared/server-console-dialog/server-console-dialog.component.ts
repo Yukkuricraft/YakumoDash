@@ -20,7 +20,7 @@ import {
 import { selectActiveContainerByContainerDef } from "@app/store/root.selectors.containers";
 import { Store } from "@ngrx/store";
 import { map, Subscription } from "rxjs";
-import { ITerminalOptions, Terminal } from "xterm";
+import { ITerminalInitOnlyOptions, ITerminalOptions, Terminal } from "xterm";
 
 export type ServerConsoleDialogData = {
   env: Env;
@@ -48,6 +48,9 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
     cursorBlink: false,
     theme: { background: "#263238" },
     scrollback: Number.MAX_SAFE_INTEGER,
+  };
+  baseInitTerminalOptions: ITerminalInitOnlyOptions = {
+    cols: 120,
   };
 
   subscriptions: Subscription[] = [];
@@ -96,7 +99,10 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.terminal = new Terminal(this.baseTerminalOptions);
+    this.terminal = new Terminal({
+      ...this.baseTerminalOptions,
+      ...this.baseInitTerminalOptions,
+    });
     this.terminal.open(this.terminalDiv.nativeElement);
   }
 
@@ -114,6 +120,7 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
   }
 
   button1Clicked() {
+    this.terminal.resize(80, 80);
     this.socketioApi.message1("aaaaa");
   }
 
@@ -122,7 +129,6 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
   }
 
   handleConsoleInput(event: KeyboardEvent) {
-    console.log(event);
     const keyCode = event.keyCode;
     if (keyCode === 13) {
       // On enter key press

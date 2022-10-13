@@ -2,7 +2,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import {
   ServerConsoleDialogComponent,
   ServerConsoleDialogData,
-} from "../server-console-dialog/server-console-dialog.component";
+} from "@app/components/shared/server-console-dialog/server-console-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { Component, Input, OnInit } from "@angular/core";
 import {
@@ -11,6 +11,7 @@ import {
   ContainerStates,
 } from "@app/models/container";
 import { Env } from "@app/models/env";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-container-actions",
@@ -21,7 +22,11 @@ export class ContainerActionsComponent {
   @Input() env!: Env;
   @Input() containerDef!: ContainerDefinition;
 
-  constructor(private dialog: MatDialog, private snackbar: MatSnackBar) {}
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private snackbar: MatSnackBar
+  ) {}
 
   startContainerDisabled() {
     return this.containerDef.getContainerState() === ContainerStates.Up;
@@ -31,7 +36,7 @@ export class ContainerActionsComponent {
   }
 
   editContainerConfig() {
-    console.log("Hm?");
+    this.router.navigateByUrl("/server-editor");
   }
 
   restartContainerDisabled() {

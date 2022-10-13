@@ -13,6 +13,13 @@ export class FilesService {
 
   constructor(private http: HttpClient) {}
 
+  listFiles(path: string) {
+    console.log(path);
+    return this.http.post(`${this.basePath}/list`, {
+      PATH: path,
+    });
+  }
+
   writeFile(file: string, content: string) {
     console.log(file, content);
     return this.http.post(`${this.basePath}/write`, {

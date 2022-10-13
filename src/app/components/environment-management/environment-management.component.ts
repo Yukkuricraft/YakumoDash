@@ -80,7 +80,7 @@ export class EnvironmentManagementComponent {
   }
 
   openNewEnvDialog(): void {
-    this.dialog.open(NewEnvironmentDialogComponent, { width: "500px" });
+    this.dialog.open(NewEnvironmentDialogComponent, { width: "50vw" });
   }
 
   getDefinedContainersForEnvAndType$(env: Env, type: ContainerType) {
@@ -118,9 +118,9 @@ export class EnvironmentManagementComponent {
     >(ConfirmationDialogComponent, {
       data: {
         title: "Confirm Shutdown of Environment",
-        description: `This action will stop all containers and servers for the environment '${activeEnv.getFormattedLabel()}'.`,
+        description: `This action will stop all containers (servers) for the environment '${activeEnv.getFormattedLabel()}'.`,
       },
-      width: "400px",
+      width: "50vw",
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -165,7 +165,7 @@ export class EnvironmentManagementComponent {
       data: {
         title: "Edit Environment Config",
         uri: `env/${activeEnv.name}.toml`,
-        extraActionPrompt: `Would you like to regenerate all env configs after saving?`,
+        extraActionPrompt: `Would you like to disable regenerating all env configs after saving? (You must regenerate configs to reflect changes in the UI)`,
       },
       width: "100vw",
       height: "90vh",
@@ -173,16 +173,18 @@ export class EnvironmentManagementComponent {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result?.result) {
-        // Regenerate, THEN reinitialize
         if (result?.extraActionResult) {
+          // 'True - disable regenerating configs'
+          // Just reinitialize
+          console.log(result);
+          this.reinitializeApp();
+        } else {
+          // 'False - don't disable regenerating configs'
+          // Regenerate, THEN reinitialize
           this.envsApi.regenerateEnvConfigs(activeEnv).subscribe(result => {
             console.log(result);
             this.reinitializeApp();
           });
-        } else {
-          // Just reinitialize
-          console.log(result);
-          this.reinitializeApp();
         }
       }
     });
@@ -205,9 +207,13 @@ export class EnvironmentManagementComponent {
     >(ConfirmationDialogComponent, {
       data: {
         title: "Confirm Environment Deletion",
-        description: `This action will PERMANENTLY delete the environment '${activeEnv.getFormattedLabel()}'. Are you sure?`,
+        description: `<p>This action will PERMANENTLY delete the environment <b>${activeEnv.getFormattedLabel()}</b>.</p>
+				<br />
+				<p>This action is <b>PERMANENT AND IRREVERSIBLE</b>. All files and configs will be lost.</p>
+				<br />
+				<p><i>Are you sure?</i></p>`,
       },
-      width: "400px",
+      width: "50vw",
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

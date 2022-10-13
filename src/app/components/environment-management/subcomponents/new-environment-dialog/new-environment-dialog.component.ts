@@ -69,6 +69,7 @@ export class NewEnvironmentDialogComponent {
     });
   }
 
+  // TODO: This doesn't handle min/max errors with different cutoff vals.
   errorMessages = {
     minlength: `You must enter a value longer than ${this.MIN_ALIAS_LEN} chars!`,
     maxlength: `You must enter a value shorter than ${this.MAX_ALIAS_LEN} chars!`,
@@ -115,7 +116,7 @@ export class NewEnvironmentDialogComponent {
           <br/>
           <p>Are you sure?</p>`,
       },
-      width: "400px",
+      width: "50vw",
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

@@ -1,21 +1,21 @@
-import { AppComponent } from "./app.component";
-import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "@app/app.component";
+import { AppRoutingModule } from "@app/app-routing.module";
 import { AppState } from "@app/store/app.state";
 import { AuthService } from "@app/services/auth/auth.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule } from "@angular/platform-browser";
-import { ConfirmationDialogComponent } from "./components/shared/confirmation-dialog/confirmation-dialog.component";
+import { ConfirmationDialogComponent } from "@app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { ContainerActionsComponent } from "@app/components/shared/container-actions/container-actions.component";
-import { ContainerStatusCardComponent } from "./components/shared/container-status-card/container-status-card.component";
-import { ContainerStatusComponent } from "./components/shared/container-status/container-status.component";
-import { ContainerStatusLightComponent } from "./components/shared/container-status-light/container-status-light.component";
-import { ContentWithSideNavComponent } from "./layouts/content-with-side-nav/content-with-side-nav.component";
-import { DashboardComponent } from "./components/dashboard/dashboard.component";
+import { ContainerStatusCardComponent } from "@app/components/shared/container-status-card/container-status-card.component";
+import { ContainerStatusComponent } from "@app/components/shared/container-status/container-status.component";
+import { ContainerStatusLightComponent } from "@app/components/shared/container-status-light/container-status-light.component";
+import { ContentWithSideNavComponent } from "@app/layouts/content-with-side-nav/content-with-side-nav.component";
+import { DashboardComponent } from "@app/components/dashboard/dashboard.component";
 import { EffectsModule } from "@ngrx/effects";
 import { Features } from "@app/store";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
-import { LoginComponent } from "./components/login/login.component";
+import { LoginComponent } from "@app/components/login/login.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -31,19 +31,19 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { MinecraftContainersTableComponent } from "./components/environment-management/subcomponents/minecraft-containers-table/minecraft-containers-table.component";
+import { MinecraftContainersTableComponent } from "@app/components/environment-management/subcomponents/minecraft-containers-table/minecraft-containers-table.component";
 import { MonacoEditorModule } from "ngx-monaco-editor-v2";
-import { NewEnvironmentDialogComponent } from "./components/environment-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
-import { ServerConsoleDialogComponent } from "./components/shared/server-console-dialog/server-console-dialog.component";
+import { NewEnvironmentDialogComponent } from "@app/components/environment-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
+import { ServerConsoleDialogComponent } from "@app/components/shared/server-console-dialog/server-console-dialog.component";
 import { NgModule, Type } from "@angular/core";
 import { RootEffects } from "@app/store/root.effects";
 import { rootReducer } from "@app/store/root.reducer";
-import { EnvironmentManagementComponent } from "./components/environment-management/environment-management.component";
+import { EnvironmentManagementComponent } from "@app/components/environment-management/environment-management.component";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
-import { TextEditorDialogComponent } from "./components/shared/text-editor-dialog/text-editor-dialog.component";
+import { TextEditorDialogComponent } from "@app/components/shared/text-editor-dialog/text-editor-dialog.component";
 import { TokenInterceptor } from "@app/interceptors/token/token.interceptor";
 
-import { config as socketioConfig } from "./services/socketio/socketio.service";
+import { config as socketioConfig } from "@app/services/socketio/socketio.service";
 // import { NgTerminalModule } from "ng-terminal";
 import { SocketIoModule } from "ngx-socket-io";
 
@@ -61,6 +61,9 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarModule,
 } from "@angular/material/snack-bar";
+import { ServerEditorComponent } from "@app/components/server-editor/server-editor.component";
+import { NestedFileTreeComponent } from "./components/server-editor/subcomponents/nested-file-tree/nested-file-tree.component";
+import { MatTreeModule } from "@angular/material/tree";
 
 const reducers: ActionReducerMap<AppState> = {
   [Features.Root]: rootReducer,
@@ -84,6 +87,8 @@ const effects: Type<any>[] = [RootEffects];
     TextEditorDialogComponent,
     ContainerStatusComponent,
     ContainerStatusCardComponent,
+    ServerEditorComponent,
+    NestedFileTreeComponent,
   ],
   imports: [
     BrowserModule,
@@ -116,6 +121,7 @@ const effects: Type<any>[] = [RootEffects];
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatTreeModule,
     ReactiveFormsModule,
   ],
   providers: [

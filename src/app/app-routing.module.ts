@@ -1,10 +1,11 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { LoginComponent } from "./components/login/login.component";
+import { LoginComponent } from "@app/components/login/login.component";
 import { AuthGuard } from "@app/guards/auth/auth.guard";
 import { ContentWithSideNavComponent } from "@app/layouts/content-with-side-nav/content-with-side-nav.component";
 import { DashboardComponent } from "@app/components/dashboard/dashboard.component";
 import { EnvironmentManagementComponent } from "@app/components/environment-management/environment-management.component";
+import { ServerEditorComponent } from "@app/components/server-editor/server-editor.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
       {
         path: "env-mgmt",
         component: EnvironmentManagementComponent,
+      },
+      {
+        path: "server-editor",
+        component: ServerEditorComponent,
       },
     ],
   },
