@@ -15,7 +15,6 @@ export class FilesService {
   constructor(private http: HttpClient) {}
 
   listFiles(path: string) {
-    console.log(path);
     return this.http
       .post(`${this.basePath}/list`, {
         PATH: path,

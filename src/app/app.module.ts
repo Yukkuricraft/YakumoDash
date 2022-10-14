@@ -1,9 +1,11 @@
+import { ActionReducerMap, StoreModule } from "@ngrx/store";
 import { AppComponent } from "@app/app.component";
 import { AppRoutingModule } from "@app/app-routing.module";
 import { AppState } from "@app/store/app.state";
 import { AuthService } from "@app/services/auth/auth.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule } from "@angular/platform-browser";
+import { config as socketioConfig } from "@app/services/socketio/socketio.service";
 import { ConfirmationDialogComponent } from "@app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { ContainerActionsComponent } from "@app/components/shared/container-actions/container-actions.component";
 import { ContainerStatusCardComponent } from "@app/components/shared/container-status-card/container-status-card.component";
@@ -11,8 +13,13 @@ import { ContainerStatusComponent } from "@app/components/shared/container-statu
 import { ContainerStatusLightComponent } from "@app/components/shared/container-status-light/container-status-light.component";
 import { ContentWithSideNavComponent } from "@app/layouts/content-with-side-nav/content-with-side-nav.component";
 import { DashboardComponent } from "@app/components/dashboard/dashboard.component";
+import { DateToShorthandPipe } from "@app/pipes/date-to-shorthand/date-to-shorthand.pipe";
 import { EffectsModule } from "@ngrx/effects";
+import { EnvironmentManagementComponent } from "@app/components/environment-management/environment-management.component";
 import { Features } from "@app/store";
+import { FileModeToStringPipe } from "@app/pipes/file-mode-to-string/file-mode-to-string.pipe";
+import { FilenodeRowComponent } from "@app/components/server-editor/subcomponents/filenode-row/filenode-row.component";
+import { FilesService } from "@app/services/files/files.service";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
 import { LoginComponent } from "@app/components/login/login.component";
@@ -31,21 +38,20 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatTreeModule } from "@angular/material/tree";
 import { MinecraftContainersTableComponent } from "@app/components/environment-management/subcomponents/minecraft-containers-table/minecraft-containers-table.component";
 import { MonacoEditorModule } from "ngx-monaco-editor-v2";
+import { NestedFileTreeComponent } from "@app/components/server-editor/subcomponents/nested-file-tree/nested-file-tree.component";
 import { NewEnvironmentDialogComponent } from "@app/components/environment-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
-import { ServerConsoleDialogComponent } from "@app/components/shared/server-console-dialog/server-console-dialog.component";
 import { NgModule, Type } from "@angular/core";
 import { RootEffects } from "@app/store/root.effects";
 import { rootReducer } from "@app/store/root.reducer";
-import { EnvironmentManagementComponent } from "@app/components/environment-management/environment-management.component";
+import { ServerConsoleDialogComponent } from "@app/components/shared/server-console-dialog/server-console-dialog.component";
+import { ServerEditorComponent } from "@app/components/server-editor/server-editor.component";
+import { SocketIoModule } from "ngx-socket-io";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { TextEditorDialogComponent } from "@app/components/shared/text-editor-dialog/text-editor-dialog.component";
 import { TokenInterceptor } from "@app/interceptors/token/token.interceptor";
-
-import { config as socketioConfig } from "@app/services/socketio/socketio.service";
-// import { NgTerminalModule } from "ng-terminal";
-import { SocketIoModule } from "ngx-socket-io";
 
 import {
   HTTP_INTERCEPTORS,
@@ -56,14 +62,10 @@ import {
   SocialLoginModule,
   SocialAuthServiceConfig,
 } from "@abacritt/angularx-social-login";
-import { ActionReducerMap, StoreModule } from "@ngrx/store";
 import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarModule,
 } from "@angular/material/snack-bar";
-import { ServerEditorComponent } from "@app/components/server-editor/server-editor.component";
-import { NestedFileTreeComponent } from "./components/server-editor/subcomponents/nested-file-tree/nested-file-tree.component";
-import { MatTreeModule } from "@angular/material/tree";
 
 const reducers: ActionReducerMap<AppState> = {
   [Features.Root]: rootReducer,
@@ -89,6 +91,9 @@ const effects: Type<any>[] = [RootEffects];
     ContainerStatusCardComponent,
     ServerEditorComponent,
     NestedFileTreeComponent,
+    FilenodeRowComponent,
+    DateToShorthandPipe,
+    FileModeToStringPipe,
   ],
   imports: [
     BrowserModule,
@@ -150,6 +155,9 @@ const effects: Type<any>[] = [RootEffects];
     {
       provide: AuthService,
       deps: [HttpClient],
+    },
+    {
+      provide: FilesService,
     },
   ],
   bootstrap: [AppComponent],

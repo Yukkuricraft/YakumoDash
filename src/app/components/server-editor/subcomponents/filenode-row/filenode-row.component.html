@@ -1,0 +1,17 @@
+<div class="row mono">
+  <div *ngIf="fileNode.isDir" class="basename dir">
+    {{ fileNode.basename }}
+  </div>
+  <div *ngIf="!fileNode.isDir" (click)="openFile()" class="basename file">
+    {{ fileNode.basename }}
+  </div>
+  <div class="filemode">
+    {{ fileNode.fileMode }}
+  </div>
+  <div class="mtime">
+    {{ fileNode.modified | dateToShorthand }}
+  </div>
+  <div class="ctime">
+    {{ fileNode.created | dateToShorthand }}
+  </div>
+</div>

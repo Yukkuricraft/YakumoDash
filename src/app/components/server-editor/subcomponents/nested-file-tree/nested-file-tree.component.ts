@@ -1,16 +1,109 @@
 import { FilesService } from "@app/services/files/files.service";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, Injectable, OnInit, ViewChild } from "@angular/core";
 import { NestedTreeControl } from "@angular/cdk/tree";
 import { MatTree, MatTreeNestedDataSource } from "@angular/material/tree";
-import { FileNode, FilePath } from "@app/models/file";
+import { FileNode, DirPath } from "@app/models/file";
+import {
+  CollectionViewer,
+  DataSource,
+  SelectionChange,
+} from "@angular/cdk/collections";
+import { BehaviorSubject, map, merge, Observable } from "rxjs";
+
+export const FILEPATH_ROOT = "secrets/configs";
 
 /**
- * Food data with nested structure.
- * Each node has a name and an optional list of children.
+ * Database for dynamic data. When expanding a node in the tree, the data source will need to fetch
+ * the descendants data from the database.
  */
-interface FoodNode {
-  name: string;
-  children?: FoodNode[];
+@Injectable({ providedIn: "root" })
+export class DynamicDatabase {
+  constructor(private filesService: FilesService) {}
+
+  /** Initial data from database */
+  initialData(): Observable<FileNode[]> {
+    return this.filesService
+      .listFiles(FILEPATH_ROOT)
+      .pipe(map(data => data.ls));
+  }
+
+  getChildren(node: FileNode): Observable<FileNode[]> {
+    const path = node.pathString;
+    return this.filesService.listFiles(path).pipe(map(data => data.ls));
+  }
+
+  isExpandable(node: FileNode): boolean {
+    return node.isDir;
+  }
+}
+/**
+ * File database, it can build a tree structured Json object from string.
+ * Each node in Json object represents a file or a directory. For a file, it has filename and type.
+ * For a directory, it has filename and children (a list of files or directories).
+ * The input will be a json object string, and the output is a list of `FileNode` with nested
+ * structure.
+ */
+export class DynamicDataSource implements DataSource<FileNode> {
+  dataChange = new BehaviorSubject<FileNode[]>([]);
+
+  get data(): FileNode[] {
+    return this.dataChange.value;
+  }
+  set data(value: FileNode[]) {
+    this._treeControl.dataNodes = value;
+    this.dataChange.next(value);
+  }
+
+  constructor(
+    private _treeControl: NestedTreeControl<FileNode>,
+    private _database: DynamicDatabase
+  ) {}
+
+  connect(collectionViewer: CollectionViewer): Observable<FileNode[]> {
+    this._treeControl.expansionModel.changed.subscribe(change => {
+      if (
+        (change as SelectionChange<FileNode>).added ||
+        (change as SelectionChange<FileNode>).removed
+      ) {
+        this.handleTreeControl(change as SelectionChange<FileNode>);
+      }
+    });
+
+    return merge(collectionViewer.viewChange, this.dataChange).pipe(
+      map(() => this.data)
+    );
+  }
+
+  disconnect(collectionViewer: CollectionViewer): void {}
+
+  /** Handle expand/collapse behaviors */
+  handleTreeControl(change: SelectionChange<FileNode>) {
+    if (change.added) {
+      change.added.forEach(node => this.toggleNode(node, true));
+    }
+    if (change.removed) {
+      change.removed
+        .slice()
+        .reverse()
+        .forEach(node => this.toggleNode(node, false));
+    }
+  }
+
+  /**
+   * Toggle the node, remove from display list
+   */
+  toggleNode(node: FileNode, expand: boolean) {
+    this._database.getChildren(node).subscribe(children => {
+      console.log("\n=================\n");
+      console.log("TOGGLENODE: GOT CHILDREN");
+      console.log(children);
+      const index = this.data.indexOf(node);
+      if (!children || index < 0) {
+        // If no children, or cannot find the node, no op
+        return;
+      }
+    });
+  }
 }
 
 /**
@@ -27,113 +120,28 @@ export class NestedFileTreeComponent {
     FileNode
   >;
 
-  treeControl = new NestedTreeControl<FileNode>(node => node.children);
-  dataSource = new MatTreeNestedDataSource<FileNode>();
+  treeControl: NestedTreeControl<FileNode>;
+  dataSource: DynamicDataSource;
 
-  FILEPATH_ROOT = "secrets/configs";
-
-  constructor(private filesService: FilesService) {
-    this.filesService.listFiles(this.FILEPATH_ROOT).subscribe(data => {
-      this.dataSource.data = data.ls;
-    });
-  }
-
-  /**
-   * Takes a `path` and traverses down from this.dataSource.data to
-   * set the children nodes at the appropriate node.
-   *
-   * @param path The path to set the children at
-   * @param children The children FileNode[] to set.
-   */
-  setNodeChildren(path: FilePath, children: FileNode[]) {
-    var treeData: FileNode[] = this.dataSource.data;
-    const tmp = path.relPath(this.FILEPATH_ROOT);
-    if (tmp === null) {
-      throw Error(
-        `How can we possibly have a non-relative path?? Path to set: '${path}', FILEPATH_ROOT: '${this.FILEPATH_ROOT}'`
-      );
-    }
-    path = tmp;
-
-    console.log(path.descentDown);
-    var descentDown = path.descentDown;
-    var nextPart = descentDown.shift();
-
-    console.log("SETTING NODE CHILDREN:");
-    console.log(nextPart, descentDown);
-
-    console.log("\nSEARCHING FOR INITIAL TREE NODE");
-    var newTreeData: FileNode[] = [];
-    for (const treeNode of treeData) {
-      console.log(treeNode);
-      if (treeNode.basename == nextPart) {
-        const newlyPopulatedNodeAncestor = this._recSetNodeChildren(
-          treeNode,
-          descentDown,
-          children
-        );
-
-        newTreeData = [];
-        for (const node of treeData) {
-          if (
-            node.path.pathString === newlyPopulatedNodeAncestor.path.pathString
-          ) {
-            console.log("WHAT");
-            continue;
-          }
-          newTreeData.push(node);
-        }
-        newTreeData.push(newlyPopulatedNodeAncestor);
-        newTreeData.sort(FileNode.nodeSortCallback);
-      }
-    }
-    console.log("CHILDREN SET");
-    console.log(newTreeData);
-
-    this.dataSource.data = newTreeData;
-    this.dataSource.data = this.dataSource.data.slice();
-    // this.tree.renderNodeChanges(newTreeData);
+  constructor(
+    private filesService: FilesService,
+    private database: DynamicDatabase
+  ) {
+    // this.treeControl = new NestedTreeControl<FileNode>(node => node.children);
+    console.log("TEST CALLING GET CHILDREN:");
+    console.log(this.database.getChildren(new FileNode()));
+    this.treeControl = new NestedTreeControl<FileNode>(
+      node => this.database.getChildren(node)
+      // (node: FileNode) => node.isDir
+    );
+    this.dataSource = new DynamicDataSource(this.treeControl, this.database);
+    this.database
+      .initialData()
+      .subscribe(data => (this.dataSource.data = data));
   }
 
   printData() {
     console.log(this.dataSource.data);
-  }
-
-  _recSetNodeChildren(
-    node: FileNode,
-    descentDown: string[],
-    children: FileNode[]
-  ): FileNode {
-    if (descentDown.length == 0) {
-      // Base case - we're at the right node.
-      node.children = children;
-      return node;
-    } else {
-      // Rec - traverse further down.
-      const nextPart = descentDown.shift();
-      for (const candidateNode of node.children) {
-        console.log("TESTING CANDIDATE NODE:");
-        console.log(candidateNode, nextPart);
-        if (candidateNode.basename == nextPart) {
-          return {
-            ...node,
-            children: [
-              ...node.children,
-              this._recSetNodeChildren(candidateNode, descentDown, children),
-            ],
-          } as FileNode;
-        }
-      }
-
-      throw Error("Could not successfuly set node children...");
-    }
-  }
-
-  getNodeChildren(node: FileNode) {
-    console.log(node);
-    this.filesService.listFiles(node.path.pathString).subscribe(results => {
-      this.setNodeChildren(node.path, results.ls);
-    });
   }
 
   hasChild = (_: number, node: FileNode) => node.isDir;

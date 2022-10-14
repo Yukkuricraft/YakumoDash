@@ -47,19 +47,37 @@ export interface IFileModeBits {
 export class FileModeBits implements IFileModeBits {
   read = false;
   write = false;
-
   execute = ExecutableModeBit.OTHER;
+
+  toString() {
+    var str = "";
+
+    str += this.read ? "r" : "-";
+    str += this.write ? "w" : "-";
+    str += this.execute;
+
+    return str;
+  }
 }
 
 export interface IFileMode {
   fileType: FileTypeBit;
   global: IFileModeBits;
   group: IFileModeBits;
-  owner: IFileModeBits;
+  user: IFileModeBits;
 }
 
 export class FileMode implements IFileMode {
   fileType = FileTypeBit.QUESTION;
+
+  toString() {
+    const ft = this.fileType;
+    const global = this.global.toString();
+    const group = this.group.toString();
+    const user = this.user.toString();
+
+    return `${ft}${global}${group}${user}`;
+  }
 
   @Transform(modelTransformer(FileModeBits))
   global = new FileModeBits();
@@ -68,15 +86,15 @@ export class FileMode implements IFileMode {
   group = new FileModeBits();
 
   @Transform(modelTransformer(FileModeBits))
-  owner = new FileModeBits();
+  user = new FileModeBits();
 }
 
-export interface IFilePath {
+export interface IDirPath {
   pathString: string; // The full path
   parts: string[]; // Its constituent parts
 }
 
-export class FilePath {
+export class DirPath {
   pathString = "";
   parts: string[] = [];
 
@@ -85,17 +103,21 @@ export class FilePath {
     this.parts = parts;
   }
 
+  get clone() {
+    return new DirPath(this.pathString, this.parts.slice());
+  }
+
   appendPart(part: string) {
     const pathString = `${this.pathString}/${part}`;
     var parts = this.parts.slice();
     parts.push(part);
 
-    return new FilePath(pathString, parts);
+    return new DirPath(pathString, parts);
   }
 
   /**
    * Given a 'prefix path', will remove it from the current this.pathString
-   * and return the suffix path represented as a FilePath
+   * and return the suffix path represented as a DirPath
    *
    * If there is no matching prefix, return null
    *
@@ -113,9 +135,9 @@ export class FilePath {
    * - Returns: null
    *
    * @param path Path to "subtract" from this.pathString
-   * @returns FilePath | null
+   * @returns DirPath | null
    */
-  relPath(prefixPath: string): FilePath | null {
+  relPath(prefixPath: string): DirPath | null {
     var currPath = this.parts.slice();
     if (currPath.length === 0) {
       return null;
@@ -134,7 +156,7 @@ export class FilePath {
       prefix: prefixPath,
       currPath: currPath,
     });
-    return new FilePath(currPath.join("/"), currPath);
+    return new DirPath(currPath.join("/"), currPath);
   }
 
   /**
@@ -160,28 +182,47 @@ export class FilePath {
     var parts = this.parts;
     parts.pop();
 
-    return new FilePath(pathString, parts);
+    return new DirPath(pathString, parts);
   }
 }
 
 export interface IFileNode {
   basename: string;
-  dirname: IFilePath;
+  dirname: IDirPath;
 
   uid: number;
   gid: number;
   fileMode: IFileMode;
   children: IFileNode[];
   modified: Date;
+  created: Date;
 }
 
 export class FileNode implements IFileNode {
   basename = ""; // Ie, the last part of the path. basename()
   @Transform(filePathTransformer)
-  dirname = new FilePath("", []);
+  dirname = new DirPath("", []);
+
+  get clone() {
+    const node = new FileNode();
+
+    node.basename = this.basename;
+    node.dirname = this.dirname.clone;
+    node.uid = this.uid;
+    node.gid = this.gid;
+    node.fileMode = this.fileMode;
+    node.children = this.children.slice();
+    node.modified = this.modified;
+    node.created = this.created;
+
+    return node;
+  }
 
   get path() {
     return this.dirname.appendPart(this.basename);
+  }
+  get pathString() {
+    return this.path.pathString;
   }
 
   uid = 0;
