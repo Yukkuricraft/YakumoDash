@@ -1,4 +1,4 @@
-import { ExecutableModeBit, FileTypeBit } from "@app/models/file";
+import { ExecutableModeBit, FilePath, FileTypeBit } from "@app/models/file";
 import { CreatedEnv, Env } from "@app/models/env";
 import {
   ClassConstructor,
@@ -78,6 +78,26 @@ export function dockerStringArrayTransformer({
       return value.split(",");
     case TransformationType.CLASS_TO_PLAIN:
       return value.join(",");
+    default:
+      return value;
+  }
+}
+
+export function filePathTransformer({
+  type,
+  value,
+}: TransformFnParams): string | FilePath {
+  if (!value) {
+    return value;
+  }
+
+  switch (type) {
+    case TransformationType.PLAIN_TO_CLASS:
+      var split = value.split("/");
+
+      return new FilePath(value, split);
+    case TransformationType.CLASS_TO_PLAIN:
+      return "Go away Javascript";
     default:
       return value;
   }
