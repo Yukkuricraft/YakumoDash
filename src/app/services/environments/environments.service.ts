@@ -13,11 +13,17 @@ export class EnvironmentsService {
 
   constructor(private http: HttpClient) {}
 
-  createEnv(proxyPort: number, envAlias: string, description?: string) {
+  createEnv(
+    proxyPort: number,
+    envAlias: string,
+    enableEnvProtection: boolean,
+    description?: string
+  ) {
     return this.http
       .post(`${this.basePath}/create-env`, {
         PROXY_PORT: proxyPort,
         ENV_ALIAS: envAlias,
+        ENABLE_ENV_PROTECTION: enableEnvProtection,
         DESCRIPTION: description,
       })
       .pipe(

@@ -27,6 +27,8 @@ export interface IEnv {
   description: string;
   alias: string;
   formatted: string;
+
+  enableEnvProtection: boolean;
 }
 
 export class Env implements IEnv {
@@ -41,6 +43,8 @@ export class Env implements IEnv {
   description = "";
   alias = "";
   formatted = "";
+
+  enableEnvProtection = false;
 
   getFormattedLabel() {
     return `${this.formatted} (${this.alias})`;

@@ -43,6 +43,9 @@ export class NewEnvironmentDialogComponent {
   get proxyPort() {
     return this.form.controls["proxyPort"] as FormControl;
   }
+  get enableEnvProtection() {
+    return this.form.controls["enableEnvProtection"] as FormControl;
+  }
 
   constructor(
     private dockerApi: DockerService,
@@ -66,6 +69,7 @@ export class NewEnvironmentDialogComponent {
         Validators.max(this.MAX_PORT),
         Validators.pattern(this.numbersReg),
       ]),
+      enableEnvProtection: new FormControl(""),
     });
   }
 
@@ -125,6 +129,7 @@ export class NewEnvironmentDialogComponent {
             proxyPort: parseInt(proxyPort),
             envAlias,
             description: this.description.value,
+            enableEnvProtection: this.enableEnvProtection.value,
           })
         );
         this.dialogRef.close();

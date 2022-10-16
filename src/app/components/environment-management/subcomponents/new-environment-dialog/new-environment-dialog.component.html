@@ -62,6 +62,19 @@
           >{{ getErrorMessage(description) }}</mat-error
         >
       </mat-form-field>
+
+      <div class="extra-spacer">
+        <mat-checkbox formControlName="enableEnvProtection"
+          >Enable Env Protection</mat-checkbox
+        >
+        <div class="checkbox-hint">
+          "Env Protection" will prevent deleting the environment. To disable
+          protection, manually modify the config flag
+          <span class="mono"
+            >general.enable_environment_protection = false</span
+          >
+        </div>
+      </div>
     </mat-form>
     <button mat-raised-button (click)="createNewEnv()" color="primary">
       Create New Environment

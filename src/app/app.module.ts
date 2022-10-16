@@ -17,7 +17,6 @@ import { DateToShorthandPipe } from "@app/pipes/date-to-shorthand/date-to-shorth
 import { EffectsModule } from "@ngrx/effects";
 import { EnvironmentManagementComponent } from "@app/components/environment-management/environment-management.component";
 import { Features } from "@app/store";
-import { FileModeToStringPipe } from "@app/pipes/file-mode-to-string/file-mode-to-string.pipe";
 import { FilenodeRowComponent } from "@app/components/server-editor/subcomponents/filenode-row/filenode-row.component";
 import { FilesService } from "@app/services/files/files.service";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -93,7 +92,6 @@ const effects: Type<any>[] = [RootEffects];
     NestedFileTreeComponent,
     FilenodeRowComponent,
     DateToShorthandPipe,
-    FileModeToStringPipe,
   ],
   imports: [
     BrowserModule,

@@ -83,6 +83,7 @@ export class RootEffects {
         return this.envsApi.createEnv(
           data.proxyPort,
           data.envAlias,
+          data.enableEnvProtection,
           data.description
         );
       }),

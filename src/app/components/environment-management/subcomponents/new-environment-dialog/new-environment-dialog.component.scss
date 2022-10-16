@@ -10,9 +10,14 @@
   margin-top: 40px !important; // Eh...
 }
 
+.checkbox-hint {
+  font-size: 75%;
+  color: rgba(255, 255, 255, 0.7);
+}
+
 mat-label {
   font-size: 1.1em;
-  color: #f1f1f1;
+  color: #f6f6ff;
 }
 
 mat-form-field + mat-form-field {

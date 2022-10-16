@@ -47,6 +47,7 @@ export const setTabIndexForPage = createAction(
 export interface CreateEnvProps {
   proxyPort: number;
   envAlias: string;
+  enableEnvProtection: boolean;
   description?: string;
 }
 

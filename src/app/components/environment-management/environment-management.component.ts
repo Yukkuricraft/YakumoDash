@@ -197,6 +197,11 @@ export class EnvironmentManagementComponent {
   deleteEnvironment() {
     if (this.activeEnv === null) {
       return;
+    } else if (this.activeEnv.enableEnvProtection) {
+      this.snackbar.open(
+        `Env Protection is enabled on ${this.activeEnv.formatted}. Disable it in the env configs before deleting this env.`
+      );
+      return;
     }
 
     const activeEnv = this.activeEnv as Env;
