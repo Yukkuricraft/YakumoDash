@@ -8,10 +8,10 @@
   <div class="filemode">
     {{ fileNode.fileMode }}
   </div>
+  <div class="filesize">
+    {{ fileNode.sizeBytes }}
+  </div>
   <div class="mtime">
     {{ fileNode.modified | dateToShorthand }}
-  </div>
-  <div class="ctime">
-    {{ fileNode.created | dateToShorthand }}
   </div>
 </div>

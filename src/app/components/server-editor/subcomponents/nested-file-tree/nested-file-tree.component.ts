@@ -1,5 +1,12 @@
 import { FilesService } from "@app/services/files/files.service";
-import { Component, Injectable, OnInit, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  Injectable,
+  Input,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { NestedTreeControl } from "@angular/cdk/tree";
 import { MatTree, MatTreeNestedDataSource } from "@angular/material/tree";
 import { FileNode, DirPath } from "@app/models/file";
@@ -8,7 +15,15 @@ import {
   DataSource,
   SelectionChange,
 } from "@angular/cdk/collections";
-import { BehaviorSubject, map, merge, Observable } from "rxjs";
+import {
+  BehaviorSubject,
+  isObservable,
+  map,
+  merge,
+  Observable,
+  of,
+} from "rxjs";
+import { Env } from "@app/models/env";
 
 export const FILEPATH_ROOT = "secrets/configs";
 
@@ -21,14 +36,18 @@ export class DynamicDatabase {
   constructor(private filesService: FilesService) {}
 
   /** Initial data from database */
-  initialData(): Observable<FileNode[]> {
+  initialData(env: Env, subPath: string): Observable<FileNode[]> {
     return this.filesService
-      .listFiles(FILEPATH_ROOT)
+      .listFiles(`${FILEPATH_ROOT}/${env.name}/${subPath}`)
       .pipe(map(data => data.ls));
   }
 
   getChildren(node: FileNode): Observable<FileNode[]> {
+    if (!node.isDir) {
+      return of([]);
+    }
     const path = node.pathString;
+    // console.log("Getting children of:", path);
     return this.filesService.listFiles(path).pipe(map(data => data.ls));
   }
 
@@ -78,6 +97,7 @@ export class DynamicDataSource implements DataSource<FileNode> {
 
   /** Handle expand/collapse behaviors */
   handleTreeControl(change: SelectionChange<FileNode>) {
+    console.log("Handle Tree Control", change);
     if (change.added) {
       change.added.forEach(node => this.toggleNode(node, true));
     }
@@ -94,9 +114,6 @@ export class DynamicDataSource implements DataSource<FileNode> {
    */
   toggleNode(node: FileNode, expand: boolean) {
     this._database.getChildren(node).subscribe(children => {
-      console.log("\n=================\n");
-      console.log("TOGGLENODE: GOT CHILDREN");
-      console.log(children);
       const index = this.data.indexOf(node);
       if (!children || index < 0) {
         // If no children, or cannot find the node, no op
@@ -114,35 +131,43 @@ export class DynamicDataSource implements DataSource<FileNode> {
   templateUrl: "nested-file-tree.component.html",
   styleUrls: ["nested-file-tree.component.scss"],
 })
-export class NestedFileTreeComponent {
+export class NestedFileTreeComponent implements AfterViewInit {
+  @Input() env$!: Observable<Env>;
+  @Input() subPath!: string;
+
   @ViewChild("treeSelector", { static: false }) tree!: MatTree<
     FileNode,
     FileNode
   >;
 
-  treeControl: NestedTreeControl<FileNode>;
-  dataSource: DynamicDataSource;
+  treeControl!: NestedTreeControl<FileNode>;
+  dataSource!: DynamicDataSource;
 
   constructor(
     private filesService: FilesService,
     private database: DynamicDatabase
-  ) {
-    // this.treeControl = new NestedTreeControl<FileNode>(node => node.children);
-    console.log("TEST CALLING GET CHILDREN:");
-    console.log(this.database.getChildren(new FileNode()));
-    this.treeControl = new NestedTreeControl<FileNode>(
-      node => this.database.getChildren(node)
-      // (node: FileNode) => node.isDir
-    );
-    this.dataSource = new DynamicDataSource(this.treeControl, this.database);
-    this.database
-      .initialData()
-      .subscribe(data => (this.dataSource.data = data));
+  ) {}
+
+  ngAfterViewInit() {
+    this.env$.subscribe(env => {
+      this.treeControl = new NestedTreeControl<FileNode>(
+        node => this.database.getChildren(node)
+        // {
+        //   trackBy: (fileNode: FileNode) => {
+        //     console.log("tracking?", fileNode);
+        //     return fileNode;
+        //   },
+        // }
+      );
+
+      this.dataSource = new DynamicDataSource(this.treeControl, this.database);
+      this.database
+        .initialData(env, this.subPath)
+        .subscribe(data => (this.dataSource.data = data));
+    });
   }
 
-  printData() {
-    console.log(this.dataSource.data);
-  }
-
-  hasChild = (_: number, node: FileNode) => node.isDir;
+  hasChild = (_: number, node: FileNode) => {
+    return node.isDir;
+  };
 }
