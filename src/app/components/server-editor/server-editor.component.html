@@ -1,2 +1,11 @@
-<p>server-editor works!</p>
-<app-nested-file-tree></app-nested-file-tree>
+<mat-drawer-container>
+  <mat-drawer #drawer class="sidenav" mode="side"> aaa </mat-drawer>
+  <mat-drawer-content>
+    <div *ngrxLet="readyToRender$">
+      <app-nested-file-tree
+        [env$]="env$"
+        [subPath$]="subPath$"
+      ></app-nested-file-tree>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

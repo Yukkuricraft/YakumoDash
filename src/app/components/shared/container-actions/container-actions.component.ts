@@ -36,7 +36,15 @@ export class ContainerActionsComponent {
   }
 
   editContainerConfig() {
-    this.router.navigateByUrl("/server-editor");
+    const env = this.env.name;
+    const subPath = `worlds/${this.containerDef.getContainerNameLabel()}`;
+    console.log("Sending to:", env, subPath);
+    this.router.navigate(["/", "server-editor"], {
+      queryParams: {
+        env,
+        subPath,
+      },
+    });
   }
 
   restartContainerDisabled() {

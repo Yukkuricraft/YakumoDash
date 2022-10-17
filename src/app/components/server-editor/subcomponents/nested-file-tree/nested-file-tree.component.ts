@@ -133,7 +133,7 @@ export class DynamicDataSource implements DataSource<FileNode> {
 })
 export class NestedFileTreeComponent implements AfterViewInit {
   @Input() env$!: Observable<Env>;
-  @Input() subPath!: string;
+  @Input() subPath$!: Observable<string>;
 
   @ViewChild("treeSelector", { static: false }) tree!: MatTree<
     FileNode,
@@ -146,24 +146,27 @@ export class NestedFileTreeComponent implements AfterViewInit {
   constructor(
     private filesService: FilesService,
     private database: DynamicDatabase
-  ) {}
+  ) {
+    this.treeControl = new NestedTreeControl<FileNode>(
+      node => this.database.getChildren(node)
+      // {
+      //   trackBy: (fileNode: FileNode) => {
+      //     console.log("tracking?", fileNode);
+      //     return fileNode;
+      //   },
+      // }
+    );
+
+    this.dataSource = new DynamicDataSource(this.treeControl, this.database);
+  }
 
   ngAfterViewInit() {
     this.env$.subscribe(env => {
-      this.treeControl = new NestedTreeControl<FileNode>(
-        node => this.database.getChildren(node)
-        // {
-        //   trackBy: (fileNode: FileNode) => {
-        //     console.log("tracking?", fileNode);
-        //     return fileNode;
-        //   },
-        // }
-      );
-
-      this.dataSource = new DynamicDataSource(this.treeControl, this.database);
-      this.database
-        .initialData(env, this.subPath)
-        .subscribe(data => (this.dataSource.data = data));
+      this.subPath$.subscribe(subPath => {
+        this.database
+          .initialData(env, subPath)
+          .subscribe(data => (this.dataSource.data = data));
+      });
     });
   }
 
