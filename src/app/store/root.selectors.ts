@@ -17,5 +17,17 @@ export const selectAvailableEnvs = createSelector(
   state => state.availableEnvs
 );
 
+export const selectEnvByEnvString = (envString: string) =>
+  createSelector(selectRootState, state => {
+    for (const env of state.availableEnvs) {
+      if (env.name === envString) {
+        return env;
+      }
+    }
+    throw Error(
+      `Got an env string that doesn't match any known Envs! Got: ${envString}`
+    );
+  });
+
 export const selectCurrentTabIndex = (pageType: string) =>
   createSelector(selectRootState, state => state.tabIndex[pageType] ?? 0);

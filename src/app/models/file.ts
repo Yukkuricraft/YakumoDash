@@ -103,10 +103,6 @@ export class DirPath {
     this.parts = parts;
   }
 
-  get clone() {
-    return new DirPath(this.pathString, this.parts.slice());
-  }
-
   appendPart(part: string) {
     const pathString = `${this.pathString}/${part}`;
     var parts = this.parts.slice();
@@ -192,6 +188,7 @@ export interface IFileNode {
 
   uid: number;
   gid: number;
+  sizeBytes: number;
   fileMode: IFileMode;
   children: IFileNode[];
   modified: Date;
@@ -203,19 +200,8 @@ export class FileNode implements IFileNode {
   @Transform(filePathTransformer)
   dirname = new DirPath("", []);
 
-  get clone() {
-    const node = new FileNode();
-
-    node.basename = this.basename;
-    node.dirname = this.dirname.clone;
-    node.uid = this.uid;
-    node.gid = this.gid;
-    node.fileMode = this.fileMode;
-    node.children = this.children.slice();
-    node.modified = this.modified;
-    node.created = this.created;
-
-    return node;
+  get size() {
+    return this.sizeBytes;
   }
 
   get path() {
@@ -225,18 +211,9 @@ export class FileNode implements IFileNode {
     return this.path.pathString;
   }
 
-  uid = 0;
-  gid = 0;
-
   get isDir() {
     return this.fileMode.fileType === FileTypeBit.d;
   }
-
-  @Transform(modelTransformer(FileMode))
-  fileMode = new FileMode();
-
-  @Type(() => FileNode)
-  children: FileNode[] = [];
 
   static nodeSortCallback(a: FileNode, b: FileNode) {
     const pathA = a.path.pathString;
@@ -251,6 +228,16 @@ export class FileNode implements IFileNode {
       return 0;
     }
   }
+
+  @Transform(modelTransformer(FileMode))
+  fileMode = new FileMode();
+
+  @Type(() => FileNode)
+  children: FileNode[] = [];
+
+  uid = 0;
+  gid = 0;
+  sizeBytes = 0;
 
   @Transform(dateEpochTransformer)
   modified = new Date();

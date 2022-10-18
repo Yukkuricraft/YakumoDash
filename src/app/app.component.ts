@@ -33,20 +33,21 @@ export class AppComponent implements OnInit {
     private domSanitizer: DomSanitizer
   ) {}
 
-  ngOnInit() {
-    this.matIconRegistry.addSvgIcon(
-      "trash",
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        "../assets/icons/trash.svg"
-      )
-    );
+  customIcons = {
+    trash: "../assets/icons/trash.svg",
+    console: "../assets/icons/code_console.svg",
 
-    this.matIconRegistry.addSvgIcon(
-      "console",
-      this.domSanitizer.bypassSecurityTrustResourceUrl(
-        "../assets/icons/code_console.svg"
-      )
-    );
+    // eslint-disable-next-line camelcase
+    chevrons_left: "../assets/icons/chevrons_left.svg",
+  };
+
+  ngOnInit() {
+    for (const [iconName, path] of Object.entries(this.customIcons)) {
+      this.matIconRegistry.addSvgIcon(
+        iconName,
+        this.domSanitizer.bypassSecurityTrustResourceUrl(path)
+      );
+    }
 
     // Attempt login on load, not guaranteed to work if auth is expired
     this.store.dispatch(initializeApp());

@@ -51,6 +51,9 @@ import { SocketIoModule } from "ngx-socket-io";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { TextEditorDialogComponent } from "@app/components/shared/text-editor-dialog/text-editor-dialog.component";
 import { TokenInterceptor } from "@app/interceptors/token/token.interceptor";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+
+import { LetModule } from "@ngrx/component";
 
 import {
   HTTP_INTERCEPTORS,
@@ -65,6 +68,7 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarModule,
 } from "@angular/material/snack-bar";
+import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
 
 const reducers: ActionReducerMap<AppState> = {
   [Features.Root]: rootReducer,
@@ -92,6 +96,7 @@ const effects: Type<any>[] = [RootEffects];
     NestedFileTreeComponent,
     FilenodeRowComponent,
     DateToShorthandPipe,
+    CapitalizePipe,
   ],
   imports: [
     BrowserModule,
@@ -108,7 +113,9 @@ const effects: Type<any>[] = [RootEffects];
     FormsModule,
     HttpClientModule,
     // NgTerminalModule,
+    LetModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatCardModule,
     MatCheckboxModule,
     MatDialogModule,

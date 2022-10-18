@@ -55,9 +55,10 @@ export class RootEffects {
     { dispatch: false }
   );
 
-  setAvailableEnvs$ = createEffect(() => {
+  fetchAvailableEnvs$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(initializeApp, EnvActions.fetchAvailableEnvs),
+      tap(console.log),
       switchMap(() => this.envsApi.listEnvsWithConfigs()),
       map((envs: Env[]) => EnvActions.setAvailableEnvs({ envs }))
     );

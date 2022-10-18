@@ -1,0 +1,65 @@
+.header {
+  padding: 8px 16px;
+
+  background-color: rgb(110, 110, 110);
+
+  border: 1px solid black;
+
+  border-left-width: 0px;
+  border-bottom-width: 0px;
+}
+
+h4 {
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+::ng-deep .toggle-buttons {
+  display: flex !important;
+  flex-direction: column !important;
+  // gap: 6px;
+
+  & mat-button-toggle {
+    &:hover {
+      filter: brightness(125%);
+    }
+  }
+
+  & .mat-button-toggle,
+  & .mat-button-toggle-button,
+  & .mat-button-toggle-label-content {
+    height: 24px;
+    line-height: 24px;
+  }
+
+  & .mat-button-toggle-checked {
+    background-color: #6d6d6d;
+  }
+}
+
+.sidenav {
+  padding: 0px 12px 12px 12px;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+
+  min-height: 75vh;
+}
+
+.expansion-tab {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+
+  background-color: rgb(255 255 255 / 6%);
+
+  &:hover {
+    background-color: rgb(255 255 255 / 25%);
+  }
+}

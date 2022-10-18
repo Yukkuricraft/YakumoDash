@@ -22,6 +22,7 @@ import {
   merge,
   Observable,
   of,
+  tap,
 } from "rxjs";
 import { Env } from "@app/models/env";
 
@@ -37,9 +38,14 @@ export class DynamicDatabase {
 
   /** Initial data from database */
   initialData(env: Env, subPath: string): Observable<FileNode[]> {
-    return this.filesService
-      .listFiles(`${FILEPATH_ROOT}/${env.name}/${subPath}`)
-      .pipe(map(data => data.ls));
+    const path = `${FILEPATH_ROOT}/${env.name}/${subPath}`;
+    console.log("Getting initial Data", env, subPath, path);
+    return this.filesService.listFiles(path).pipe(
+      tap(data => {
+        console.log("got initial data:", data);
+      }),
+      map(data => data.ls)
+    );
   }
 
   getChildren(node: FileNode): Observable<FileNode[]> {
@@ -48,6 +54,7 @@ export class DynamicDatabase {
     }
     const path = node.pathString;
     // console.log("Getting children of:", path);
+    console.log(path);
     return this.filesService.listFiles(path).pipe(map(data => data.ls));
   }
 
@@ -134,6 +141,7 @@ export class DynamicDataSource implements DataSource<FileNode> {
 export class NestedFileTreeComponent implements AfterViewInit {
   @Input() env$!: Observable<Env>;
   @Input() subPath$!: Observable<string>;
+  @Input() render$!: Observable<boolean>;
 
   @ViewChild("treeSelector", { static: false }) tree!: MatTree<
     FileNode,
@@ -163,10 +171,28 @@ export class NestedFileTreeComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.env$.subscribe(env => {
       this.subPath$.subscribe(subPath => {
-        this.database
-          .initialData(env, subPath)
-          .subscribe(data => (this.dataSource.data = data));
+        this.render$.subscribe(renderReady => {
+          console.log(">>>", env, subPath, renderReady);
+          if (renderReady) {
+            console.log("SUBPATH CHANGE:", subPath);
+            this.database
+              .initialData(env, subPath)
+              .subscribe(data => (this.dataSource.data = data));
+          }
+        });
       });
+    });
+
+    this.env$.subscribe(env => {
+      console.log("asdfads env", env);
+    });
+
+    this.subPath$.subscribe(subPath => {
+      console.log("asdfads subpath", subPath);
+    });
+
+    this.render$.subscribe(ready => {
+      console.log("asdfads renderready", ready);
     });
   }
 

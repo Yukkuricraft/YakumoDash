@@ -38,6 +38,7 @@ export class SocketioService {
           world_group_name: activeContainer.getContainerNameLabel(),
         };
 
+        console.log("CONNECTING TO SERVER CONSOLE");
         console.log(payload);
         this.socket.emit("connect to console", payload);
       });
