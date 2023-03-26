@@ -41,18 +41,44 @@
     <!-- Extra Config Params -->
     <div *ngIf="((extraConfigParams$ | async) ?? []).length > 0">
       <h4>{{ selectedConfigType$ | async | capitalize }}</h4>
-      <mat-button-toggle-group class="toggle-buttons">
-        <ng-container *ngFor="let data of extraConfigParams$ | async">
+      <div *ngIf="(selectedConfigType$ | async) === 'worlds'">
+        <mat-button-toggle-group class="toggle-buttons">
           <mat-button-toggle
-            class="button-height"
+            class="button-height default-configs-button"
             mat-raised-button
-            value="{{ data.value }}"
+            value="default"
             (change)="onExtraConfigParamChange($event)"
           >
-            {{ data.formatted }}
+            Default Configs
           </mat-button-toggle>
-        </ng-container>
-      </mat-button-toggle-group>
+          <ng-container
+            *ngFor="let data of defaultFilteredFromExtraConfigParams$ | async"
+          >
+            <mat-button-toggle
+              class="button-height"
+              mat-raised-button
+              value="{{ data.value }}"
+              (change)="onExtraConfigParamChange($event)"
+            >
+              {{ data.formatted }}
+            </mat-button-toggle>
+          </ng-container>
+        </mat-button-toggle-group>
+      </div>
+      <div *ngIf="(selectedConfigType$ | async) !== 'worlds'">
+        <mat-button-toggle-group class="toggle-buttons">
+          <ng-container *ngFor="let data of extraConfigParams$ | async">
+            <mat-button-toggle
+              class="button-height"
+              mat-raised-button
+              value="{{ data.value }}"
+              (change)="onExtraConfigParamChange($event)"
+            >
+              {{ data.formatted }}
+            </mat-button-toggle>
+          </ng-container>
+        </mat-button-toggle-group>
+      </div>
     </div>
   </mat-drawer>
 

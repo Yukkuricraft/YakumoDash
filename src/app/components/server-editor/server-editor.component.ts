@@ -7,9 +7,18 @@ import { Env } from "@app/models/env";
 import { FileTypeBit } from "@app/models/file";
 import { FilesService } from "@app/services/files/files.service";
 import { Store } from "@ngrx/store";
-import { BehaviorSubject, map, Observable, of, switchMap, tap } from "rxjs";
+import {
+  BehaviorSubject,
+  filter,
+  map,
+  Observable,
+  of,
+  switchMap,
+  tap,
+} from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { MatButtonToggleChange } from "@angular/material/button-toggle";
+import { unchangedTextChangeRange } from "typescript";
 
 export interface ExtraConfigParam {
   value: string;
@@ -35,6 +44,7 @@ export class ServerEditorComponent implements OnInit, AfterViewInit {
   selectedExtraConfigParam$: BehaviorSubject<string>;
 
   extraConfigParams$: BehaviorSubject<ExtraConfigParam[]>;
+  defaultFilteredFromExtraConfigParams$: Observable<ExtraConfigParam[]>;
 
   env$: BehaviorSubject<Env>;
   subPath$!: BehaviorSubject<string>;
@@ -49,6 +59,7 @@ export class ServerEditorComponent implements OnInit, AfterViewInit {
     this.availableEnvs$ = this.store.select(selectAvailableEnvs);
     this.availableEnvs$.subscribe(console.log);
 
+    // These are like "event emitters"
     this.selectedEnv$ = new BehaviorSubject(this._selectedEnv);
     this.selectedConfigType$ = new BehaviorSubject(this._selectedConfigType);
     this.selectedExtraConfigParam$ = new BehaviorSubject(
@@ -58,6 +69,17 @@ export class ServerEditorComponent implements OnInit, AfterViewInit {
     this.extraConfigParams$ = new BehaviorSubject([] as ExtraConfigParam[]);
     this.env$ = new BehaviorSubject(new Env());
     this.renderFileTree$ = new BehaviorSubject(false);
+
+    // gross
+    this.defaultFilteredFromExtraConfigParams$ = this.extraConfigParams$
+      .asObservable()
+      .pipe(
+        map((data: ExtraConfigParam[]) => {
+          return data.filter(val => val.value !== "default");
+        })
+      );
+
+    this.extraConfigParams$.subscribe(console.log);
   }
 
   ngOnInit() {
@@ -66,6 +88,11 @@ export class ServerEditorComponent implements OnInit, AfterViewInit {
 
       const env = params["env"] ?? null;
       const subPath = params["subPath"] ?? null;
+      if (env !== null) {
+        this.store
+          .select(selectEnvByEnvString(env))
+          .subscribe(env => this.env$.next(env));
+      }
 
       this.subPath$ = new BehaviorSubject(subPath ?? "");
     });
@@ -82,11 +109,15 @@ export class ServerEditorComponent implements OnInit, AfterViewInit {
       console.log("Initializing server editor", env, subPath);
       if (env === null || subPath === null) {
         this.drawer.toggle();
+      } else {
+        this.renderFileTree$.next(true);
       }
     });
   }
 
   onEnvChange(event: MatButtonToggleChange) {
+    this.renderFileTree$.next(false);
+
     const envString = event.value;
     this.selectedEnv$.next(envString);
 
@@ -98,11 +129,17 @@ export class ServerEditorComponent implements OnInit, AfterViewInit {
       });
 
     this.updateExtraConfigParams();
+    // this.unrenderFileTree();
   }
 
   onConfigTypeChange(event: MatButtonToggleChange) {
+    this.renderFileTree$.next(false);
+
     const configType = event.value;
     this.selectedConfigType$.next(configType);
+
+    this.selectedExtraConfigParam$.next("");
+    // this.unrenderFileTree();
 
     this.updateExtraConfigParams();
   }
@@ -118,9 +155,7 @@ export class ServerEditorComponent implements OnInit, AfterViewInit {
     } else if (configType === "worlds") {
       console.log("Setting up worlds extraConfigParams");
       const path = `${FILEPATH_ROOT}/${this.selectedEnv$.value}/worlds`;
-      console.log(`listFiles'ing on ${path}`);
       this.filesService.listFiles(path).subscribe(data => {
-        console.log(`aaa got files for ${path}`);
         for (let fileNode of data.ls) {
           const basename = fileNode.basename;
           extraConfigParams.push({
@@ -144,6 +179,10 @@ export class ServerEditorComponent implements OnInit, AfterViewInit {
     const subPath = `${this.selectedConfigType$.value}/${this.selectedExtraConfigParam$.value}`;
     this.subPath$.next(subPath);
     this.renderFileTree$.next(true);
+  }
+
+  unrenderFileTree() {
+    this.renderFileTree$.next(false);
   }
 
   toggleDrawer() {
