@@ -20,4 +20,4 @@ RUN yarn build
 # Nginx
 
 FROM nginx:1.23.0
-COPY --from=build /app/dist/yakumo-dash /usr/share/nginx/html
+COPY --from=dev /app/dist/yakumo-dash /usr/share/nginx/html
