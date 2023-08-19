@@ -11,7 +11,7 @@ import { ActiveContainer, ContainerDefinition } from "@app/models/container";
   providedIn: "root",
 })
 export class DockerService {
-  private basePath: string = "https://api2.yukkuricraft.net/server";
+  private basePath: string = "https://api.yukkuricraft.net/server";
 
   constructor(private http: HttpClient) {}
 

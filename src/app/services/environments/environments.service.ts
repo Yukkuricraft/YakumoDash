@@ -9,7 +9,7 @@ import { DockerEnvActionResponse } from "@app/models/docker";
   providedIn: "root",
 })
 export class EnvironmentsService {
-  private basePath: string = "https://api2.yukkuricraft.net/environments";
+  private basePath: string = "https://api.yukkuricraft.net/environments";
 
   constructor(private http: HttpClient) {}
 
