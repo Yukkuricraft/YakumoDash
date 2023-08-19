@@ -18,7 +18,7 @@ const accessTokenName = "auth.yakumo.access_token";
   providedIn: "root",
 })
 export class AuthService {
-  private basePath: string = "https://api2.yukkuricraft.net/auth";
+  private basePath: string = "https://api.yukkuricraft.net/auth";
   private _accessToken: string | null = null;
 
   constructor(
