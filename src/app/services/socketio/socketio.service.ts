@@ -4,9 +4,10 @@ import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 import { Env } from "@app/models/env";
 import { Store } from "@ngrx/store";
 import { Socket, SocketIoConfig } from "ngx-socket-io";
+import { environment } from "src/environments/environment";
 
 export const config: SocketIoConfig = {
-  url: "wss://dev.api.yukkuricraft.net",
+  url: `wss://${environment.API_HOST}`,
   options: {
     autoConnect: false,
   },

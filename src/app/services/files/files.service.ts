@@ -5,12 +5,13 @@ import { DomainConverter } from "@app/helpers/domain";
 import { CreateEnvResponse, Env } from "@app/models/env";
 import { DockerEnvActionResponse } from "@app/models/docker";
 import { FileListResponse } from "@app/models/file";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class FilesService {
-  private basePath: string = "https://dev.api.yukkuricraft.net/files";
+  private basePath: string = `https://${environment.API_HOST}/files`;
 
   constructor(private http: HttpClient) {}
 

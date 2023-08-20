@@ -6,12 +6,13 @@ import { lowercaseKeys } from "@app/helpers/case";
 import { Env, CreateEnvResponse } from "@app/models/env";
 import { DockerEnvActionResponse } from "@app/models/docker";
 import { ActiveContainer, ContainerDefinition } from "@app/models/container";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class DockerService {
-  private basePath: string = "https://dev.api.yukkuricraft.net/server";
+  private basePath: string = `https://${environment.API_HOST}/server`;
 
   constructor(private http: HttpClient) {}
 

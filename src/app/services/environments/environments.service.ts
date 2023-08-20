@@ -4,12 +4,13 @@ import { map, tap } from "rxjs";
 import { DomainConverter } from "@app/helpers/domain";
 import { CreateEnvResponse, Env } from "@app/models/env";
 import { DockerEnvActionResponse } from "@app/models/docker";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",
 })
 export class EnvironmentsService {
-  private basePath: string = "https://dev.api.yukkuricraft.net/environments";
+  private basePath: string = `https://${environment.API_HOST}/environments`;
 
   constructor(private http: HttpClient) {}
 
