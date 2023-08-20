@@ -10,7 +10,7 @@ import { FileListResponse } from "@app/models/file";
   providedIn: "root",
 })
 export class FilesService {
-  private basePath: string = "https://api.yukkuricraft.net/files";
+  private basePath: string = "https://dev.api.yukkuricraft.net/files";
 
   constructor(private http: HttpClient) {}
 

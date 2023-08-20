@@ -6,9 +6,9 @@ services:
     image: yukkuricraft/yakumo-dash-dev
     command: yarn start
     environment:
-      VIRTUAL_HOST: yakumo.yukkuricraft.net
+      VIRTUAL_HOST: dev.yakumo.yukkuricraft.net
       VIRTUAL_PORT: 25699
-      LETSENCRYPT_HOST: yakumo.yukkuricraft.net
+      LETSENCRYPT_HOST: dev.yakumo.yukkuricraft.net
     volumes:
       - ./src:/app/src
     networks:

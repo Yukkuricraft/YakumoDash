@@ -6,7 +6,7 @@ import { Store } from "@ngrx/store";
 import { Socket, SocketIoConfig } from "ngx-socket-io";
 
 export const config: SocketIoConfig = {
-  url: "wss://api.yukkuricraft.net",
+  url: "wss://dev.api.yukkuricraft.net",
   options: {
     autoConnect: false,
   },
