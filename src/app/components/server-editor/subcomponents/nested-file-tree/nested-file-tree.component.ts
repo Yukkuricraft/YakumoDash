@@ -53,8 +53,7 @@ export class DynamicDatabase {
       return of([]);
     }
     const path = node.pathString;
-    // console.log("Getting children of:", path);
-    console.log(path);
+    console.log("Getting children of:", path);
     return this.filesService.listFiles(path).pipe(map(data => data.ls));
   }
 

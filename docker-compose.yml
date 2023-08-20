@@ -2,27 +2,15 @@ version: "3.4"
 
 services:
   yakumo-dash:
-    container_name: yakumo-dash-dev
-    image: yukkuricraft/yakumo-dash-dev
+    container_name: yakumo-dash-${IMAGE_NAME_SUFFIX}
+    image: yukkuricraft/yakumo-dash-${IMAGE_NAME_SUFFIX}
     command: yarn start
     environment:
-      VIRTUAL_HOST: yakumo.yukkuricraft.net
-      VIRTUAL_PORT: 25699
-      LETSENCRYPT_HOST: yakumo.yukkuricraft.net
+      VIRTUAL_HOST: ${YAKUMO_HOST}
+      VIRTUAL_PORT: ${YAKUMO_PORT}
+      LETSENCRYPT_HOST: ${YAKUMO_HOST}
     volumes:
       - ./src:/app/src
-
-  nginx-proxy:
-    container_name: nginx-proxy-yakumo-dash
-    image: nginxproxy/nginx-proxy
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - certs:/etc/nginx/certs:ro
-      - html:/usr/share/nginx/html
-      - vhost:/etc/nginx/vhost.d
 
   letsencrypt-nginx-proxy:
     container_name: letsencrypt-nginx-proxy-yakumo-dash

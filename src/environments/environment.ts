@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  API_HOST: 'dev.api.yukkuricraft.net',
 };
 
 /*

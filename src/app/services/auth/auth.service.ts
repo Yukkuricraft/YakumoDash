@@ -11,6 +11,7 @@ import {
 } from "@app/models/auth";
 import { Store } from "@ngrx/store";
 import { IUser, User } from "@app/models/user";
+import { environment } from "src/environments/environment";
 
 const accessTokenName = "auth.yakumo.access_token";
 
@@ -18,7 +19,7 @@ const accessTokenName = "auth.yakumo.access_token";
   providedIn: "root",
 })
 export class AuthService {
-  private basePath: string = "https://api.yukkuricraft.net/auth";
+  private basePath: string = `https://${environment.API_HOST}/auth`;
   private _accessToken: string | null = null;
 
   constructor(

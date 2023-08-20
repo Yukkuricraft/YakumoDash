@@ -1,14 +1,15 @@
 version: "3.4"
 
+# Run this one if you already have nginx and acme-companion running from Yukkuricraft/Yukkuricraft
+
 services:
   yakumo-dash:
-    container_name: yakumo-dash-dev
-    image: yukkuricraft/yakumo-dash-dev
-    command: yarn start
+    container_name: yakumo-dash-${IMAGE_NAME_SUFFIX}
+    image: yukkuricraft/yakumo-dash-${IMAGE_NAME_SUFFIX}
     environment:
-      VIRTUAL_HOST: yakumo.yukkuricraft.net
-      VIRTUAL_PORT: 25699
-      LETSENCRYPT_HOST: yakumo.yukkuricraft.net
+      VIRTUAL_HOST: ${YAKUMO_HOST}
+      VIRTUAL_PORT: ${YAKUMO_PORT}
+      LETSENCRYPT_HOST: ${YAKUMO_HOST}
     volumes:
       - ./src:/app/src
     networks:
