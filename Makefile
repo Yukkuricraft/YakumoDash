@@ -1,7 +1,7 @@
 # BUILD
 
 .EXPORT_ALL_VARIABLES:
-ifeq ($(hostname), 'neo-yukkuricraft')
+ifeq ($(shell hostname), neo-yukkuricraft)
   export YAKUMO_HOST=yakumo.yukkuricraft.net
   export YAKUMO_PORT=80
   export IMAGE_NAME_SUFFIX=nginx-prod
