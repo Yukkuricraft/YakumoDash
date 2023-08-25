@@ -127,6 +127,20 @@
               [containerDef]="container"
             ></app-container-status-card>
           </div>
+          <!-- Redis -->
+          <div
+            *ngFor="
+              let container of getDefinedContainersForEnvAndType$(
+                env,
+                ContainerType.Redis
+              ) | async
+            "
+          >
+            <app-container-status-card
+              [env]="env"
+              [containerDef]="container"
+            ></app-container-status-card>
+          </div>
         </div>
 
         <div class="mc-containers">

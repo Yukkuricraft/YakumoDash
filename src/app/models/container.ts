@@ -9,6 +9,7 @@ export enum ContainerType {
   Minecraft = "mc",
   MySQL = "mysql",
   MCProxy = "MCProxy",
+  Redis = "Redis",
   Unknown = "unknown",
 }
 
@@ -98,6 +99,8 @@ export class ContainerDefinition implements IContainerDefinition {
       containerType = ContainerType.MCProxy;
     } else if (includes(labels, `${this.TypeLabel}=mysql`)) {
       containerType = ContainerType.MySQL;
+    } else if (includes(labels, `${this.TypeLabel}=redis`)) {
+      containerType = ContainerType.Redis;
     }
 
     return containerType;
@@ -115,7 +118,7 @@ export class ContainerDefinition implements IContainerDefinition {
   }
   get isAuxContainer() {
     return includes(
-      [ContainerType.MCProxy, ContainerType.MySQL],
+      [ContainerType.MCProxy, ContainerType.MySQL, ContainerType.Redis],
       this.getContainerType()
     );
   }
