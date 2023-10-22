@@ -98,6 +98,7 @@
       </div>
       <div class="containers">
         <div class="aux-containers">
+          <!-- TODO: This is getting ugly/repetitive. Use templates/looping -->
           <h3>Aux Containers</h3>
           <!-- Velocity -->
           <div
@@ -119,6 +120,20 @@
               let container of getDefinedContainersForEnvAndType$(
                 env,
                 ContainerType.MySQL
+              ) | async
+            "
+          >
+            <app-container-status-card
+              [env]="env"
+              [containerDef]="container"
+            ></app-container-status-card>
+          </div>
+          <!-- Postgres -->
+          <div
+            *ngFor="
+              let container of getDefinedContainersForEnvAndType$(
+                env,
+                ContainerType.Postgres
               ) | async
             "
           >

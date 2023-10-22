@@ -8,6 +8,7 @@ import { capitalize, includes } from "lodash";
 export enum ContainerType {
   Minecraft = "mc",
   MySQL = "mysql",
+  Postgres = "postgres",
   MCProxy = "MCProxy",
   Redis = "Redis",
   Unknown = "unknown",
@@ -101,6 +102,8 @@ export class ContainerDefinition implements IContainerDefinition {
       containerType = ContainerType.MySQL;
     } else if (includes(labels, `${this.TypeLabel}=redis`)) {
       containerType = ContainerType.Redis;
+    } else if (includes(labels, `${this.TypeLabel}=postgres`)) {
+      containerType = ContainerType.Postgres;
     }
 
     return containerType;
@@ -118,7 +121,7 @@ export class ContainerDefinition implements IContainerDefinition {
   }
   get isAuxContainer() {
     return includes(
-      [ContainerType.MCProxy, ContainerType.MySQL, ContainerType.Redis],
+      [ContainerType.MCProxy, ContainerType.MySQL, ContainerType.Postgres, ContainerType.Redis],
       this.getContainerType()
     );
   }
