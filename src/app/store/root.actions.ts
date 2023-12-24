@@ -6,7 +6,7 @@ import {
 } from "@ngrx/store";
 import { User } from "@app/models/user";
 import { Env } from "@app/models/env";
-import { ActiveContainer, ContainerDefinition } from "@app/models/container";
+import { ActiveContainer, ConfigType, ContainerDefinition, ContainerType } from "@app/models/container";
 import { MatDialogRef } from "@angular/material/dialog";
 
 export const beginForceNavigateToLogin = createAction(
@@ -29,6 +29,11 @@ export const setLogoutUser = createAction("[Root] Set Logout User");
 export const fetchContainerStatusForEnv = createAction(
   "[Root] Fetching Container Status for Env",
   props<{ env: Env }>()
+);
+
+export const copyConfigsForEnvContainerAndType = createAction(
+  '[Root] Copying Configs for Env, Container, and Type',
+  props<{ env: Env, containerDef: ContainerDefinition, configType: ConfigType}>()
 );
 
 export const setGlobalLoadingBarActive = createAction(
@@ -68,8 +73,18 @@ export interface SpinupEnvProps {
   env: Env;
 }
 
+export interface SpinupContainerProps {
+  env: Env;
+  containerDef: ContainerDefinition;
+}
+
 export interface ShutdownEnvProps {
   env: Env;
+}
+
+export interface ShutdownContainerProps {
+  env: Env;
+  containerDef: ContainerDefinition;
 }
 
 export const EnvActions = createActionGroup({
@@ -95,7 +110,13 @@ export const EnvActions = createActionGroup({
     "Begin Spinup Env": props<SpinupEnvProps>(),
     "Finish Spinup Env": props<SpinupEnvProps>(),
 
+    "Begin Spinup Container": props<SpinupContainerProps>(),
+    "Finish Spinup Container": props<SpinupContainerProps>(),
+
     "Begin Shutdown Env": props<ShutdownEnvProps>(),
     "Finish Shutdown Env": props<ShutdownEnvProps>(),
+
+    "Begin Shutdown Container": props<ShutdownContainerProps>(),
+    "Finish Shutdown Container": props<ShutdownContainerProps>(),
   },
 });

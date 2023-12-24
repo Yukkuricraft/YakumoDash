@@ -10,10 +10,10 @@
   <button
     mat-icon-button
     matTooltip="Restart Container"
-    (click)="restartContainer()"
-    [disabled]="restartContainerDisabled()"
+    (click)="stopContainer()"
+    [disabled]="stopContainerDisabled()"
   >
-    <mat-icon> replay </mat-icon>
+    <mat-icon> stop_circle </mat-icon>
   </button>
   <button
     mat-icon-button
@@ -29,5 +29,13 @@
     (click)="openServerConsole()"
   >
     <mat-icon svgIcon="console" class="filter-to-white"></mat-icon>
+  </button>
+  <button
+    *ngIf="containerDef.isMinecraftContainer"
+    mat-icon-button
+    matTooltip="Copy configs from container to bindmounts"
+    (click)="copyConfigs()"
+  >
+    <mat-icon>file_copy</mat-icon>
   </button>
 </div>

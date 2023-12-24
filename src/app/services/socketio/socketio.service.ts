@@ -61,7 +61,7 @@ export class SocketioService {
     console.log(command);
 
     const env = activeContainer.EnvLabel;
-    const containerName = activeContainer.getContainerName();
+    const containerName = activeContainer.getContainerNameShorthand();
 
     const payload = {
       container_name: containerName,

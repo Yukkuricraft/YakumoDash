@@ -14,3 +14,18 @@ export class DockerEnvActionResponse
   @Transform(modelTransformer(Env))
   env = new Env();
 }
+
+export interface IDockerContainerActionResponse extends IApiRunnerResponse {
+  env: Env;
+  containerName: string;
+}
+
+export class DockerContainerActionResponse
+  extends ApiRunnerResponse
+  implements IDockerEnvActionResponse
+{
+  @Transform(modelTransformer(Env))
+  env = new Env();
+
+  containerName = "";
+}

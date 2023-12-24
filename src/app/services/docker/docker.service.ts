@@ -4,8 +4,8 @@ import { HttpClient } from "@angular/common/http";
 import { DomainConverter } from "@app/helpers/domain";
 import { lowercaseKeys } from "@app/helpers/case";
 import { Env, CreateEnvResponse } from "@app/models/env";
-import { DockerEnvActionResponse } from "@app/models/docker";
-import { ActiveContainer, ContainerDefinition } from "@app/models/container";
+import { DockerContainerActionResponse, DockerEnvActionResponse } from "@app/models/docker";
+import { ActiveContainer, ConfigType, ContainerDefinition } from "@app/models/container";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -16,36 +16,33 @@ export class DockerService {
 
   constructor(private http: HttpClient) {}
 
-  sendCommandToContainer(activeContainer: ActiveContainer, command: string) {
-    console.log("SENDING COMMAND TO CONTAINER");
-    console.log(activeContainer);
-    console.log(command);
-
-    const env = activeContainer.EnvLabel;
-    const containerName = activeContainer.getContainerNameLabel();
-
-    return this.http.post(
-      `${this.basePath}/${env}/containers/exec-server-command`,
-      {
-        container_name: containerName,
-        command,
-      }
-    );
-  }
-
   upEnv(env: Env) {
     return this.http
-      .get(`${this.basePath}/${env.name}/containers/up`)
+      .post(`${this.basePath}/${env.name}/containers/up`, {})
       .pipe(
         map((data: any) =>
           DomainConverter.fromDto(DockerEnvActionResponse, data)
+        )
+      );
+  }
+
+  upContainer(containerDef: ContainerDefinition, env: Env) {
+    const containerName = containerDef.getContainerNameLabel();
+
+    return this.http
+      .post(`${this.basePath}/${env.name}/containers/up_one`, {
+        container_name: containerName,
+      })
+      .pipe(
+        map((data: any) =>
+          DomainConverter.fromDto(DockerContainerActionResponse, data)
         )
       );
   }
 
   downEnv(env: Env) {
     return this.http
-      .get(`${this.basePath}/${env.name}/containers/down`)
+      .post(`${this.basePath}/${env.name}/containers/down`, {})
       .pipe(
         map((data: any) =>
           DomainConverter.fromDto(DockerEnvActionResponse, data)
@@ -53,8 +50,33 @@ export class DockerService {
       );
   }
 
+  downContainer(containerDef: ContainerDefinition, env: Env) {
+    const containerName = containerDef.getContainerNameLabel();
+    return this.http
+      .post(`${this.basePath}/${env.name}/containers/down_one`, {
+        container_name: containerName,
+      })
+      .pipe(
+        map((data: any) =>
+          DomainConverter.fromDto(DockerContainerActionResponse, data)
+        )
+      );
+  }
+
   restartEnv(env: Env) {
-    return this.http.get(`${this.basePath}/${env.name}/containers/restart`);
+    console.log("Restart Env not implemented")
+    return this.http.post(`${this.basePath}/${env.name}/containers/restart`, {});
+  }
+
+  copyConfigs(containerDef: ContainerDefinition, env: Env, configType: ConfigType) {
+    console.log(containerDef);
+    const containerName = containerDef.getContainerName();
+
+    return this.http
+      .post(`${this.basePath}/${env.name}/containers/copy-configs-to-bindmount`, {
+        container_name: containerName,
+        config_type: configType,
+      })
   }
 
   listDefined(env: Env) {

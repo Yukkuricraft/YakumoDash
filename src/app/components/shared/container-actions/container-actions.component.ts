@@ -1,4 +1,5 @@
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { Store } from "@ngrx/store";
 import {
   ServerConsoleDialogComponent,
   ServerConsoleDialogData,
@@ -7,11 +8,13 @@ import { MatDialog } from "@angular/material/dialog";
 import { Component, Input, OnInit } from "@angular/core";
 import {
   ActiveContainer,
+  ConfigType,
   ContainerDefinition,
   ContainerStates,
 } from "@app/models/container";
 import { Env } from "@app/models/env";
 import { Router } from "@angular/router";
+import { EnvActions, copyConfigsForEnvContainerAndType } from "@app/store/root.actions";
 
 @Component({
   selector: "app-container-actions",
@@ -25,14 +28,17 @@ export class ContainerActionsComponent {
   constructor(
     private dialog: MatDialog,
     private router: Router,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private store: Store,
   ) {}
 
   startContainerDisabled() {
     return this.containerDef.getContainerState() === ContainerStates.Up;
   }
+
   startContainer() {
-    console.log("Starting container", this.containerDef);
+    console.log(`Stopping container in env ${this.env.getFormattedLabel()}`, this.containerDef);
+    this.store.dispatch(EnvActions.beginSpinupContainer({ env: this.env, containerDef: this.containerDef }));
   }
 
   editContainerConfig() {
@@ -47,11 +53,19 @@ export class ContainerActionsComponent {
     });
   }
 
-  restartContainerDisabled() {
+  stopContainerDisabled() {
     return this.containerDef.getContainerState() !== ContainerStates.Up;
   }
-  restartContainer() {
-    console.log("Restarting container", this.containerDef);
+
+  stopContainer() {
+    console.log(`Stopping container in env ${this.env.getFormattedLabel()}`, this.containerDef);
+    this.store.dispatch(EnvActions.beginSpinupContainer({ env: this.env, containerDef: this.containerDef }));
+  }
+
+  copyConfigs() {
+    // TODO: Dropdown select config type?
+    console.log(`Copying configs back to bindmount for container in env ${this.env.getFormattedLabel()}`, this.containerDef);
+    this.store.dispatch(copyConfigsForEnvContainerAndType({ env: this.env, containerDef: this.containerDef, configType: ConfigType.Mod }));
   }
 
   openServerConsole() {

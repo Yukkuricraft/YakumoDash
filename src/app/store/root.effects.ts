@@ -8,9 +8,11 @@ import {
   initializeApp,
   setGlobalLoadingBarActive,
   setGlobalLoadingBarInactive,
+  copyConfigsForEnvContainerAndType,
 } from "@app/store/root.actions";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import {
+  EMPTY,
   concatMap,
   exhaustMap,
   map,
@@ -190,6 +192,37 @@ export class RootEffects {
     );
   });
 
+  beginShutdownContainer$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(EnvActions.beginShutdownContainer),
+      switchMap(data => {
+        return [
+          setGlobalLoadingBarActive(),
+          EnvActions.finishShutdownContainer(data),
+        ];
+      })
+    );
+  });
+
+  shutdownContainer$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(EnvActions.finishShutdownContainer),
+      switchMap(data => {
+        return this.dockerApi.downContainer(data.containerDef, data.env);
+      }),
+      concatMap(result => {
+        this.snackbar.open(
+          `Done shutting down env '${result.env.getFormattedLabel()}'`
+        );
+
+        return [
+          fetchContainerStatusForEnv({ env: result.env }),
+          setGlobalLoadingBarInactive(),
+        ];
+      })
+    );
+  });
+
   fetchDefinedContainersForEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fetchContainerStatusForEnv),
@@ -221,4 +254,15 @@ export class RootEffects {
       })
     );
   });
+
+  copyConfigsForEnvContainerAndType$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(copyConfigsForEnvContainerAndType),
+      switchMap(data => {
+        return this.dockerApi.copyConfigs(data.containerDef, data.env, data.configType)
+      })
+    )
+  },
+  { dispatch: false }
+  );
 }

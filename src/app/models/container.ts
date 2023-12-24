@@ -14,6 +14,12 @@ export enum ContainerType {
   Unknown = "unknown",
 }
 
+export enum ConfigType {
+  Plugin = "plugin",
+  Mod = "mod",
+  ModFiles = "mod_files",
+}
+
 /**
  * Possible "states" corresponding to docker container states.
  */
@@ -47,6 +53,7 @@ export interface IContainerDefinition {
   image: string;
   labels: string[];
   names: string[];
+  containerName: string;
   mounts: string[];
   networks: string[];
   ports: string[];
@@ -85,6 +92,10 @@ export class ContainerDefinition implements IContainerDefinition {
    * @returns
    */
   getContainerName() {
+    return this.containerName;
+  }
+
+  getContainerNameShorthand() {
     return this.names.length > 0 ? this.names[0] : "Undefined";
   }
 
@@ -135,6 +146,7 @@ export class ContainerDefinition implements IContainerDefinition {
   // ContainerDefinitions come back as proper arrays because Python handles those.
   // This is not true for ActiveContainer which we get directly from `docker ps` output.
   image = "";
+  containerName = "";
   labels: string[] = [];
   names: string[] = [];
   mounts: string[] = [];
