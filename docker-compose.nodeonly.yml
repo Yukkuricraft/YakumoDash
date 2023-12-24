@@ -14,6 +14,11 @@ services:
       - ./src:/app/src
     networks:
       - yukkuricraft_yc-web-dev
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "20"
 
 networks:
   yukkuricraft_yc-web-dev:

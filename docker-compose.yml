@@ -11,6 +11,11 @@ services:
       LETSENCRYPT_HOST: ${YAKUMO_HOST}
     volumes:
       - ./src:/app/src
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "20"
 
   letsencrypt-nginx-proxy:
     container_name: letsencrypt-nginx-proxy-yakumo-dash
@@ -27,6 +32,11 @@ services:
       - acme:/etc/acme.sh
     depends_on:
       - nginx-proxy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "20"
 
 volumes:
   certs:
