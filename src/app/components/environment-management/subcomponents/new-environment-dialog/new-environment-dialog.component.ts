@@ -16,6 +16,12 @@ import {
 } from "@app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Env } from "@app/models/env";
 
+interface ServerType {
+  name: string;
+  id: string;
+  hint: string;
+}
+
 @Component({
   selector: "app-new-environment-dialog",
   templateUrl: "./new-environment-dialog.component.html",
@@ -27,8 +33,11 @@ export class NewEnvironmentDialogComponent {
 
   MAX_DESCRIPTION_LEN = 2048;
 
+  // TODO: This really should be supplied by the yc-api rather than hardcoded in the frontend.
   MIN_PORT = 25600;
   MAX_PORT = 25700;
+  // MIN_PORT = 26600;
+  // MAX_PORT = 26700;
 
   numbersReg = /^\d+$/;
 
@@ -42,6 +51,9 @@ export class NewEnvironmentDialogComponent {
   }
   get proxyPort() {
     return this.form.controls["proxyPort"] as FormControl;
+  }
+  get serverType() {
+    return this.form.controls["serverType"] as FormControl;
   }
   get enableEnvProtection() {
     return this.form.controls["enableEnvProtection"] as FormControl;
@@ -69,6 +81,7 @@ export class NewEnvironmentDialogComponent {
         Validators.max(this.MAX_PORT),
         Validators.pattern(this.numbersReg),
       ]),
+      serverType: new FormControl(""),
       enableEnvProtection: new FormControl(""),
     });
   }
@@ -82,6 +95,12 @@ export class NewEnvironmentDialogComponent {
     max: `You must enter a value smaller than ${this.MAX_PORT}!`,
     pattern: "You must enter a numeric value!",
   };
+
+  serverTypes: ServerType[] = [
+    { name: "Paper", id: "PAPER", hint: "Spins up a Paper server with Velocity compatibility settings preconfigured" },
+    { name: "Fabric", id: "FABRIC", hint: "Spins up a Fabric server with (eventually) Velocity comaptibility mods automatically installed" },
+    { name: "Custom", id: "CUSTOM", hint: "You can use any type supported by itzg/minecraft-server but you'll need to manually configure it" },
+  ];
 
   getErrorMessage(formControl: FormControl) {
     console.log(formControl);
@@ -129,6 +148,7 @@ export class NewEnvironmentDialogComponent {
             proxyPort: parseInt(proxyPort),
             envAlias,
             description: this.description.value,
+            serverType: this.serverType.value?.id,
             enableEnvProtection: this.enableEnvProtection.value,
           })
         );

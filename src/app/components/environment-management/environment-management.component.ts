@@ -145,6 +145,7 @@ export class EnvironmentManagementComponent {
     console.log("RESTARTING ENV", activeEnv);
     this.dockerApi.restartEnv(activeEnv).subscribe(console.log);
   }
+
   restartEnvironmentDisabled() {
     return true;
   }

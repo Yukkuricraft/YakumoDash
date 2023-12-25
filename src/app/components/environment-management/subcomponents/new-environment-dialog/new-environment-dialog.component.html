@@ -64,6 +64,21 @@
         >
       </mat-form-field>
 
+      <mat-form-field class="extra-spacer">
+        <mat-label>Server Type</mat-label>
+        <mat-select
+          formControlName="serverType"
+          id="serverType"
+          required
+        >
+          <mat-option *ngFor="let type of serverTypes" [value]="type">
+            {{type.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="serverType.hasError('required')">Please choose a server type!</mat-error>
+        <mat-hint>{{serverType.value?.hint}}</mat-hint>
+      </mat-form-field>
+
       <div class="extra-spacer">
         <mat-checkbox formControlName="enableEnvProtection"
           >Enable Env Protection</mat-checkbox

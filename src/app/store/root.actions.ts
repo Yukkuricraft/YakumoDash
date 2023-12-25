@@ -53,6 +53,7 @@ export interface CreateEnvProps {
   proxyPort: number;
   envAlias: string;
   enableEnvProtection: boolean;
+  serverType: string;
   description?: string;
 }
 

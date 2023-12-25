@@ -87,6 +87,7 @@ export class RootEffects {
           data.proxyPort,
           data.envAlias,
           data.enableEnvProtection,
+          data.serverType,
           data.description
         );
       }),

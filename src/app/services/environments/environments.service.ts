@@ -18,6 +18,7 @@ export class EnvironmentsService {
     proxyPort: number,
     envAlias: string,
     enableEnvProtection: boolean,
+    serverType: string,
     description?: string
   ) {
     return this.http
@@ -25,6 +26,7 @@ export class EnvironmentsService {
         PROXY_PORT: proxyPort,
         ENV_ALIAS: envAlias,
         ENABLE_ENV_PROTECTION: enableEnvProtection,
+        SERVER_TYPE: serverType,
         DESCRIPTION: description,
       })
       .pipe(
