@@ -47,7 +47,7 @@ export class Env implements IEnv {
   enableEnvProtection = false;
 
   getFormattedLabel() {
-    return `${this.formatted} (${this.alias})`;
+    return this.formatted;
   }
   getRenderedDescription() {
     return this.description.replace(/\n/g, "<br />");

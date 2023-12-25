@@ -27,11 +27,9 @@ export class DockerService {
   }
 
   upContainer(containerDef: ContainerDefinition, env: Env) {
-    const containerName = containerDef.getContainerNameLabel();
-
     return this.http
       .post(`${this.basePath}/${env.name}/containers/up_one`, {
-        container_name: containerName,
+        container_name: containerDef.getHostname(),
       })
       .pipe(
         map((data: any) =>
@@ -51,10 +49,9 @@ export class DockerService {
   }
 
   downContainer(containerDef: ContainerDefinition, env: Env) {
-    const containerName = containerDef.getContainerNameLabel();
     return this.http
       .post(`${this.basePath}/${env.name}/containers/down_one`, {
-        container_name: containerName,
+        container_name: containerDef.getHostname(),
       })
       .pipe(
         map((data: any) =>
@@ -70,11 +67,11 @@ export class DockerService {
 
   copyConfigs(containerDef: ContainerDefinition, env: Env, configType: ConfigType) {
     console.log(containerDef);
-    const containerName = containerDef.getContainerName();
+    const hostname = containerDef.getHostname();
 
     return this.http
       .post(`${this.basePath}/${env.name}/containers/copy-configs-to-bindmount`, {
-        container_name: containerName,
+        container_name: hostname,
         config_type: configType,
       })
   }

@@ -54,6 +54,7 @@ export interface IContainerDefinition {
   labels: string[];
   names: string[];
   containerName: string;
+  hostname: string;
   mounts: string[];
   networks: string[];
   ports: string[];
@@ -91,8 +92,8 @@ export class ContainerDefinition implements IContainerDefinition {
    * - etc
    * @returns
    */
-  getContainerName() {
-    return this.containerName;
+  getHostname() {
+    return this.hostname;
   }
 
   getContainerNameShorthand() {
@@ -147,6 +148,7 @@ export class ContainerDefinition implements IContainerDefinition {
   // This is not true for ActiveContainer which we get directly from `docker ps` output.
   image = "";
   containerName = "";
+  hostname = "";
   labels: string[] = [];
   names: string[] = [];
   mounts: string[] = [];
