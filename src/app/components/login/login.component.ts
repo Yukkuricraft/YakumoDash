@@ -3,7 +3,6 @@ import { SocialAuthService, SocialUser } from "@abacritt/angularx-social-login";
 import { HttpClient } from "@angular/common/http";
 import { Store } from "@ngrx/store";
 import { AuthService } from "@app/services/auth/auth.service";
-import { setLoggedInUser } from "@app/store/root.actions";
 import { Router } from "@angular/router";
 
 @Component({

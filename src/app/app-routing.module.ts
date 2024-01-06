@@ -6,6 +6,7 @@ import { ContentWithSideNavComponent } from "@app/layouts/content-with-side-nav/
 import { DashboardComponent } from "@app/components/dashboard/dashboard.component";
 import { EnvironmentManagementComponent } from "@app/components/environment-management/environment-management.component";
 import { ServerEditorComponent } from "@app/components/server-editor/server-editor.component";
+import { BackupManagementComponent } from "./components/backup-management/backup-management.component";
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
       {
         path: "env-mgmt",
         component: EnvironmentManagementComponent,
+      },
+      {
+        path: "backup-mgmt",
+        component: BackupManagementComponent,
       },
       {
         path: "server-editor",

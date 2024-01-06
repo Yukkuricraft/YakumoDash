@@ -19,6 +19,7 @@ export class EnvironmentsService {
     envAlias: string,
     enableEnvProtection: boolean,
     serverType: string,
+
     description?: string
   ) {
     return this.http

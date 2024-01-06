@@ -7,7 +7,7 @@ import {
 } from "@abacritt/angularx-social-login";
 import { Store } from "@ngrx/store";
 import { sendMessageToMaster } from "@angular/compiler-cli/ngcc/src/execution/cluster/utils";
-import { initializeApp, setLoggedInUser } from "@app/store/root.actions";
+import { RootActions } from "@app/store/root.actions";
 import { Observable, switchMap } from "rxjs";
 import { AuthService } from "@app/services/auth/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
     }
 
     // Attempt login on load, not guaranteed to work if auth is expired
-    this.store.dispatch(initializeApp());
+    this.store.dispatch(RootActions.initializeApp());
 
     this.authService.authState
       .pipe(
@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
         })
       )
       .subscribe(loginResp => {
-        this.store.dispatch(initializeApp());
+        this.store.dispatch(RootActions.initializeApp());
 
         if (this.router.url === "/login") {
           // Do we ever want this from a non-login url?

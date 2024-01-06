@@ -3,6 +3,7 @@ import { AppComponent } from "@app/app.component";
 import { AppRoutingModule } from "@app/app-routing.module";
 import { AppState } from "@app/store/app.state";
 import { AuthService } from "@app/services/auth/auth.service";
+import { BackupManagementComponent } from "./components/backup-management/backup-management.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule } from "@angular/platform-browser";
 import { config as socketioConfig } from "@app/services/socketio/socketio.service";
@@ -71,6 +72,7 @@ import {
 } from "@angular/material/snack-bar";
 import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
 
+
 const reducers: ActionReducerMap<AppState> = {
   [Features.Root]: rootReducer,
 };
@@ -83,6 +85,7 @@ const effects: Type<any>[] = [RootEffects];
     LoginComponent,
     ContentWithSideNavComponent,
     DashboardComponent,
+    BackupManagementComponent,
     EnvironmentManagementComponent,
     NewEnvironmentDialogComponent,
     ServerConsoleDialogComponent,

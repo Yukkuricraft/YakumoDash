@@ -10,12 +10,8 @@ import {
 import { selectDefinedContainersByEnvAndType } from "@app/store/root.selectors.containers";
 import { Env } from "@app/models/env";
 import {
+  RootActions,
   EnvActions,
-  fetchContainerStatusForEnv,
-  setGlobalLoadingBarActive,
-  setGlobalLoadingBarInactive,
-  setTabIndexForPage,
-  initializeApp,
 } from "@app/store/root.actions";
 import { ContainerType } from "@app/models/container";
 import { MatDialog } from "@angular/material/dialog";
@@ -76,7 +72,7 @@ export class EnvironmentManagementComponent {
 
   refreshContainersForEnv(env: Env): void {
     console.log(`Refreshing containers for ${env.getFormattedLabel()}`);
-    this.store.dispatch(fetchContainerStatusForEnv({ env }));
+    this.store.dispatch(RootActions.fetchContainerStatusForEnv({ env }));
   }
 
   openNewEnvDialog(): void {
@@ -89,7 +85,7 @@ export class EnvironmentManagementComponent {
 
   selectedIndexChanged(tabIndex: number) {
     this.store.dispatch(
-      setTabIndexForPage({ pageType: this.pageType, tabIndex })
+      RootActions.setTabIndexForPage({ pageType: this.pageType, tabIndex })
     );
   }
 
@@ -192,7 +188,7 @@ export class EnvironmentManagementComponent {
   }
 
   reinitializeApp() {
-    this.store.dispatch(initializeApp());
+    this.store.dispatch(RootActions.initializeApp());
   }
 
   deleteEnvironment() {

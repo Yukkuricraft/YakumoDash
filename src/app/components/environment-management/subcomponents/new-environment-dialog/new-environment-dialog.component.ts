@@ -2,10 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { DockerService } from "@app/services/docker/docker.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import {
-  initializeApp,
+  RootActions,
   EnvActions,
-  setGlobalLoadingBarActive,
-  setGlobalLoadingBarInactive,
 } from "@app/store/root.actions";
 import { Store } from "@ngrx/store";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -34,10 +32,10 @@ export class NewEnvironmentDialogComponent {
   MAX_DESCRIPTION_LEN = 2048;
 
   // TODO: This really should be supplied by the yc-api rather than hardcoded in the frontend.
-  MIN_PORT = 25600;
-  MAX_PORT = 25700;
-  // MIN_PORT = 26600;
-  // MAX_PORT = 26700;
+  // MIN_PORT = 25600;
+  // MAX_PORT = 25700;
+  MIN_PORT = 26600;
+  MAX_PORT = 26700;
 
   numbersReg = /^\d+$/;
 

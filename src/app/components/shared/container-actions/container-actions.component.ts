@@ -14,7 +14,7 @@ import {
 } from "@app/models/container";
 import { Env } from "@app/models/env";
 import { Router } from "@angular/router";
-import { EnvActions, copyConfigsForEnvContainerAndType } from "@app/store/root.actions";
+import { RootActions, EnvActions } from "@app/store/root.actions";
 
 @Component({
   selector: "app-container-actions",
@@ -53,6 +53,18 @@ export class ContainerActionsComponent {
     });
   }
 
+  restoreFromBackup() {
+    const env = this.env.name;
+    const subPath = `worlds/${this.containerDef.getContainerNameLabel()}`;
+    console.log("Sending to:", env, subPath);
+    this.router.navigate(["/", "backup-mgmt"], {
+      queryParams: {
+        env,
+        subPath,
+      },
+    });
+  }
+
   stopContainerDisabled() {
     return this.containerDef.getContainerState() !== ContainerStates.Up;
   }
@@ -65,7 +77,7 @@ export class ContainerActionsComponent {
   copyConfigs() {
     // TODO: Dropdown select config type?
     console.log(`Copying configs back to bindmount for container in env ${this.env.getFormattedLabel()}`, this.containerDef);
-    this.store.dispatch(copyConfigsForEnvContainerAndType({ env: this.env, containerDef: this.containerDef, configType: ConfigType.Mod }));
+    this.store.dispatch(RootActions.copyConfigsForEnvContainerAndType({ env: this.env, containerDef: this.containerDef, configType: ConfigType.Mod }));
   }
 
   openServerConsole() {

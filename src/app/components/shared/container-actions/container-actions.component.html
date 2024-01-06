@@ -31,6 +31,13 @@
     <mat-icon svgIcon="console" class="filter-to-white"></mat-icon>
   </button>
   <button
+    mat-icon-button
+    matTooltip="Restore from Backups"
+    (click)="restoreFromBackup()"
+  >
+    <mat-icon> settings_backup_restore </mat-icon>
+  </button>
+  <button
     *ngIf="containerDef.isMinecraftContainer"
     mat-icon-button
     matTooltip="Copy configs from container to bindmounts"

@@ -1,12 +1,8 @@
 import { initialState, RootState } from "@app/store/root.state";
 import { ActionReducer, createReducer, MetaReducer, on } from "@ngrx/store";
 import {
+  RootActions,
   EnvActions,
-  setGlobalLoadingBarActive,
-  setGlobalLoadingBarInactive,
-  setLoggedInUser,
-  setLogoutUser,
-  setTabIndexForPage,
 } from "@app/store/root.actions";
 import {
   ContainerType,
@@ -16,20 +12,29 @@ import {
 
 export const rootReducer = createReducer(
   initialState,
-  on(setLoggedInUser, (state, { user }): RootState => {
+  on(RootActions.setLoggedInUser, (state, { user }): RootState => {
     return { ...state, user };
   }),
-  on(setLogoutUser, (state): RootState => {
+  on(RootActions.setLogoutUser, (state): RootState => {
     return { ...state, user: null };
   }),
-  on(setGlobalLoadingBarActive, (state): RootState => {
+  on(RootActions.setGlobalLoadingBarActive, (state): RootState => {
     return { ...state, globalLoadingBarState: true };
   }),
-  on(setGlobalLoadingBarInactive, (state): RootState => {
+  on(RootActions.setGlobalLoadingBarInactive, (state): RootState => {
     return { ...state, globalLoadingBarState: false };
   }),
   on(EnvActions.setAvailableEnvs, (state, { envs }): RootState => {
     return { ...state, availableEnvs: envs };
+  }),
+  on(RootActions.setTabIndexForPage, (state, { pageType, tabIndex }): RootState => {
+    return {
+      ...state,
+      tabIndex: {
+        ...state.tabIndex,
+        [pageType]: tabIndex,
+      },
+    };
   }),
   on(
     EnvActions.setDefinedContainersForEnv,
@@ -79,13 +84,4 @@ export const rootReducer = createReducer(
       };
     }
   ),
-  on(setTabIndexForPage, (state, { pageType, tabIndex }): RootState => {
-    return {
-      ...state,
-      tabIndex: {
-        ...state.tabIndex,
-        [pageType]: tabIndex,
-      },
-    };
-  })
 );
