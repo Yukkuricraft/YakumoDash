@@ -1,0 +1,49 @@
+<mat-toolbar>
+  <span>Backup Management</span>
+  <button
+    mat-icon-button
+    matTooltip="Create New Environment"
+  >
+    <mat-icon> add_box </mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="container-tab">
+  <div class="container-summary">
+    <h3>Overview</h3>
+    <mat-card>
+      <mat-card-title> Summary </mat-card-title>
+      <mat-card-content>
+        Stuff
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="containers">
+    <h3>Backups</h3>
+    <table mat-table [dataSource]="backupsList" class="mat-elevation-z8">
+      <!-- Position Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element">{{element.date}}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Id</th>
+        <td mat-cell *matCellDef="let element">{{element.id}}</td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="tags">
+        <th mat-header-cell *matHeaderCellDef>Tags</th>
+        <td mat-cell *matCellDef="let element">{{element.tags}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns;"
+      ></tr>
+    </table>
+  </div>
+</div>

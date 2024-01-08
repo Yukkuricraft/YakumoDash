@@ -59,8 +59,6 @@ export class ContainerActionsComponent {
     console.log("Sending to:", env, subPath);
     this.router.navigate(["/", "backup-mgmt"], {
       queryParams: {
-        env,
-        subPath,
       },
     });
   }

@@ -81,27 +81,33 @@ export const selectDefinedContainersByEnvAndType = (
   );
 
 export const selectDefinedContainerByName = (
-  env: Env,
-  type: ContainerType,
   name: string
 ) =>
   createSelector(selectRootState, (state: RootState) => {
     let allContainers: ContainerDefinition[] = [];
 
+    console.log("??? 1");
+    console.log(allContainers);
     Object.entries(state.definedContainersByEnv).forEach(
       ([_, containersByType]) => {
+        console.log("poop1", containersByType);
         Object.entries(containersByType).forEach(
           ([_, containers]) => {
+            console.log("poop2", containersByType);
             allContainers.push(...containers);
+            console.log("allContainers:", allContainers)
           }
         )
       }
     )
+
+    console.log("??? 2");
+    console.log(allContainers);
     if (isNil(allContainers)) {
       return null;
     }
     for (let container of allContainers) {
-      if (includes(container.labels, `${container.NameLabel}=${name}`)) {
+      if (container.getHostname() === name) {
         return container;
       }
     }

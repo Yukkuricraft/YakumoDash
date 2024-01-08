@@ -104,8 +104,6 @@ export const rootReducer = createReducer(
           }
         }
       }
-
-
     }
   )
 );
