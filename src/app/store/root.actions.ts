@@ -25,6 +25,10 @@ export interface EnvProp {
   env: Env;
 };
 
+export interface EnvsProp {
+  envs: Env[];
+}
+
 export interface ContainerProp {
   containerDef: ContainerDefinition
 };
@@ -32,6 +36,26 @@ export interface ContainerProp {
 export interface ContainerAndBackupProps {
   containerDef: ContainerDefinition;
   backups: BackupDefinition[];
+}
+
+export interface EnvAndActiveContainersProps {
+  env: Env;
+  containers: ActiveContainer[];
+}
+
+export interface EnvAndContainerDefinitionsProps {
+  env: Env;
+  containers: ContainerDefinition[];
+}
+
+export interface PageTypeAndTabIndexProps {
+  pageType: string;
+  tabIndex: number
+}
+
+export interface ContainerAndConfigTypeProps {
+  containerDef: ContainerDefinition,
+  configType: ConfigType
 }
 
 
@@ -44,16 +68,10 @@ export const RootActions = createActionGroup({
     "Set logged in user": props<UserProp>(),
     "Set logout user": emptyProps(),
     "Fetch container status for env": props<EnvProp>(),
-    "Copy configs for env container and type": props<{
-      containerDef: ContainerDefinition,
-      configType: ConfigType
-    }>(),
+    "Copy configs for container and type": props<ContainerAndConfigTypeProps>(),
     "Set global loading bar active": emptyProps(),
     "Set global loading bar inactive": emptyProps(),
-    "Set tab index for page": props<{
-      pageType: string;
-      tabIndex: number
-    }>(),
+    "Set tab index for page": props<PageTypeAndTabIndexProps>(),
   }
 });
 
@@ -79,17 +97,9 @@ export const EnvActions = createActionGroup({
   source: "Environment",
   events: {
     "Fetch Available Envs": emptyProps(),
-    "Set Available Envs": props<{
-      envs: Env[]
-    }>(),
-    "Set Active Containers For Env": props<{
-      env: Env;
-      containers: ActiveContainer[];
-    }>(),
-    "Set Defined Containers For Env": props<{
-      env: Env;
-      containers: ContainerDefinition[];
-    }>(),
+    "Set Available Envs": props<EnvsProp>(),
+    "Set Active Containers For Env": props<EnvAndActiveContainersProps>(),
+    "Set Defined Containers For Env": props<EnvAndContainerDefinitionsProps>(),
 
     "Begin Create New Env": props<CreateEnvProps>(),
     "Finish Create New Env": props<CreateEnvProps>(),
@@ -115,7 +125,7 @@ export const EnvActions = createActionGroup({
 export const BackupActions = createActionGroup({
   source: "Backups",
   events: {
-    "Fetch Backups For Env And Container": props<ContainerProp>(),
-    "Set Backups For Env And Container": props<ContainerAndBackupProps>(),
+    "Fetch Backups For Container": props<ContainerProp>(),
+    "Set Backups For Container": props<ContainerAndBackupProps>(),
   }
 });

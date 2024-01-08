@@ -5,20 +5,20 @@ import { Env } from "@app/models/env";
 
 const selectRootState = createFeatureSelector<RootState>(Features.Root);
 
-export const selectUser = createSelector(selectRootState, state => state.user);
+export const selectUser = createSelector(selectRootState, (state: RootState) => state.user);
 
 export const selectGlobalLoadingBarState = createSelector(
   selectRootState,
-  state => state.globalLoadingBarState
+  (state: RootState) => state.globalLoadingBarState
 );
 
 export const selectAvailableEnvs = createSelector(
   selectRootState,
-  state => state.availableEnvs
+  (state: RootState) => state.availableEnvs
 );
 
 export const selectEnvByEnvString = (envString: string) =>
-  createSelector(selectRootState, state => {
+  createSelector(selectRootState, (state: RootState) => {
     for (const env of state.availableEnvs) {
       if (env.name === envString) {
         return env;
@@ -30,4 +30,4 @@ export const selectEnvByEnvString = (envString: string) =>
   });
 
 export const selectCurrentTabIndex = (pageType: string) =>
-  createSelector(selectRootState, state => state.tabIndex[pageType] ?? 0);
+  createSelector(selectRootState, (state: RootState) => state.tabIndex[pageType] ?? 0);

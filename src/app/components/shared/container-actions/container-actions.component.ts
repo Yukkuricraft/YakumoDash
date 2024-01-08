@@ -77,7 +77,7 @@ export class ContainerActionsComponent {
   copyConfigs() {
     // TODO: Dropdown select config type?
     console.log(`Copying configs back to bindmount for container in env ${this.env.getFormattedLabel()}`, this.containerDef);
-    this.store.dispatch(RootActions.copyConfigsForEnvContainerAndType({ containerDef: this.containerDef, configType: ConfigType.Mod }));
+    this.store.dispatch(RootActions.copyConfigsForContainerAndType({ containerDef: this.containerDef, configType: ConfigType.Mod }));
   }
 
   openServerConsole() {

@@ -15,14 +15,14 @@ const selectRootState = createFeatureSelector<RootState>(Features.Root);
 export const selectActiveContainersByEnv = (env: Env) =>
   createSelector(
     selectRootState,
-    state => state.activeContainersByEnv[env.name] || []
+    (state: RootState) => state.activeContainersByEnv[env.name] || []
   );
 
 export const selectActiveContainersByEnvAndType = (
   env: Env,
   type: ContainerType
 ) =>
-  createSelector(selectRootState, state => {
+  createSelector(selectRootState, (state: RootState) => {
     const containersInEnv = state.activeContainersByEnv[env.name];
     if (!containersInEnv || !has(containersInEnv, type)) {
       return [];
@@ -33,13 +33,13 @@ export const selectActiveContainersByEnvAndType = (
 export const selectActiveContainerByContainerDef = (
   containerDef: ContainerDefinition
 ) => {
-  const envString = containerDef.getContainerEnvString();
+  const env = containerDef.env;
   const type = containerDef.getContainerType();
   const name = containerDef.getContainerNameLabel();
 
   return createSelector(
     selectActiveContainerByEnvTypeAndName(
-      { name: envString } as Env,
+      env,
       type,
       name
     ),
@@ -52,7 +52,7 @@ export const selectActiveContainerByEnvTypeAndName = (
   type: ContainerType,
   name: string
 ) =>
-  createSelector(selectActiveContainersByEnvAndType(env, type), containers => {
+  createSelector(selectActiveContainersByEnvAndType(env, type), (containers: ActiveContainer[]) => {
     if (isNil(containers)) {
       return null;
     }
@@ -68,7 +68,7 @@ export const selectActiveContainerByEnvTypeAndName = (
 export const selectDefinedContainersByEnv = (env: Env) =>
   createSelector(
     selectRootState,
-    state => state.definedContainersByEnv[env.name] || []
+    (state: RootState) => state.definedContainersByEnv[env.name] || []
   );
 
 export const selectDefinedContainersByEnvAndType = (
@@ -77,5 +77,33 @@ export const selectDefinedContainersByEnvAndType = (
 ) =>
   createSelector(
     selectRootState,
-    state => (state.definedContainersByEnv[env.name] ?? {})[type]
+    (state: RootState) => (state.definedContainersByEnv[env.name] ?? {})[type]
   );
+
+export const selectDefinedContainerByName = (
+  env: Env,
+  type: ContainerType,
+  name: string
+) =>
+  createSelector(selectRootState, (state: RootState) => {
+    let allContainers: ContainerDefinition[] = [];
+
+    Object.entries(state.definedContainersByEnv).forEach(
+      ([_, containersByType]) => {
+        Object.entries(containersByType).forEach(
+          ([_, containers]) => {
+            allContainers.push(...containers);
+          }
+        )
+      }
+    )
+    if (isNil(allContainers)) {
+      return null;
+    }
+    for (let container of allContainers) {
+      if (includes(container.labels, `${container.NameLabel}=${name}`)) {
+        return container;
+      }
+    }
+    return null;
+  });

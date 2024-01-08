@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { map, tap } from "rxjs";
+import { map, tap, Observable } from "rxjs";
 import { DomainConverter } from "@app/helpers/domain";
 import { CreateEnvResponse, Env } from "@app/models/env";
 import { DockerEnvActionResponse } from "@app/models/docker";
@@ -21,7 +21,7 @@ export class EnvironmentsService {
     serverType: string,
 
     description?: string
-  ) {
+  ): Observable<CreateEnvResponse> {
     return this.http
       .post(`${this.basePath}/create-env`, {
         PROXY_PORT: proxyPort,

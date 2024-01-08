@@ -4,6 +4,10 @@ import {
   RootActions,
   EnvActions,
   BackupActions,
+  CreateEnvProps,
+  EnvProp,
+  ContainerProp,
+  ContainerAndConfigTypeProps,
 } from "@app/store/root.actions";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import {
@@ -16,12 +20,14 @@ import {
   switchMap,
   tap,
 } from "rxjs";
-import { Env } from "@app/models/env";
+import { CreateEnvResponse, Env } from "@app/models/env";
 import { DockerService } from "@app/services/docker/docker.service";
 import { Store } from "@ngrx/store";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { BackupsService } from "@app/services/backups/backups.service";
+import { ActiveContainer, ConfigType, ContainerDefinition } from "@app/models/container";
+import { BackupDefinition } from "@app/models/backup";
 
 @Injectable()
 export class RootEffects {
@@ -66,7 +72,7 @@ export class RootEffects {
   beginCreateNewEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.beginCreateNewEnv),
-      switchMap(data => {
+      switchMap((data: CreateEnvProps) => {
         return [
           RootActions.setGlobalLoadingBarActive(),
           EnvActions.finishCreateNewEnv(data),
@@ -78,17 +84,16 @@ export class RootEffects {
   finishCreateNewEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.finishCreateNewEnv),
-      switchMap(data => {
+      switchMap(({ proxyPort, envAlias, enableEnvProtection, serverType, description }: CreateEnvProps) => {
         return this.envsApi.createEnv(
-          data.proxyPort,
-          data.envAlias,
-          data.enableEnvProtection,
-          data.serverType,
-          data.description
+          proxyPort,
+          envAlias,
+          enableEnvProtection,
+          serverType,
+          description
         );
       }),
-      switchMap(result => {
-        const createdEnv = result.createdEnv;
+      switchMap(({ createdEnv }: CreateEnvResponse ) => {
         this.snackbar.open(
           `Created new env '${createdEnv.env.getFormattedLabel()} running on port '${
             createdEnv.port
@@ -104,8 +109,8 @@ export class RootEffects {
   beginDeleteEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.beginDeleteEnv),
-      switchMap(data => {
-        return [RootActions.setGlobalLoadingBarActive(), EnvActions.finishDeleteEnv(data)];
+      switchMap(({ env }: EnvProp) => {
+        return [RootActions.setGlobalLoadingBarActive(), EnvActions.finishDeleteEnv({ env })];
       })
     );
   });
@@ -113,14 +118,14 @@ export class RootEffects {
   deleteEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.finishDeleteEnv),
-      switchMap(data => {
-        return this.envsApi.deleteEnv(data.env);
+      switchMap(({ env }: EnvProp ) => {
+        return this.envsApi.deleteEnv(env);
       }),
-      switchMap(result => {
+      switchMap(({ env }: EnvProp) => {
         console.log("RESULT FOR DELETE ENV");
-        console.log(result);
+        console.log(env);
         this.snackbar.open(
-          `Done deleting env '${result.env.getFormattedLabel()}'`
+          `Done deleting env '${env.getFormattedLabel()}'`
         );
 
         return [EnvActions.fetchAvailableEnvs(), RootActions.setGlobalLoadingBarInactive()];
@@ -132,8 +137,8 @@ export class RootEffects {
   beginSpinupEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.beginSpinupEnv),
-      switchMap(data => {
-        return [RootActions.setGlobalLoadingBarActive(), EnvActions.finishSpinupEnv(data)];
+      switchMap(({ env }: EnvProp) => {
+        return [RootActions.setGlobalLoadingBarActive(), EnvActions.finishSpinupEnv({ env })];
       })
     );
   });
@@ -141,16 +146,16 @@ export class RootEffects {
   spinupEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.finishSpinupEnv),
-      switchMap(data => {
-        return this.dockerApi.upEnv(data.env);
+      switchMap(({ env }: EnvProp) => {
+        return this.dockerApi.upEnv(env);
       }),
-      concatMap(result => {
+      concatMap(({ env }: EnvProp) => {
         this.snackbar.open(
-          `Done starting env '${result.env.getFormattedLabel()}'`
+          `Done starting env '${env.getFormattedLabel()}'`
         );
 
         return [
-          RootActions.fetchContainerStatusForEnv({ env: result.env }),
+          RootActions.fetchContainerStatusForEnv({ env }),
           RootActions.setGlobalLoadingBarInactive(),
         ];
       })
@@ -161,10 +166,10 @@ export class RootEffects {
   beginShutdownEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.beginShutdownEnv),
-      switchMap(data => {
+      switchMap(({ env }: EnvProp) => {
         return [
           RootActions.setGlobalLoadingBarActive(),
-          EnvActions.finishShutdownEnv(data),
+          EnvActions.finishShutdownEnv({ env }),
         ];
       })
     );
@@ -173,16 +178,16 @@ export class RootEffects {
   shutdownEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.finishShutdownEnv),
-      switchMap(data => {
-        return this.dockerApi.downEnv(data.env);
+      switchMap(({ env }: EnvProp) => {
+        return this.dockerApi.downEnv(env);
       }),
-      concatMap(result => {
+      concatMap(({ env }: EnvProp) => {
         this.snackbar.open(
-          `Done shutting down env '${result.env.getFormattedLabel()}'`
+          `Done shutting down env '${env.getFormattedLabel()}'`
         );
 
         return [
-          RootActions.fetchContainerStatusForEnv({ env: result.env }),
+          RootActions.fetchContainerStatusForEnv({ env }),
           RootActions.setGlobalLoadingBarInactive(),
         ];
       })
@@ -192,7 +197,7 @@ export class RootEffects {
   beginShutdownContainer$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.beginShutdownContainer),
-      switchMap(data => {
+      switchMap((data: ContainerProp) => {
         return [
           RootActions.setGlobalLoadingBarActive(),
           EnvActions.finishShutdownContainer(data),
@@ -204,16 +209,16 @@ export class RootEffects {
   shutdownContainer$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.finishShutdownContainer),
-      switchMap(data => {
-        return this.dockerApi.downContainer(data.containerDef);
+      switchMap(({ containerDef }: { containerDef: ContainerDefinition }) => {
+        return this.dockerApi.downContainer(containerDef);
       }),
-      concatMap(result => {
+      concatMap(({ env }: EnvProp) => {
         this.snackbar.open(
-          `Done shutting down env '${result.env.getFormattedLabel()}'`
+          `Done shutting down env '${env.getFormattedLabel()}'`
         );
 
         return [
-          RootActions.fetchContainerStatusForEnv({ env: result.env }),
+          RootActions.fetchContainerStatusForEnv({ env }),
           RootActions.setGlobalLoadingBarInactive(),
         ];
       })
@@ -223,12 +228,12 @@ export class RootEffects {
   fetchDefinedContainersForEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(RootActions.fetchContainerStatusForEnv),
-      switchMap(data => {
-        return this.dockerApi.listDefined(data.env).pipe(
+      switchMap(({ env }: { env: Env}) => {
+        return this.dockerApi.listDefined(env).pipe(
           concatLatestFrom(() => {
-            return of(data.env);
+            return of(env);
           }),
-          map(([containers, env]) =>
+          map(([containers, env]: [containers: ContainerDefinition[], env: Env]) =>
             EnvActions.setDefinedContainersForEnv({ env, containers })
           )
         );
@@ -239,12 +244,12 @@ export class RootEffects {
   fetchActiveContainersForEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(RootActions.fetchContainerStatusForEnv),
-      switchMap(data => {
-        return this.dockerApi.listActive(data.env).pipe(
+      switchMap(({ env }: EnvProp) => {
+        return this.dockerApi.listActive(env).pipe(
           concatLatestFrom(() => {
-            return of(data.env);
+            return of(env);
           }),
-          map(([containers, env]) =>
+          map(([containers, env]: [containers: ActiveContainer[], env: Env]) =>
             EnvActions.setActiveContainersForEnv({ env, containers })
           )
         );
@@ -252,27 +257,27 @@ export class RootEffects {
     );
   });
 
-  copyConfigsForEnvContainerAndType$ = createEffect(() => {
+  copyConfigsForContainerAndType$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(RootActions.copyConfigsForEnvContainerAndType),
-      switchMap(data => {
-        return this.dockerApi.copyConfigs(data.containerDef, data.configType)
+      ofType(RootActions.copyConfigsForContainerAndType),
+      switchMap(({ containerDef, configType }: ContainerAndConfigTypeProps) => {
+        return this.dockerApi.copyConfigs(containerDef, configType)
       })
     )
   },
   { dispatch: false }
   );
 
-  fetchBackupsForEnvAndContainer$ = createEffect(() => {
+  fetchBackupsForContainer$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(BackupActions.fetchBackupsForEnvAndContainer),
-      switchMap(data => {
-        return this.backupsApi.listBackups(data.containerDef).pipe(
+      ofType(BackupActions.fetchBackupsForContainer),
+      switchMap(({ containerDef }: ContainerProp) => {
+        return this.backupsApi.listBackups(containerDef).pipe(
           concatLatestFrom(() => {
-            return of(data.containerDef);
+            return of(containerDef);
           }),
-          map(([backups, containerDef]) =>
-            BackupActions.setBackupsForEnvAndContainer({ containerDef, backups })
+          map(([backups, containerDef]: [backups: BackupDefinition[], containerDef: ContainerDefinition]) =>
+            BackupActions.setBackupsForContainer({ containerDef, backups })
           )
         );
       })

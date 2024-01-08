@@ -4,32 +4,37 @@ import {
   RootActions,
   EnvActions,
   BackupActions,
+  EnvAndActiveContainersProps,
+  ContainerAndBackupProps,
+  EnvAndContainerDefinitionsProps,
+  PageTypeAndTabIndexProps,
+  EnvsProp,
+  UserProp,
 } from "@app/store/root.actions";
 import {
   ContainerType,
   ContainerTypeToActiveContainerMapping,
   ContainerTypeToContainerDefinitionMapping,
 } from "@app/models/container";
-import { EnvToBackupsMapping } from "@app/models/backup";
 
 export const rootReducer = createReducer(
   initialState,
-  on(RootActions.setLoggedInUser, (state, { user }): RootState => {
+  on(RootActions.setLoggedInUser, (state: RootState, { user }: UserProp): RootState => {
     return { ...state, user };
   }),
-  on(RootActions.setLogoutUser, (state): RootState => {
+  on(RootActions.setLogoutUser, (state: RootState): RootState => {
     return { ...state, user: null };
   }),
-  on(RootActions.setGlobalLoadingBarActive, (state): RootState => {
+  on(RootActions.setGlobalLoadingBarActive, (state: RootState): RootState => {
     return { ...state, globalLoadingBarState: true };
   }),
-  on(RootActions.setGlobalLoadingBarInactive, (state): RootState => {
+  on(RootActions.setGlobalLoadingBarInactive, (state: RootState): RootState => {
     return { ...state, globalLoadingBarState: false };
   }),
-  on(EnvActions.setAvailableEnvs, (state, { envs }): RootState => {
+  on(EnvActions.setAvailableEnvs, (state: RootState, { envs }: EnvsProp): RootState => {
     return { ...state, availableEnvs: envs };
   }),
-  on(RootActions.setTabIndexForPage, (state, { pageType, tabIndex }): RootState => {
+  on(RootActions.setTabIndexForPage, (state: RootState, { pageType, tabIndex }: PageTypeAndTabIndexProps): RootState => {
     return {
       ...state,
       tabIndex: {
@@ -40,7 +45,7 @@ export const rootReducer = createReducer(
   }),
   on(
     EnvActions.setDefinedContainersForEnv,
-    (state, { env, containers }): RootState => {
+    (state: RootState, { env, containers }: EnvAndContainerDefinitionsProps): RootState => {
       let currEnvContainers: ContainerTypeToContainerDefinitionMapping = {};
 
       for (const container of containers) {
@@ -64,7 +69,7 @@ export const rootReducer = createReducer(
   ),
   on(
     EnvActions.setActiveContainersForEnv,
-    (state, { env, containers }): RootState => {
+    (state: RootState, { env, containers }: EnvAndActiveContainersProps): RootState => {
       let currEnvContainers: ContainerTypeToActiveContainerMapping = {};
 
       for (const container of containers) {
@@ -87,8 +92,8 @@ export const rootReducer = createReducer(
     }
   ),
   on(
-    BackupActions.setBackupsForEnvAndContainer,
-    (state, { containerDef, backups }): RootState => {
+    BackupActions.setBackupsForContainer,
+    (state: RootState, { containerDef, backups }: ContainerAndBackupProps): RootState => {
       return {
         ...state,
         backupsByContainerAndEnv: {
