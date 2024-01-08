@@ -3,6 +3,7 @@ import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import {
   RootActions,
   EnvActions,
+  BackupActions,
 } from "@app/store/root.actions";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import {
@@ -17,10 +18,10 @@ import {
 } from "rxjs";
 import { Env } from "@app/models/env";
 import { DockerService } from "@app/services/docker/docker.service";
-import { ContainerDefinition } from "@app/models/container";
 import { Store } from "@ngrx/store";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { BackupsService } from "@app/services/backups/backups.service";
 
 @Injectable()
 export class RootEffects {
@@ -30,6 +31,7 @@ export class RootEffects {
     private router: Router,
     private store: Store,
     private envsApi: EnvironmentsService,
+    private backupsApi: BackupsService,
     private snackbar: MatSnackBar
   ) {}
 
@@ -203,7 +205,7 @@ export class RootEffects {
     return this.actions$.pipe(
       ofType(EnvActions.finishShutdownContainer),
       switchMap(data => {
-        return this.dockerApi.downContainer(data.containerDef, data.env);
+        return this.dockerApi.downContainer(data.containerDef);
       }),
       concatMap(result => {
         this.snackbar.open(
@@ -254,10 +256,26 @@ export class RootEffects {
     return this.actions$.pipe(
       ofType(RootActions.copyConfigsForEnvContainerAndType),
       switchMap(data => {
-        return this.dockerApi.copyConfigs(data.containerDef, data.env, data.configType)
+        return this.dockerApi.copyConfigs(data.containerDef, data.configType)
       })
     )
   },
   { dispatch: false }
   );
+
+  fetchBackupsForEnvAndContainer$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(BackupActions.fetchBackupsForEnvAndContainer),
+      switchMap(data => {
+        return this.backupsApi.listBackups(data.containerDef).pipe(
+          concatLatestFrom(() => {
+            return of(data.containerDef);
+          }),
+          map(([backups, containerDef]) =>
+            BackupActions.setBackupsForEnvAndContainer({ containerDef, backups })
+          )
+        );
+      })
+    );
+  });
 }

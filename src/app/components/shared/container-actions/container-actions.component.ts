@@ -38,7 +38,7 @@ export class ContainerActionsComponent {
 
   startContainer() {
     console.log(`Stopping container in env ${this.env.getFormattedLabel()}`, this.containerDef);
-    this.store.dispatch(EnvActions.beginSpinupContainer({ env: this.env, containerDef: this.containerDef }));
+    this.store.dispatch(EnvActions.beginSpinupContainer({ containerDef: this.containerDef }));
   }
 
   editContainerConfig() {
@@ -71,13 +71,13 @@ export class ContainerActionsComponent {
 
   stopContainer() {
     console.log(`Stopping container in env ${this.env.getFormattedLabel()}`, this.containerDef);
-    this.store.dispatch(EnvActions.beginSpinupContainer({ env: this.env, containerDef: this.containerDef }));
+    this.store.dispatch(EnvActions.beginSpinupContainer({ containerDef: this.containerDef }));
   }
 
   copyConfigs() {
     // TODO: Dropdown select config type?
     console.log(`Copying configs back to bindmount for container in env ${this.env.getFormattedLabel()}`, this.containerDef);
-    this.store.dispatch(RootActions.copyConfigsForEnvContainerAndType({ env: this.env, containerDef: this.containerDef, configType: ConfigType.Mod }));
+    this.store.dispatch(RootActions.copyConfigsForEnvContainerAndType({ containerDef: this.containerDef, configType: ConfigType.Mod }));
   }
 
   openServerConsole() {

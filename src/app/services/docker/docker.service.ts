@@ -26,9 +26,9 @@ export class DockerService {
       );
   }
 
-  upContainer(containerDef: ContainerDefinition, env: Env) {
+  upContainer(containerDef: ContainerDefinition) {
     return this.http
-      .post(`${this.basePath}/${env.name}/containers/up_one`, {
+      .post(`${this.basePath}/${containerDef.env.name}/containers/up_one`, {
         container_name: containerDef.getHostname(),
       })
       .pipe(
@@ -48,9 +48,9 @@ export class DockerService {
       );
   }
 
-  downContainer(containerDef: ContainerDefinition, env: Env) {
+  downContainer(containerDef: ContainerDefinition) {
     return this.http
-      .post(`${this.basePath}/${env.name}/containers/down_one`, {
+      .post(`${this.basePath}/${containerDef.env.name}/containers/down_one`, {
         container_name: containerDef.getHostname(),
       })
       .pipe(
@@ -65,12 +65,12 @@ export class DockerService {
     return this.http.post(`${this.basePath}/${env.name}/containers/restart`, {});
   }
 
-  copyConfigs(containerDef: ContainerDefinition, env: Env, configType: ConfigType) {
+  copyConfigs(containerDef: ContainerDefinition, configType: ConfigType) {
     console.log(containerDef);
     const hostname = containerDef.getHostname();
 
     return this.http
-      .post(`${this.basePath}/${env.name}/containers/copy-configs-to-bindmount`, {
+      .post(`${this.basePath}/${containerDef.env.name}/containers/copy-configs-to-bindmount`, {
         container_name: hostname,
         config_type: configType,
       })
@@ -81,9 +81,11 @@ export class DockerService {
       .get(`${this.basePath}/${env.name}/containers`)
       .pipe(
         map((data: any) =>
-          data.map((obj: any) =>
-            DomainConverter.fromDto(ContainerDefinition, obj)
-          )
+          data.map((obj: any) => {
+            let containerDef = DomainConverter.fromDto<ContainerDefinition>(ContainerDefinition, obj)
+            containerDef.env = env;
+            return containerDef;
+          })
         )
       );
   }
@@ -93,9 +95,11 @@ export class DockerService {
       .get(`${this.basePath}/${env.name}/containers/active`)
       .pipe(
         map((data: any) =>
-          data.map((obj: any) =>
-            DomainConverter.fromDto(ActiveContainer, lowercaseKeys(obj))
-          )
+          data.map((obj: any) => {
+            let activeContainer = DomainConverter.fromDto<ActiveContainer>(ActiveContainer, lowercaseKeys(obj))
+            activeContainer.env = env;
+            return activeContainer;
+          })
         )
       );
   }

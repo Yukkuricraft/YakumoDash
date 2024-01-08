@@ -7,7 +7,7 @@ import {
 import { User } from "@app/models/user";
 import { Env } from "@app/models/env";
 import { ActiveContainer, ConfigType, ContainerDefinition, ContainerType } from "@app/models/container";
-import { MatDialogRef } from "@angular/material/dialog";
+import { BackupDefinition } from "@app/models/backup";
 
 export interface CreateEnvProps {
   proxyPort: number;
@@ -25,10 +25,15 @@ export interface EnvProp {
   env: Env;
 };
 
-export interface EnvAndContainerProps {
-  env: Env;
-  containerDef: ContainerDefinition;
+export interface ContainerProp {
+  containerDef: ContainerDefinition
 };
+
+export interface ContainerAndBackupProps {
+  containerDef: ContainerDefinition;
+  backups: BackupDefinition[];
+}
+
 
 export const RootActions = createActionGroup({
   source: "Root",
@@ -40,13 +45,15 @@ export const RootActions = createActionGroup({
     "Set logout user": emptyProps(),
     "Fetch container status for env": props<EnvProp>(),
     "Copy configs for env container and type": props<{
-      env: Env,
       containerDef: ContainerDefinition,
       configType: ConfigType
     }>(),
     "Set global loading bar active": emptyProps(),
     "Set global loading bar inactive": emptyProps(),
-    "Set tab index for page": props<{ pageType: string; tabIndex: number }>(),
+    "Set tab index for page": props<{
+      pageType: string;
+      tabIndex: number
+    }>(),
   }
 });
 
@@ -54,9 +61,16 @@ export const RootActions = createActionGroup({
 export const SocketActions = createActionGroup({
   source: "Environment",
   events: {
-    "Connect To Websocket": props<{ endpoint: string }>(),
-    "Disconnect To Websocket": props<{ endpoint: string }>(),
-    "Send Message": props<{ endpoint: string; data: any }>(),
+    "Connect To Websocket": props<{
+      endpoint: string
+    }>(),
+    "Disconnect To Websocket": props<{
+      endpoint: string
+    }>(),
+    "Send Message": props<{
+      endpoint: string;
+      data: any
+    }>(),
   },
 });
 
@@ -65,7 +79,9 @@ export const EnvActions = createActionGroup({
   source: "Environment",
   events: {
     "Fetch Available Envs": emptyProps(),
-    "Set Available Envs": props<{ envs: Env[] }>(),
+    "Set Available Envs": props<{
+      envs: Env[]
+    }>(),
     "Set Active Containers For Env": props<{
       env: Env;
       containers: ActiveContainer[];
@@ -84,14 +100,14 @@ export const EnvActions = createActionGroup({
     "Begin Spinup Env": props<EnvProp>(),
     "Finish Spinup Env": props<EnvProp>(),
 
-    "Begin Spinup Container": props<EnvAndContainerProps>(),
-    "Finish Spinup Container": props<EnvAndContainerProps>(),
+    "Begin Spinup Container": props<ContainerProp>(),
+    "Finish Spinup Container": props<ContainerProp>(),
 
     "Begin Shutdown Env": props<EnvProp>(),
     "Finish Shutdown Env": props<EnvProp>(),
 
-    "Begin Shutdown Container": props<EnvAndContainerProps>(),
-    "Finish Shutdown Container": props<EnvAndContainerProps>(),
+    "Begin Shutdown Container": props<ContainerProp>(),
+    "Finish Shutdown Container": props<ContainerProp>(),
   },
 });
 
@@ -99,6 +115,7 @@ export const EnvActions = createActionGroup({
 export const BackupActions = createActionGroup({
   source: "Backups",
   events: {
-    "List Backups": props<EnvAndContainerProps>(),
+    "Fetch Backups For Env And Container": props<ContainerProp>(),
+    "Set Backups For Env And Container": props<ContainerAndBackupProps>(),
   }
 });

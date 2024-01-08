@@ -4,6 +4,7 @@ import {
 } from "@app/helpers/dto-transformers";
 import { Transform } from "class-transformer";
 import { capitalize, includes } from "lodash";
+import { Env } from "./env";
 
 export enum ContainerType {
   Minecraft = "mc",
@@ -50,6 +51,7 @@ export interface EnvToDefinedContainerMapping {
 }
 
 export interface IContainerDefinition {
+  env: Env;
   image: string;
   labels: string[];
   names: string[];
@@ -146,6 +148,7 @@ export class ContainerDefinition implements IContainerDefinition {
 
   // ContainerDefinitions come back as proper arrays because Python handles those.
   // This is not true for ActiveContainer which we get directly from `docker ps` output.
+  env = new Env();
   image = "";
   containerName = "";
   hostname = "";

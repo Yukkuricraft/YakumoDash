@@ -4,6 +4,7 @@ import {
   EnvToDefinedContainerMapping,
 } from "@app/models/container";
 import { Env } from "@app/models/env";
+import { EnvToBackupsMapping } from "@app/models/backup";
 
 export interface RootState {
   tabIndex: { [pageName: string]: number };
@@ -12,6 +13,7 @@ export interface RootState {
   activeContainersByEnv: EnvToActiveContainerMapping;
   definedContainersByEnv: EnvToDefinedContainerMapping;
   globalLoadingBarState: boolean;
+  backupsByContainerAndEnv: EnvToBackupsMapping;
 }
 
 export const initialState: RootState = {
@@ -21,4 +23,5 @@ export const initialState: RootState = {
   activeContainersByEnv: {},
   definedContainersByEnv: {},
   globalLoadingBarState: false,
+  backupsByContainerAndEnv: {},
 };

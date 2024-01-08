@@ -3,12 +3,14 @@ import { ActionReducer, createReducer, MetaReducer, on } from "@ngrx/store";
 import {
   RootActions,
   EnvActions,
+  BackupActions,
 } from "@app/store/root.actions";
 import {
   ContainerType,
   ContainerTypeToActiveContainerMapping,
   ContainerTypeToContainerDefinitionMapping,
 } from "@app/models/container";
+import { EnvToBackupsMapping } from "@app/models/backup";
 
 export const rootReducer = createReducer(
   initialState,
@@ -84,4 +86,21 @@ export const rootReducer = createReducer(
       };
     }
   ),
+  on(
+    BackupActions.setBackupsForEnvAndContainer,
+    (state, { containerDef, backups }): RootState => {
+      return {
+        ...state,
+        backupsByContainerAndEnv: {
+          ...state.backupsByContainerAndEnv,
+          [containerDef.getContainerEnvString()]: {
+            ...state.backupsByContainerAndEnv[containerDef.getContainerEnvString()],
+            [containerDef.getContainerNameShorthand()]: backups,
+          }
+        }
+      }
+
+
+    }
+  )
 );
