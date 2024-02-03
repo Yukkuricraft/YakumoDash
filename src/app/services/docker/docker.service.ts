@@ -70,7 +70,7 @@ export class DockerService {
     const hostname = containerDef.getHostname();
 
     return this.http
-      .post(`${this.basePath}/${containerDef.env.name}/containers/copy-configs-to-bindmount`, {
+      .post(`${this.basePath}/containers/copy-configs-to-bindmount`, {
         container_name: hostname,
         config_type: configType,
       })

@@ -28,19 +28,21 @@
                 <ul class="ul-left-margin">
                   <li>
                     <span class="item-key">Running on Port: </span
-                    ><span class="item-val">{{ env.config.proxyPort }}</span>
+                    ><span class="item-val">{{ env.config.runtimeEnvironmentVariables["velocityPort"] }}</span>
                   </li>
                   <li>
                     <span class="item-key">Server Version: </span
-                    ><span class="item-val">{{ env.config.mcVersion }}</span>
+                    ><span class="item-val">{{ env.config.runtimeEnvironmentVariables["mcVersion"] }}</span>
                   </li>
                   <li>
                     <span class="item-key">Server Type: </span
-                    ><span class="item-val">{{ env.config.serverType }}</span>
+                    ><span class="item-val">{{ env.config.runtimeEnvironmentVariables["mcType"] }}</span>
                   </li>
                   <li>
                     <span class="item-key">Server Build: </span
-                    ><span class="item-val">{{ env.config.serverBuild }}</span>
+                    ><span class="item-val">{{ env.config.runtimeEnvironmentVariables["paperBuild"] }}</span>
+                    <!-- TODO: Make this read from actual jar? Version between paper/fabric/etc will not necessarily match env vars. -->
+                    <!-- TODO: Do I care that PASCAL_CASE env vars are being camelCase'd--->
                   </li>
                 </ul>
               </div>

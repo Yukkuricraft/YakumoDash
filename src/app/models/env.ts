@@ -2,20 +2,45 @@ import { modelTransformer } from "@app/helpers/dto-transformers";
 import { Transform } from "class-transformer";
 import { ApiRunnerResponse, IApiRunnerResponse } from "./api";
 
-export interface IEnvConfig {
-  proxyPort: number;
-  serverType: string;
-  serverBuild: string;
-  mcVersion: string;
-  fsRoot: string;
+export interface IGeneralConfig {
+  description: string;
+  hostname: string;
+}
+export class GeneralConfig implements IGeneralConfig{
+  description = "";
+  hostname = "";
 }
 
-export class EnvConfig {
-  proxyPort = 0;
-  serverType = "";
-  serverBuild = "";
+export interface IWorldGroups {
+  enabledGroups: string[];
+}
+export class WorldGroups {
+  enabledGroups = [];
+}
+
+type IRuntimeEnvironmentVariables = Record<string, any>;
+
+export class RuntimeEnvironmentVariables implements IRuntimeEnvironmentVariables {
+  envAlias = "";
+  mcFsRoot = "";
+  mcType = "";
   mcVersion = "";
-  fsRoot = "";
+  velocityPort = "";
+  ycRepoRoot = "";
+  backupsRoot = "";
+  // ...And whatever else may be added
+}
+
+export interface IEnvConfig {
+  general: IGeneralConfig;
+  worldGroups: IWorldGroups;
+  runtimeEnvironmentVariables: IRuntimeEnvironmentVariables;
+}
+
+export class EnvConfig implements IEnvConfig {
+  general = new GeneralConfig();
+  worldGroups = new WorldGroups();
+  runtimeEnvironmentVariables: IRuntimeEnvironmentVariables = new RuntimeEnvironmentVariables();
 }
 
 export interface IEnv {
