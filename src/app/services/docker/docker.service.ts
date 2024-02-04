@@ -5,7 +5,7 @@ import { DomainConverter } from "@app/helpers/domain";
 import { lowercaseKeys } from "@app/helpers/case";
 import { Env, CreateEnvResponse } from "@app/models/env";
 import { DockerContainerActionResponse, DockerEnvActionResponse } from "@app/models/docker";
-import { ActiveContainer, ConfigType, ContainerDefinition } from "@app/models/container";
+import { ActiveContainer, DataFileType, ContainerDefinition } from "@app/models/container";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -65,14 +65,14 @@ export class DockerService {
     return this.http.post(`${this.basePath}/${env.name}/containers/restart`, {});
   }
 
-  copyConfigs(containerDef: ContainerDefinition, configType: ConfigType) {
+  copyConfigs(containerDef: ContainerDefinition, dataFileType: DataFileType) {
     console.log(containerDef);
     const hostname = containerDef.getHostname();
 
     return this.http
       .post(`${this.basePath}/containers/copy-configs-to-bindmount`, {
         container_name: hostname,
-        config_type: configType,
+        data_file_type: dataFileType,
       })
   }
 

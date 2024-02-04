@@ -7,7 +7,7 @@ import {
   CreateEnvProps,
   EnvProp,
   ContainerProp,
-  ContainerAndConfigTypeProps,
+  ContainerAndDataFileTypeProp,
 } from "@app/store/root.actions";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import {
@@ -26,7 +26,7 @@ import { Store } from "@ngrx/store";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { BackupsService } from "@app/services/backups/backups.service";
-import { ActiveContainer, ConfigType, ContainerDefinition } from "@app/models/container";
+import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 import { BackupDefinition } from "@app/models/backup";
 
 @Injectable()
@@ -260,8 +260,8 @@ export class RootEffects {
   copyConfigsForContainerAndType$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(RootActions.copyConfigsForContainerAndType),
-      switchMap(({ containerDef, configType }: ContainerAndConfigTypeProps) => {
-        return this.dockerApi.copyConfigs(containerDef, configType)
+      switchMap(({ containerDef, dataFileType }: ContainerAndDataFileTypeProp) => {
+        return this.dockerApi.copyConfigs(containerDef, dataFileType)
       })
     )
   },

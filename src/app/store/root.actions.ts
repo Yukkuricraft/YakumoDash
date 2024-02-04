@@ -6,7 +6,7 @@ import {
 } from "@ngrx/store";
 import { User } from "@app/models/user";
 import { Env } from "@app/models/env";
-import { ActiveContainer, ConfigType, ContainerDefinition, ContainerType } from "@app/models/container";
+import { ActiveContainer, DataFileType, ContainerDefinition, ContainerType } from "@app/models/container";
 import { BackupDefinition } from "@app/models/backup";
 
 export interface CreateEnvProps {
@@ -53,9 +53,9 @@ export interface PageTypeAndTabIndexProps {
   tabIndex: number
 }
 
-export interface ContainerAndConfigTypeProps {
+export interface ContainerAndDataFileTypeProp {
   containerDef: ContainerDefinition,
-  configType: ConfigType
+  dataFileType: DataFileType,
 }
 
 
@@ -68,7 +68,7 @@ export const RootActions = createActionGroup({
     "Set logged in user": props<UserProp>(),
     "Set logout user": emptyProps(),
     "Fetch container status for env": props<EnvProp>(),
-    "Copy configs for container and type": props<ContainerAndConfigTypeProps>(),
+    "Copy configs for container and type": props<ContainerAndDataFileTypeProp>(),
     "Set global loading bar active": emptyProps(),
     "Set global loading bar inactive": emptyProps(),
     "Set tab index for page": props<PageTypeAndTabIndexProps>(),

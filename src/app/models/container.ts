@@ -15,10 +15,17 @@ export enum ContainerType {
   Unknown = "unknown",
 }
 
-export enum ConfigType {
+export enum DataFileType {
   Plugin = "plugin",
   Mod = "mod",
+  Server = "server",
+
+  // While these are part of the DataFileType enum on serverside we should never
+  // be interacting with the following three from frontend side.
+  // Smelly.
   ModFiles = "mod_files",
+  ClientAndServerModFiles = "client_and_server_mod_files",
+  ServerOnlyModFiles = "server_only_mod_files",
 }
 
 /**
