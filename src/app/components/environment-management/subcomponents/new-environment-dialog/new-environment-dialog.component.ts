@@ -32,10 +32,10 @@ export class NewEnvironmentDialogComponent {
   MAX_DESCRIPTION_LEN = 2048;
 
   // TODO: This really should be supplied by the yc-api rather than hardcoded in the frontend.
-  // MIN_PORT = 25600;
-  // MAX_PORT = 25700;
-  MIN_PORT = 26600;
-  MAX_PORT = 26700;
+  MIN_PORT = 25600;
+  MAX_PORT = 25700;
+  // MIN_PORT = 26600;
+  // MAX_PORT = 26700;
 
   numbersReg = /^\d+$/;
 
