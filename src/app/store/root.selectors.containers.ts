@@ -57,7 +57,7 @@ export const selectActiveContainerByEnvTypeAndName = (
       return null;
     }
     for (let container of containers) {
-      if (includes(container.labels, `${container.NameLabel}=${name}`)) {
+      if (container.getContainerNameLabel() == name) {
         return container;
       }
     }
@@ -77,7 +77,9 @@ export const selectDefinedContainersByEnvAndType = (
 ) =>
   createSelector(
     selectRootState,
-    (state: RootState) => (state.definedContainersByEnv[env.name] ?? {})[type]
+    (state: RootState) => {
+      return (state.definedContainersByEnv[env.name] ?? {})[type]
+    }
   );
 
 export const selectDefinedContainerByName = (

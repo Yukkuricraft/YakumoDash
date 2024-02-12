@@ -2,17 +2,22 @@ import {
   dateStringTransformer,
   dockerStringArrayTransformer,
 } from "@app/helpers/dto-transformers";
-import { Transform } from "class-transformer";
+import { Transform, Exclude } from "class-transformer";
 import { capitalize, includes } from "lodash";
 import { Env } from "./env";
 
 export enum ContainerType {
-  Minecraft = "mc",
+  Minecraft = "minecraft",
+  Backup = "backup",
   MySQL = "mysql",
   Postgres = "postgres",
-  MCProxy = "MCProxy",
-  Redis = "Redis",
+  MCProxy = "velocity",
+  Redis = "redis",
   Unknown = "unknown",
+}
+
+function isValidContainerType(value: string): value is ContainerType {
+  return Object.values<string>(ContainerType).includes(value);
 }
 
 export enum DataFileType {
@@ -60,7 +65,7 @@ export interface EnvToDefinedContainerMapping {
 export interface IContainerDefinition {
   env: Env;
   image: string;
-  labels: string[];
+  labels: Record<string,string>;
   names: string[];
   containerName: string;
   hostname: string;
@@ -75,12 +80,11 @@ export class ContainerDefinition implements IContainerDefinition {
   EnvLabel = "net.yukkuricraft.env";
 
   getLabelValue(targetLabel: string) {
-    const filteredLabels = this.labels.filter((label: string) =>
-      label.includes(targetLabel)
-    );
-    const label = filteredLabels ? filteredLabels[0] : "";
-    const splitLabel = label.split("=");
-    return splitLabel.length > 1 ? splitLabel[1] : "";
+    if (targetLabel in this.labels) {
+      return this.labels[targetLabel];
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -89,8 +93,8 @@ export class ContainerDefinition implements IContainerDefinition {
    * This is equivalent to world group names
    * @returns
    */
-  getContainerNameLabel() {
-    return this.getLabelValue(this.NameLabel);
+  getContainerNameLabel(): string{
+    return this.getLabelValue(this.NameLabel) ?? "UnknownContainer";
   }
   /**
    * Returns the docker-context container name, ie what you would use with
@@ -106,37 +110,26 @@ export class ContainerDefinition implements IContainerDefinition {
   }
 
   getContainerNameShorthand() {
-    return this.names.length > 0 ? this.names[0] : "Undefined";
+    return this.hostname;
   }
 
   getFormattedContainerName() {
     return capitalize(this.getContainerNameLabel());
   }
 
-  labelsToContainerType(labels: string[]) {
-    let containerType = ContainerType.Unknown;
-    if (includes(labels, `${this.TypeLabel}=minecraft`)) {
-      containerType = ContainerType.Minecraft;
-    } else if (includes(labels, `${this.TypeLabel}=velocity`)) {
-      containerType = ContainerType.MCProxy;
-    } else if (includes(labels, `${this.TypeLabel}=mysql`)) {
-      containerType = ContainerType.MySQL;
-    } else if (includes(labels, `${this.TypeLabel}=redis`)) {
-      containerType = ContainerType.Redis;
-    } else if (includes(labels, `${this.TypeLabel}=postgres`)) {
-      containerType = ContainerType.Postgres;
-    }
-
-    return containerType;
-  }
-
   getContainerEnvString(): string {
-    return this.getLabelValue(this.EnvLabel);
+    return this.getLabelValue(this.EnvLabel) ?? "UnknownEnv";
   }
 
   getContainerType(): ContainerType {
-    return this.labelsToContainerType(this.labels);
+    const label = this.getLabelValue(this.TypeLabel) ?? "unknown";
+    if (isValidContainerType(label)) {
+      return label as ContainerType;
+    } else {
+      return ContainerType.Unknown
+    }
   }
+
   get isMinecraftContainer() {
     return this.getContainerType() === ContainerType.Minecraft;
   }
@@ -159,7 +152,7 @@ export class ContainerDefinition implements IContainerDefinition {
   image = "";
   containerName = "";
   hostname = "";
-  labels: string[] = [];
+  labels: Record<string,string> = {};
   names: string[] = [];
   mounts: string[] = [];
   networks: string[] = [];
@@ -170,9 +163,7 @@ export interface IActiveContainer extends IContainerDefinition {
   command: string;
   createdAt: Date;
   id: string;
-  localVolumes: number;
   runningFor: string;
-  size: string;
   state: DockerContainerState;
   status: string;
 }
@@ -246,21 +237,14 @@ export class ActiveContainer
 
   command = "";
   id = "";
-  localVolumes = -1;
   runningFor = "";
-  size = "";
   state = DockerContainerState.Uninitialized;
   status = "";
 
-  @Transform(dockerStringArrayTransformer)
-  override labels: string[] = [];
-  @Transform(dockerStringArrayTransformer)
+  override labels: Record<string, string> = {};
   override names: string[] = [];
-  @Transform(dockerStringArrayTransformer)
   override mounts: string[] = [];
-  @Transform(dockerStringArrayTransformer)
   override networks: string[] = [];
-  @Transform(dockerStringArrayTransformer)
   override ports: string[] = [];
 
   @Transform(dateStringTransformer)

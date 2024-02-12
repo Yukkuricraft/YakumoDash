@@ -49,9 +49,7 @@ export const rootReducer = createReducer(
       let currEnvContainers: ContainerTypeToContainerDefinitionMapping = {};
 
       for (const container of containers) {
-        let containerType: ContainerType = container.labelsToContainerType(
-          container.labels
-        );
+        let containerType: ContainerType = container.getContainerType();
         currEnvContainers[containerType] = [
           ...(currEnvContainers[containerType] ?? []),
           container,
@@ -73,22 +71,21 @@ export const rootReducer = createReducer(
       let currEnvContainers: ContainerTypeToActiveContainerMapping = {};
 
       for (const container of containers) {
-        let containerType: ContainerType = container.labelsToContainerType(
-          container.labels
-        );
+        let containerType: ContainerType = container.getContainerType();
         currEnvContainers[containerType] = [
           ...(currEnvContainers[containerType] ?? []),
           container,
         ];
       }
 
-      return {
+      const newState = {
         ...state,
         activeContainersByEnv: {
           ...state.activeContainersByEnv,
           [env.name]: currEnvContainers,
         },
       };
+      return newState;
     }
   ),
   on(

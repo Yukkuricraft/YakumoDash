@@ -66,7 +66,6 @@ export class DockerService {
   }
 
   copyConfigs(containerDef: ContainerDefinition, dataFileType: DataFileType) {
-    console.log(containerDef);
     const hostname = containerDef.getHostname();
 
     return this.http
@@ -82,7 +81,13 @@ export class DockerService {
       .pipe(
         map((data: any) =>
           data.map((obj: any) => {
-            let containerDef = DomainConverter.fromDto<ContainerDefinition>(ContainerDefinition, obj)
+            let containerDef = DomainConverter.fromDto<ContainerDefinition>(ContainerDefinition, obj, {
+              caseOptions: {
+                excludeValuesForKeys: [
+                  "labels",
+                ]
+              }
+            })
             containerDef.env = env;
             return containerDef;
           })
@@ -96,7 +101,13 @@ export class DockerService {
       .pipe(
         map((data: any) =>
           data.map((obj: any) => {
-            let activeContainer = DomainConverter.fromDto<ActiveContainer>(ActiveContainer, lowercaseKeys(obj))
+            let activeContainer = DomainConverter.fromDto<ActiveContainer>(ActiveContainer, lowercaseKeys(obj), {
+              caseOptions: {
+                excludeValuesForKeys: [
+                  "labels",
+                ]
+              }
+            })
             activeContainer.env = env;
             return activeContainer;
           })

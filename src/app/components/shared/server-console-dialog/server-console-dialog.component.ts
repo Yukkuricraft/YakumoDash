@@ -74,8 +74,10 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      socketioApi.logFromConsole$.subscribe(log => {
+      socketioApi.logFromConsole$.subscribe((log: string) => {
+
         console.log(`GOT LOGLINE FROM CONSOLE: ${log}`);
+
         if (this.contentLen == this.maxContentLen) {
           this._consoleContent.shift();
         }
