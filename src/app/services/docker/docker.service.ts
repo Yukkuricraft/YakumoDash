@@ -16,7 +16,8 @@ export class DockerService {
 
   constructor(private http: HttpClient) {}
 
-  upEnv(env: Env) {
+  upEnv(env: Env): Observable<DockerEnvActionResponse> {
+    console.log("DockerService.upEnv asdf");
     return this.http
       .post(`${this.basePath}/${env.name}/containers/up`, {})
       .pipe(
@@ -26,7 +27,7 @@ export class DockerService {
       );
   }
 
-  upContainer(containerDef: ContainerDefinition) {
+  upContainer(containerDef: ContainerDefinition): Observable<DockerContainerActionResponse> {
     return this.http
       .post(`${this.basePath}/${containerDef.env.name}/containers/up_one`, {
         container_name: containerDef.getHostname(),
@@ -38,7 +39,7 @@ export class DockerService {
       );
   }
 
-  downEnv(env: Env) {
+  downEnv(env: Env): Observable<DockerEnvActionResponse> {
     return this.http
       .post(`${this.basePath}/${env.name}/containers/down`, {})
       .pipe(
@@ -48,7 +49,7 @@ export class DockerService {
       );
   }
 
-  downContainer(containerDef: ContainerDefinition) {
+  downContainer(containerDef: ContainerDefinition): Observable<DockerContainerActionResponse> {
     return this.http
       .post(`${this.basePath}/${containerDef.env.name}/containers/down_one`, {
         container_name: containerDef.getHostname(),

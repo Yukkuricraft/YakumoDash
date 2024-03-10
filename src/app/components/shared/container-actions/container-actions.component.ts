@@ -15,6 +15,8 @@ import {
 import { Env } from "@app/models/env";
 import { Router } from "@angular/router";
 import { RootActions, EnvActions } from "@app/store/root.actions";
+import { selectActiveContainerByContainerDef } from "@app/store/root.selectors.containers";
+import { map, Observable, switchMap, BehaviorSubject } from "rxjs";
 
 @Component({
   selector: "app-container-actions",
@@ -25,19 +27,37 @@ export class ContainerActionsComponent {
   @Input() env!: Env;
   @Input() containerDef!: ContainerDefinition;
 
+  activeContainer$!: Observable<ActiveContainer | null>;
+
+  containerRunning$: BehaviorSubject<boolean>;
+
   constructor(
     private dialog: MatDialog,
     private router: Router,
     private snackbar: MatSnackBar,
     private store: Store,
-  ) {}
+  ) {
+    this.containerRunning$ = new BehaviorSubject(true);
+  }
 
-  startContainerDisabled() {
-    return this.containerDef.getContainerState() === ContainerStates.Up;
+  ngOnInit() {
+    this.activeContainer$ = this.store.select(selectActiveContainerByContainerDef(this.containerDef));
+
+    this.activeContainer$.subscribe(
+      (activeContainer: ActiveContainer | null) => {
+        console.log(activeContainer);
+
+        if (activeContainer === null) {
+          this.containerRunning$.next(false);
+        } else {
+          this.containerRunning$.next(activeContainer.getContainerState() == ContainerStates.Up);
+        }
+      }
+    )
   }
 
   startContainer() {
-    console.log(`Stopping container in env ${this.env.getFormattedLabel()}`, this.containerDef);
+    console.log(`Starting container in env ${this.env.getFormattedLabel()}`, this.containerDef);
     this.store.dispatch(EnvActions.beginSpinupContainer({ containerDef: this.containerDef }));
   }
 
@@ -59,17 +79,15 @@ export class ContainerActionsComponent {
     console.log("Sending to:", env, subPath);
     this.router.navigate(["/", "backup-mgmt"], {
       queryParams: {
+        env,
+        container_name: this.containerDef.getContainerNameShorthand(),
       },
     });
   }
 
-  stopContainerDisabled() {
-    return this.containerDef.getContainerState() !== ContainerStates.Up;
-  }
-
   stopContainer() {
     console.log(`Stopping container in env ${this.env.getFormattedLabel()}`, this.containerDef);
-    this.store.dispatch(EnvActions.beginSpinupContainer({ containerDef: this.containerDef }));
+    this.store.dispatch(EnvActions.beginShutdownContainer({ containerDef: this.containerDef }));
   }
 
   copyConfigs() {

@@ -11,6 +11,7 @@ import {
 } from "@app/store/root.actions";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import {
+  Observable,
   EMPTY,
   concatMap,
   exhaustMap,
@@ -28,6 +29,7 @@ import { Router } from "@angular/router";
 import { BackupsService } from "@app/services/backups/backups.service";
 import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 import { BackupDefinition } from "@app/models/backup";
+import { DockerContainerActionResponse } from "@app/models/docker";
 
 @Injectable()
 export class RootEffects {
@@ -162,6 +164,37 @@ export class RootEffects {
     );
   });
 
+  beginSpinupContainer$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(EnvActions.beginSpinupContainer),
+      switchMap((data: ContainerProp) => {
+        return [
+          RootActions.setGlobalLoadingBarActive(),
+          EnvActions.finishSpinupContainer(data),
+        ];
+      })
+    );
+  });
+
+  spinupContainer$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(EnvActions.finishSpinupContainer),
+      switchMap(({ containerDef }: { containerDef: ContainerDefinition }) => {
+        return this.dockerApi.upContainer(containerDef);
+      }),
+      concatMap(({ env, containerName }: DockerContainerActionResponse) => {
+        this.snackbar.open(
+          `Done spinning up '${containerName}'`
+        );
+
+        return [
+          RootActions.fetchContainerStatusForEnv({ env }),
+          RootActions.setGlobalLoadingBarInactive(),
+        ];
+      })
+    );
+  });
+
   /** SHUTDOWN ENV */
   beginShutdownEnv$ = createEffect(() => {
     return this.actions$.pipe(
@@ -212,9 +245,9 @@ export class RootEffects {
       switchMap(({ containerDef }: { containerDef: ContainerDefinition }) => {
         return this.dockerApi.downContainer(containerDef);
       }),
-      concatMap(({ env }: EnvProp) => {
+      concatMap(({ env, containerName }: DockerContainerActionResponse) => {
         this.snackbar.open(
-          `Done shutting down env '${env.getFormattedLabel()}'`
+          `Done shutting down container '${containerName}'`
         );
 
         return [
@@ -272,6 +305,7 @@ export class RootEffects {
     return this.actions$.pipe(
       ofType(BackupActions.fetchBackupsForContainer),
       switchMap(({ containerDef }: ContainerProp) => {
+        console.log("fetchBackupsForContainer$")
         return this.backupsApi.listBackups(containerDef).pipe(
           concatLatestFrom(() => {
             return of(containerDef);

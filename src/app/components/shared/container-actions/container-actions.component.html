@@ -3,15 +3,15 @@
     mat-icon-button
     matTooltip="Start the container"
     (click)="startContainer()"
-    [disabled]="startContainerDisabled()"
+    [disabled]="containerRunning$ | async"
   >
     <mat-icon> play_circle_filled </mat-icon>
   </button>
   <button
     mat-icon-button
-    matTooltip="Restart Container"
+    matTooltip="Stop Container"
     (click)="stopContainer()"
-    [disabled]="stopContainerDisabled()"
+    [disabled]="!(containerRunning$ | async)"
   >
     <mat-icon> stop_circle </mat-icon>
   </button>
