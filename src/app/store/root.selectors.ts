@@ -36,6 +36,15 @@ export const selectCurrentTabIndex = (pageType: string) =>
 export const selectBackupsForContainer = (containerDef: ContainerDefinition) =>
   createSelector(
     selectRootState,
-    (state: RootState) =>
-      state.backupsByContainerAndEnv[containerDef.getContainerEnvString()][containerDef.getContainerNameShorthand()]
+    (state: RootState) => {
+      const env = containerDef.getContainerEnvString();
+      if (env in state.backupsByContainerAndEnv) {
+        const containerName = containerDef.getContainerNameShorthand();
+        if (containerName in state.backupsByContainerAndEnv[env]) {
+          return state.backupsByContainerAndEnv[env][containerDef.getContainerNameShorthand()]
+        }
+      }
+
+      return [];
+    }
   );

@@ -110,7 +110,7 @@ export class ContainerDefinition implements IContainerDefinition {
   }
 
   getContainerNameShorthand() {
-    return this.hostname;
+    return this.names.length > 0 ? this.names[0] : this.hostname;
   }
 
   getFormattedContainerName() {

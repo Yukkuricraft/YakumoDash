@@ -20,11 +20,11 @@
   </div>
   <div class="containers">
     <h3>Backups</h3>
-    <table mat-table [dataSource]="backupsList" class="mat-elevation-z8">
+    <table mat-table [dataSource]="(backupsDataSource$ | async) ?? []" class="mat-elevation-z8">
       <!-- Position Column -->
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef>Date</th>
-        <td mat-cell *matCellDef="let element">{{element.date}}</td>
+        <td mat-cell *matCellDef="let element">{{element.time}}</td>
       </ng-container>
 
       <!-- Name Column -->

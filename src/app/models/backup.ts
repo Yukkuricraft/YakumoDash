@@ -12,14 +12,34 @@ export interface ContainerToBackupsMapping {
 }
 
 export interface IBackupDefinition {
-  date: Date;
+  excludes: string[];
+  gid: number;
+  hostname: string;
   id: string;
+  parent: string;
+  paths: string[];
+  programVersion: string;
+  shortId: string;
   tags: string[];
+  time: Date;
+  tree: string;
+  uid: number;
+  username: string;
 }
 
 export class BackupDefinition implements IBackupDefinition {
-  @Transform(dateStringTransformer)
-  date = new Date();
+  excludes = [];
+  gid = 0;
+  hostname = "";
   id = "";
-  tags = [''];
+  parent = "";
+  paths = [];
+  programVersion = "";
+  shortId = "";
+  tags = [];
+  @Transform(dateStringTransformer)
+  time = new Date();
+  tree = "";
+  uid = 0;
+  username = "";
 }

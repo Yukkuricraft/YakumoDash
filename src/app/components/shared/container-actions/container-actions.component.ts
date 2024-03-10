@@ -75,12 +75,11 @@ export class ContainerActionsComponent {
 
   restoreFromBackup() {
     const env = this.env.name;
-    const subPath = `worlds/${this.containerDef.getContainerNameLabel()}`;
-    console.log("Sending to:", env, subPath);
+    console.log("Sending to:", env, this.containerDef);
     this.router.navigate(["/", "backup-mgmt"], {
       queryParams: {
         env,
-        container_name: this.containerDef.getContainerNameShorthand(),
+        containerName: this.containerDef.getHostname(),
       },
     });
   }
