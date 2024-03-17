@@ -18,9 +18,9 @@ export class WorldGroups {
   enabledGroups = [];
 }
 
-type IRuntimeEnvironmentVariables = Record<string, any>;
+type IClusterVariables = Record<string, any>;
 
-export class RuntimeEnvironmentVariables implements IRuntimeEnvironmentVariables {
+export class ClusterVariables implements IClusterVariables {
   envAlias = "";
   mcFsRoot = "";
   mcType = "";
@@ -34,13 +34,13 @@ export class RuntimeEnvironmentVariables implements IRuntimeEnvironmentVariables
 export interface IEnvConfig {
   general: IGeneralConfig;
   worldGroups: IWorldGroups;
-  runtimeEnvironmentVariables: IRuntimeEnvironmentVariables;
+  clusterVariables: IClusterVariables;
 }
 
 export class EnvConfig implements IEnvConfig {
   general = new GeneralConfig();
   worldGroups = new WorldGroups();
-  runtimeEnvironmentVariables: IRuntimeEnvironmentVariables = new RuntimeEnvironmentVariables();
+  clusterVariables: IClusterVariables = new ClusterVariables();
 }
 
 export interface IEnv {
