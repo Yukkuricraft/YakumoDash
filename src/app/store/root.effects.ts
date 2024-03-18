@@ -327,11 +327,13 @@ export class RootEffects {
           concatLatestFrom(() => {
             return of(containerDef);
           }),
-          map(([backups, containerDef]: [backups: BackupDefinition[], containerDef: ContainerDefinition]) =>
-            BackupActions.setBackupsForContainer({ containerDef, backups })
+          map(() =>
+            EMPTY
           )
         );
       })
     );
-  });
+  },
+  { dispatch: false }
+  );
 }

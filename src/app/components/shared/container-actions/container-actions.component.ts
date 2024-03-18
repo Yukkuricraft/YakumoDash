@@ -8,7 +8,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Component, Input, OnInit } from "@angular/core";
 import {
   ActiveContainer,
-  DataFileType,
+  DataDirType,
   ContainerDefinition,
   ContainerStates,
 } from "@app/models/container";
@@ -97,7 +97,7 @@ export class ContainerActionsComponent {
   copyConfigs() {
     // TODO: Dropdown select config type?
     console.log(`Copying configs back to bindmount for container in env ${this.env.getFormattedLabel()}`, this.containerDef);
-    this.store.dispatch(RootActions.copyConfigsForContainerAndType({ containerDef: this.containerDef, dataFileType: DataFileType.Mod }));
+    this.store.dispatch(RootActions.copyConfigsForContainerAndType({ containerDef: this.containerDef, dataFileType: DataDirType.ModConfigs }));
   }
 
   openServerConsole() {

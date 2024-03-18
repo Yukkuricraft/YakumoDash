@@ -20,17 +20,21 @@ function isValidContainerType(value: string): value is ContainerType {
   return Object.values<string>(ContainerType).includes(value);
 }
 
-export enum DataFileType {
-  Plugin = "plugin",
-  Mod = "mod",
-  Server = "server",
+export enum DataDirType {
+  PluginConfigs = "plugin_configs",
+  ModConfigs = "mod_configs",
+  ServerConfigs = "server_configs",
 
   // While these are part of the DataFileType enum on serverside we should never
   // be interacting with the following three from frontend side.
   // Smelly.
+  LogFiles = "log_files",
+  WorldFiles = "world_files",
+  PluginFiles = "plugin_files",
   ModFiles = "mod_files",
   ClientAndServerModFiles = "client_and_server_mod_files",
   ServerOnlyModFiles = "server_only_mod_files",
+  CrashReports = "crash_reports",
 }
 
 /**

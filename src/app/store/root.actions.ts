@@ -6,7 +6,7 @@ import {
 } from "@ngrx/store";
 import { User } from "@app/models/user";
 import { Env } from "@app/models/env";
-import { ActiveContainer, DataFileType, ContainerDefinition, ContainerType } from "@app/models/container";
+import { ActiveContainer, DataDirType, ContainerDefinition, ContainerType } from "@app/models/container";
 import { BackupDefinition } from "@app/models/backup";
 
 export interface CreateEnvProps {
@@ -55,7 +55,7 @@ export interface PageTypeAndTabIndexProps {
 
 export interface ContainerAndDataFileTypeProp {
   containerDef: ContainerDefinition,
-  dataFileType: DataFileType,
+  dataFileType: DataDirType,
 }
 
 

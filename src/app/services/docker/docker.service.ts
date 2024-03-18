@@ -5,7 +5,7 @@ import { DomainConverter } from "@app/helpers/domain";
 import { lowercaseKeys } from "@app/helpers/case";
 import { Env, CreateEnvResponse } from "@app/models/env";
 import { DockerContainerActionResponse, DockerEnvActionResponse } from "@app/models/docker";
-import { ActiveContainer, DataFileType, ContainerDefinition } from "@app/models/container";
+import { ActiveContainer, DataDirType, ContainerDefinition } from "@app/models/container";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -66,7 +66,7 @@ export class DockerService {
     return this.http.post(`${this.basePath}/${env.name}/containers/restart`, {});
   }
 
-  copyConfigs(containerDef: ContainerDefinition, dataFileType: DataFileType) {
+  copyConfigs(containerDef: ContainerDefinition, dataFileType: DataDirType) {
     const hostname = containerDef.getHostname();
 
     return this.http
