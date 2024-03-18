@@ -3,6 +3,7 @@ import { RootState } from "@app/store/root.state";
 import { Features } from "@app/store/index";
 import { Env } from "@app/models/env";
 import { ContainerDefinition } from "@app/models/container";
+import { BackupDefinition } from "@app/models/backup";
 
 const selectRootState = createFeatureSelector<RootState>(Features.Root);
 
@@ -33,10 +34,12 @@ export const selectEnvByEnvString = (envString: string) =>
 export const selectCurrentTabIndex = (pageType: string) =>
   createSelector(selectRootState, (state: RootState) => state.tabIndex[pageType] ?? 0);
 
-export const selectBackupsForContainer = (containerDef: ContainerDefinition) =>
+export const selectBackupsForContainer = (containerDef: ContainerDefinition | null) =>
   createSelector(
     selectRootState,
-    (state: RootState) => {
+    (state: RootState): BackupDefinition[] => {
+      if (containerDef == null) return [];
+
       const env = containerDef.getContainerEnvString();
       if (env in state.backupsByContainerAndEnv) {
         const containerName = containerDef.getContainerNameShorthand();

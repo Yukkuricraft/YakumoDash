@@ -38,4 +38,25 @@ export class BackupsService {
         )
       );
   }
+
+  createBackup(container: ContainerDefinition) {
+    console.log("Creating backup?")
+
+    return this.http
+      .post(`${this.basePath}/create-new-minecraft-backup`, {
+        target_env: container.env.name,
+        target_world_group: container.getContainerNameLabel(),
+      })
+  }
+
+  restoreBackup(container: ContainerDefinition, target_snapshot_id: string) {
+    console.log("Creating backup?")
+
+    return this.http
+      .post(`${this.basePath}/restore-minecraft-backup`, {
+        target_env: container.env.name,
+        target_world_group: container.getContainerNameLabel(),
+        target_snapshot_id,
+      })
+  }
 }

@@ -127,5 +127,6 @@ export const BackupActions = createActionGroup({
   events: {
     "Fetch Backups For Container": props<ContainerProp>(),
     "Set Backups For Container": props<ContainerAndBackupProps>(),
+    "Create new backup": props<ContainerProp>(),
   }
 });

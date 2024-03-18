@@ -317,4 +317,21 @@ export class RootEffects {
       })
     );
   });
+
+  createNewBackupForContainer$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(BackupActions.createNewBackup),
+      switchMap(({ containerDef }: ContainerProp) => {
+        console.log("createNewBackupForContainer$")
+        return this.backupsApi.createBackup(containerDef).pipe(
+          concatLatestFrom(() => {
+            return of(containerDef);
+          }),
+          map(([backups, containerDef]: [backups: BackupDefinition[], containerDef: ContainerDefinition]) =>
+            BackupActions.setBackupsForContainer({ containerDef, backups })
+          )
+        );
+      })
+    );
+  });
 }

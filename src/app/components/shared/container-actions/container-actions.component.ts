@@ -14,7 +14,7 @@ import {
 } from "@app/models/container";
 import { Env } from "@app/models/env";
 import { Router } from "@angular/router";
-import { RootActions, EnvActions } from "@app/store/root.actions";
+import { RootActions, EnvActions, BackupActions } from "@app/store/root.actions";
 import { selectActiveContainerByContainerDef } from "@app/store/root.selectors.containers";
 import { map, Observable, switchMap, BehaviorSubject } from "rxjs";
 
@@ -82,6 +82,11 @@ export class ContainerActionsComponent {
         containerName: this.containerDef.getHostname(),
       },
     });
+  }
+
+  createNewBackup() {
+    console.log(`Creating new backup for container in env ${this.env.getFormattedLabel()}`, this.containerDef);
+    this.store.dispatch(BackupActions.createNewBackup({ containerDef: this.containerDef }))
   }
 
   stopContainer() {
