@@ -63,14 +63,15 @@ export class ContainerActionsComponent {
 
   editContainerConfig() {
     const env = this.env.name;
-    const subPath = `worlds/${this.containerDef.getContainerNameLabel()}`;
-    console.log("Sending to:", env, subPath);
-    this.router.navigate(["/", "server-editor"], {
-      queryParams: {
-        env,
-        subPath,
-      },
-    });
+    const worldGroup = this.containerDef.getContainerNameLabel();
+    const subPath = `files/${env}/minecraft/${worldGroup}`;
+
+    // TODO: API-authorative configs...
+    const isDev = window.location.hostname.indexOf("dev") > -1;
+    const url = `https://${isDev ? 'dev.' : '' }files.yakumo.yukkuricraft.net/${subPath}`;
+    console.log("Sending to:", env, url);
+
+    window.open(url, "_blank");
   }
 
   restoreFromBackup() {
