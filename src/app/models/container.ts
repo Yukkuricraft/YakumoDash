@@ -134,6 +134,13 @@ export class ContainerDefinition implements IContainerDefinition {
     }
   }
 
+  get isBackupsEnabled() {
+    return [
+      ContainerType.Minecraft,
+      // ContainerType.MySQL
+    ].includes(this.getContainerType())
+  }
+
   get isMinecraftContainer() {
     return this.getContainerType() === ContainerType.Minecraft;
   }

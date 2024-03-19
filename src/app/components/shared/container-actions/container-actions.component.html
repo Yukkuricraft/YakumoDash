@@ -16,6 +16,7 @@
     <mat-icon> stop_circle </mat-icon>
   </button>
   <button
+    *ngIf="containerDef.isMinecraftContainer"
     mat-icon-button
     matTooltip="Edit filesystem and configs"
     (click)="editContainerConfig()"
@@ -31,6 +32,7 @@
     <mat-icon svgIcon="console" class="filter-to-white"></mat-icon>
   </button>
   <button
+    *ngIf="containerDef.isBackupsEnabled"
     mat-icon-button
     matTooltip="Create new backup"
     (click)="createNewBackup()"
@@ -38,6 +40,7 @@
     <mat-icon> cloud_upload </mat-icon>
   </button>
   <button
+    *ngIf="containerDef.isBackupsEnabled"
     mat-icon-button
     matTooltip="Restore from Backups"
     (click)="restoreFromBackup()"
