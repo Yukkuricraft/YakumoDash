@@ -13,12 +13,10 @@ import { ContainerStatusCardComponent } from "@app/components/shared/container-s
 import { ContainerStatusComponent } from "@app/components/shared/container-status/container-status.component";
 import { ContainerStatusLightComponent } from "@app/components/shared/container-status-light/container-status-light.component";
 import { ContentWithSideNavComponent } from "@app/layouts/content-with-side-nav/content-with-side-nav.component";
-import { DashboardComponent } from "@app/components/dashboard/dashboard.component";
 import { DateToShorthandPipe } from "@app/pipes/date-to-shorthand/date-to-shorthand.pipe";
 import { EffectsModule } from "@ngrx/effects";
 import { EnvironmentManagementComponent } from "@app/components/environment-management/environment-management.component";
 import { Features } from "@app/store";
-import { FilenodeRowComponent } from "@app/components/server-editor/subcomponents/filenode-row/filenode-row.component";
 import { FilesService } from "@app/services/files/files.service";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
@@ -42,13 +40,11 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTreeModule } from "@angular/material/tree";
 import { MinecraftContainersTableComponent } from "@app/components/environment-management/subcomponents/minecraft-containers-table/minecraft-containers-table.component";
 import { MonacoEditorModule } from "ngx-monaco-editor-v2";
-import { NestedFileTreeComponent } from "@app/components/server-editor/subcomponents/nested-file-tree/nested-file-tree.component";
 import { NewEnvironmentDialogComponent } from "@app/components/environment-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
 import { NgModule, Type } from "@angular/core";
 import { RootEffects } from "@app/store/root.effects";
 import { rootReducer } from "@app/store/root.reducer";
 import { ServerConsoleDialogComponent } from "@app/components/shared/server-console-dialog/server-console-dialog.component";
-import { ServerEditorComponent } from "@app/components/server-editor/server-editor.component";
 import { SocketIoModule } from "ngx-socket-io";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { TextEditorDialogComponent } from "@app/components/shared/text-editor-dialog/text-editor-dialog.component";
@@ -84,7 +80,6 @@ const effects: Type<any>[] = [RootEffects];
     AppComponent,
     LoginComponent,
     ContentWithSideNavComponent,
-    DashboardComponent,
     BackupManagementComponent,
     EnvironmentManagementComponent,
     NewEnvironmentDialogComponent,
@@ -96,9 +91,6 @@ const effects: Type<any>[] = [RootEffects];
     TextEditorDialogComponent,
     ContainerStatusComponent,
     ContainerStatusCardComponent,
-    ServerEditorComponent,
-    NestedFileTreeComponent,
-    FilenodeRowComponent,
     DateToShorthandPipe,
     CapitalizePipe,
   ],
