@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from "@angular/router";
 import { DockerService } from "@app/services/docker/docker.service";
 import { BackupsService } from "@app/services/backups/backups.service";
 import { Store } from "@ngrx/store";
-import { of, map, Observable, switchMap, BehaviorSubject } from "rxjs";
+import { of, tap, map, Observable, switchMap, concatMap, exhaustMap, BehaviorSubject } from "rxjs";
 import {
   selectAvailableEnvs,
   selectBackupsForContainer,
@@ -38,32 +38,10 @@ import { BackupDefinition } from "@app/models/backup";
   styleUrls: ["./backup-management.component.scss"],
 })
 export class BackupManagementComponent {
-  containerDef$: Observable<ContainerDefinition | null> = this.route.queryParams.pipe(
-    switchMap((params: Params) => {
-      const containerName = params["containerName"] ?? "";
-      console.log(`containerDef$ - ${containerName}`);
-      return this.store.select(selectDefinedContainerByName(containerName))
-    }
-  ))
-
-  backups$: Observable<BackupDefinition[]> = this.containerDef$.pipe(
-    switchMap((containerDef: ContainerDefinition | null) => {
-      console.log("backups$");
-      console.log(containerDef);
-      return containerDef !== null ? this.store.select(selectBackupsForContainer(containerDef)) : of([]);
-    })
-  );;
-
+  containerDef$!: Observable<ContainerDefinition | null>;
+  backups$!: Observable<BackupDefinition[]>;
   private dataSource = new MatTableDataSource<BackupDefinition>();
-  backupsDataSource$: Observable<MatTableDataSource<BackupDefinition>> = this.backups$.pipe(
-    map((backups) => {
-      const dataSource: MatTableDataSource<BackupDefinition> = this.dataSource;
-      dataSource.data = backups;
-      console.log("backupsDataSource$");
-      console.log(dataSource);
-      return dataSource;
-    })
-  )
+  backupsDataSource$!: Observable<MatTableDataSource<BackupDefinition>>;
 
   displayedColumns = [ "date", "id", "tags" ];
 
@@ -84,6 +62,22 @@ export class BackupManagementComponent {
     private snackbar: MatSnackBar,
     private backupsApi: BackupsService
   ) {
+  }
+
+  ngOnInit() {
+    console.log("??")
+    console.log(this.route.snapshot);
+    console.log(this.route.snapshot.data);
+
+    // TODO: Router store selectors
+    this.containerDef$ = this.route.queryParams.pipe(
+      exhaustMap((params: Params) => {
+        const containerName = params["containerName"] ?? "";
+        console.log(`containerDef$ - ${containerName}`);
+        return this.store.select(selectDefinedContainerByName(containerName));
+      }
+    ));
+
     this.containerDef$.subscribe((containerDef: ContainerDefinition | null) => {
       console.log("aaaa")
       console.log("1");
@@ -93,32 +87,23 @@ export class BackupManagementComponent {
       }
     });
 
-    // this.backups$.subscribe((backups: BackupDefinition[]) => {
-    //   console.log("3");
-    //   this.backupsList = backups;
-    // })
+    this.backups$ = this.containerDef$.pipe(
+      concatMap((containerDef: ContainerDefinition | null) => {
+        console.log("backups$");
+        console.log(containerDef);
+        return this.store.select(selectBackupsForContainer(containerDef));
+      })
+    );;
 
+
+    this.backupsDataSource$ = this.backups$.pipe(
+      map((backups: BackupDefinition[]) => {
+        const dataSource: MatTableDataSource<BackupDefinition> = this.dataSource;
+        dataSource.data = backups;
+        console.log("backupsDataSource$");
+        console.log(dataSource);
+        return dataSource;
+      })
+    )
   }
-
-  ngOnInit() {
-    console.log("??")
-    console.log(this.route.snapshot);
-    console.log(this.route.snapshot.data);
-    this.route.queryParams.subscribe(params => {
-      const containerDef = window.history.state?.containerDef ?? null;
-      console.log("this.route.queryParams.subscribe()");
-      console.log(params);
-      console.log(containerDef);
-
-      if (containerDef == null) {
-        return;
-      }
-
-      // this.containerDef$ = new BehaviorSubject(containerDef);
-      console.log("CONTAINER DEF HELLO?");
-      console.log(window.history.state);
-      // this.env$.next(containerDef.env);
-    });
-  }
-
 }

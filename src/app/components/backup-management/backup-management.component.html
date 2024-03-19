@@ -1,11 +1,5 @@
 <mat-toolbar>
   <span>Backup Management</span>
-  <button
-    mat-icon-button
-    matTooltip="Create New Environment"
-  >
-    <mat-icon> add_box </mat-icon>
-  </button>
 </mat-toolbar>
 
 <div class="container-tab">
@@ -24,13 +18,13 @@
       <!-- Position Column -->
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef>Date</th>
-        <td mat-cell *matCellDef="let element">{{element.time}}</td>
+        <td mat-cell *matCellDef="let element">{{element.time.toISOString()}}</td>
       </ng-container>
 
       <!-- Name Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>Id</th>
-        <td mat-cell *matCellDef="let element">{{element.id}}</td>
+        <td mat-cell *matCellDef="let element">{{element.id.substring(0, 8)}}</td>
       </ng-container>
 
       <!-- Weight Column -->
