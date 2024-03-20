@@ -38,6 +38,7 @@ import { BackupDefinition } from "@app/models/backup";
   styleUrls: ["./backup-management.component.scss"],
 })
 export class BackupManagementComponent {
+  containerName$!: Observable<string>;
   containerDef$!: Observable<ContainerDefinition | null>;
   backups$!: Observable<BackupDefinition[]>;
   private dataSource = new MatTableDataSource<BackupDefinition>();
@@ -64,15 +65,25 @@ export class BackupManagementComponent {
   ) {
   }
 
-  ngOnInit() {
+  restoreBackup(backup: BackupDefinition) {
+    return this.store.dispatch(BackupActions.restoreBackup({ backup }))
+  }
+
+  ngAfterViewInit() {
     console.log("??")
     console.log(this.route.snapshot);
     console.log(this.route.snapshot.data);
 
+    this.containerName$ = this.route.queryParams.pipe(
+      map((params: Params) => {
+        const name = params["containerName"] ?? "";
+        return name as string;
+      })
+    )
+
     // TODO: Router store selectors
-    this.containerDef$ = this.route.queryParams.pipe(
-      exhaustMap((params: Params) => {
-        const containerName = params["containerName"] ?? "";
+    this.containerDef$ = this.containerName$.pipe(
+      concatMap((containerName: string) => {
         console.log(`containerDef$ - ${containerName}`);
         return this.store.select(selectDefinedContainerByName(containerName));
       }

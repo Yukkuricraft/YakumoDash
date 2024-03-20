@@ -38,6 +38,10 @@ export interface ContainerAndBackupProps {
   backups: BackupDefinition[];
 }
 
+export interface BackupProp {
+  backup: BackupDefinition;
+}
+
 export interface EnvAndActiveContainersProps {
   env: Env;
   containers: ActiveContainer[];
@@ -128,5 +132,6 @@ export const BackupActions = createActionGroup({
     "Fetch Backups For Container": props<ContainerProp>(),
     "Set Backups For Container": props<ContainerAndBackupProps>(),
     "Create new backup": props<ContainerProp>(),
+    "Restore Backup": props<BackupProp>(),
   }
 });

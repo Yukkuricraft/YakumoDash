@@ -6,6 +6,7 @@ import { ContentWithSideNavComponent } from "@app/layouts/content-with-side-nav/
 import { EnvironmentManagementComponent } from "@app/components/environment-management/environment-management.component";
 import { BackupManagementComponent } from "./components/backup-management/backup-management.component";
 
+// TODO: https://adrianfaciu.dev/posts/angular-router-external-links/
 const routes: Routes = [
   {
     path: "",

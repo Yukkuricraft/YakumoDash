@@ -8,6 +8,7 @@ import {
   EnvProp,
   ContainerProp,
   ContainerAndDataFileTypeProp,
+  BackupProp,
 } from "@app/store/root.actions";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import {
@@ -331,6 +332,17 @@ export class RootEffects {
             EMPTY
           )
         );
+      })
+    );
+  },
+  { dispatch: false }
+  );
+  restoreBackup$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(BackupActions.restoreBackup),
+      switchMap(({ backup }: BackupProp) => {
+        console.log("restoreBackup$")
+        return this.backupsApi.restoreBackup(backup);
       })
     );
   },

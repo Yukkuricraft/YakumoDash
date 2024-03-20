@@ -49,14 +49,13 @@ export class BackupsService {
       })
   }
 
-  restoreBackup(container: ContainerDefinition, target_snapshot_id: string) {
+  restoreBackup(backup: BackupDefinition) {
     console.log("Creating backup?")
 
     return this.http
       .post(`${this.basePath}/restore-minecraft-backup`, {
-        target_env: container.env.name,
-        target_world_group: container.getContainerNameLabel(),
-        target_snapshot_id,
+        target_hostname: backup.hostname,
+        target_snapshot_id: backup.id,
       })
   }
 }
