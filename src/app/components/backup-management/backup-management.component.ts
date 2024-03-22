@@ -1,46 +1,30 @@
-import { Component } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
-import { DockerService } from "@app/services/docker/docker.service";
-import { BackupsService } from "@app/services/backups/backups.service";
-import { Store } from "@ngrx/store";
-import { of, tap, map, Observable, switchMap, concatMap, exhaustMap, BehaviorSubject } from "rxjs";
-import {
-  selectAvailableEnvs,
-  selectBackupsForContainer,
-  selectCurrentTabIndex,
-  selectEnvByEnvString,
-} from "@app/store/root.selectors";
-import { selectDefinedContainerByName, selectDefinedContainersByEnvAndType } from "@app/store/root.selectors.containers";
-import { Env } from "@app/models/env";
-import {
-  BackupActions,
-  EnvActions,
-} from "@app/store/root.actions";
-import { ContainerDefinition, ContainerType } from "@app/models/container";
-import { MatDialog } from "@angular/material/dialog";
-import {
-  ConfirmationDialogComponent,
-  ConfirmationDialogData,
-} from "../shared/confirmation-dialog/confirmation-dialog.component";
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSnackBar } from "@angular/material/snack-bar";
-import {
-  TextEditorDialogComponent,
-  TextEditorDialogData,
-  TextEditorDialogReturn,
-} from "../shared/text-editor-dialog/text-editor-dialog.component";
+import { Component, Input, Inject } from "@angular/core";
 import { isNil } from "lodash";
+import { map, Observable } from "rxjs";
+import { Env } from "@app/models/env";
+import { ContainerDefinition } from "@app/models/container";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatTableDataSource } from '@angular/material/table';
 import { BackupDefinition } from "@app/models/backup";
+import { BackupsFacade } from "@app/store/backups/backups.facade";
+
+export type BackupsManagementDialogData = {
+  title?: string;
+  containerDef: ContainerDefinition;
+  extraActionPrompt?: string;
+};
+
+export type BackupsManagementDialogReturn = {
+  result: boolean;
+  extraActionResult: boolean | null;
+};
 
 @Component({
   selector: "app-backup-management",
   templateUrl: "./backup-management.component.html",
   styleUrls: ["./backup-management.component.scss"],
 })
-export class BackupManagementComponent {
-  containerName$!: Observable<string>;
-  containerDef$!: Observable<ContainerDefinition | null>;
-  backups$!: Observable<BackupDefinition[]>;
+export class BackupsManagementDialogComponent {
   private dataSource = new MatTableDataSource<BackupDefinition>();
   backupsDataSource$!: Observable<MatTableDataSource<BackupDefinition>>;
 
@@ -52,63 +36,29 @@ export class BackupManagementComponent {
   activeEnv$!: Observable<Env>;
   activeEnv: Env | null = null;
 
-  env$ = new BehaviorSubject(new Env());
-  subPath$: BehaviorSubject<string> = new BehaviorSubject("/");
+  containerDef: ContainerDefinition;
 
   constructor(
-    public dialog: MatDialog,
-    private route: ActivatedRoute,
-    private store: Store,
-    private dockerApi: DockerService,
-    private snackbar: MatSnackBar,
-    private backupsApi: BackupsService
+    public dialogRef: MatDialogRef<
+      BackupsManagementDialogComponent,
+      BackupsManagementDialogReturn
+    >,
+    private backupsFacade: BackupsFacade,
+    @Inject(MAT_DIALOG_DATA) public data?: BackupsManagementDialogData,
   ) {
-  }
 
-  restoreBackup(backup: BackupDefinition) {
-    return this.store.dispatch(BackupActions.restoreBackup({ backup }))
-  }
+    if (isNil(data)) {
+      throw new Error("Got an empty MAT_DIALOG_DATA in BackupsManagementDialogComponent. Aborting")
+    }
 
-  ngAfterViewInit() {
-    console.log("??")
-    console.log(this.route.snapshot);
-    console.log(this.route.snapshot.data);
+    this.containerDef = data!.containerDef;
 
-    this.containerName$ = this.route.queryParams.pipe(
-      map((params: Params) => {
-        const name = params["containerName"] ?? "";
-        return name as string;
-      })
-    )
-
-    // TODO: Router store selectors
-    this.containerDef$ = this.containerName$.pipe(
-      concatMap((containerName: string) => {
-        console.log(`containerDef$ - ${containerName}`);
-        return this.store.select(selectDefinedContainerByName(containerName));
-      }
-    ));
-
-    this.containerDef$.subscribe((containerDef: ContainerDefinition | null) => {
-      console.log("aaaa")
-      console.log("1");
-      console.log(containerDef);
-      if (containerDef !== null) {
-        this.store.dispatch(BackupActions.fetchBackupsForContainer({ containerDef }));
-      }
-    });
-
-    this.backups$ = this.containerDef$.pipe(
-      concatMap((containerDef: ContainerDefinition | null) => {
-        console.log("backups$");
-        console.log(containerDef);
-        return this.store.select(selectBackupsForContainer(containerDef));
-      })
-    );;
-
-
-    this.backupsDataSource$ = this.backups$.pipe(
-      map((backups: BackupDefinition[]) => {
+    this.backupsDataSource$ = this.backupsFacade.getBackupsList$().pipe(
+      map((backups: BackupDefinition[] | undefined) => {
+        if (backups === undefined) {
+          console.warn("Got back an undefined backups list! This shouldn't be possible.");
+          backups = [];
+        }
         const dataSource: MatTableDataSource<BackupDefinition> = this.dataSource;
         dataSource.data = backups;
         console.log("backupsDataSource$");
@@ -116,5 +66,17 @@ export class BackupManagementComponent {
         return dataSource;
       })
     )
+  }
+
+  backupChoiceSelected(backupDef: BackupDefinition) {
+    return this.backupsFacade.onBackupChoiceSelected(this.containerDef, backupDef);
+  }
+
+  ngOnInit(): void {
+    this.backupsFacade.onInitBackupsComponent(this.containerDef);
+  }
+
+  ngOnDestroy(): void {
+    this.backupsFacade.onDestroyBackupsComponent(this.containerDef);
   }
 }

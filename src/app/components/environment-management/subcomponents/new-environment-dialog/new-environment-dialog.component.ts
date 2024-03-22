@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import {
   RootActions,
   EnvActions,
-} from "@app/store/root.actions";
+} from "@app/store/root/root.actions";
 import { Store } from "@ngrx/store";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";

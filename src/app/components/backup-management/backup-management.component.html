@@ -36,7 +36,7 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr
-          (click)="restoreBackup(row)"
+          (click)="backupChoiceSelected(row)"
           mat-row
           *matRowDef="let row; columns: displayedColumns;"
       ></tr>

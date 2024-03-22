@@ -14,9 +14,10 @@ import {
 } from "@app/models/container";
 import { Env } from "@app/models/env";
 import { Router } from "@angular/router";
-import { RootActions, EnvActions, BackupActions } from "@app/store/root.actions";
-import { selectActiveContainerByContainerDef } from "@app/store/root.selectors.containers";
+import { RootActions, EnvActions, BackupActions } from "@app/store/root/root.actions";
+import { selectActiveContainerByContainerDef } from "@app/store/root/root.selectors.containers";
 import { map, Observable, switchMap, BehaviorSubject } from "rxjs";
+import { BackupsManagementDialogComponent, BackupsManagementDialogData, BackupsManagementDialogReturn } from "@app/components/backup-management/backup-management.component";
 
 @Component({
   selector: "app-container-actions",
@@ -77,6 +78,21 @@ export class ContainerActionsComponent {
   restoreFromBackup() {
     const env = this.env.name;
     console.log("Sending to:", env, this.containerDef);
+
+    const dialogRef = this.dialog.open<
+      BackupsManagementDialogComponent,
+      BackupsManagementDialogData,
+      BackupsManagementDialogReturn
+    >(BackupsManagementDialogComponent, {
+      data: {
+        containerDef: this.containerDef,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+    });
+
     this.router.navigate(["/", "backup-mgmt"], {
       queryParams: {
         env,
