@@ -9,7 +9,7 @@ import {
   ContainerProp,
   ContainerAndDataFileTypeProp,
   BackupProp,
-} from "@app/store/root.actions";
+} from "@app/store/root/root.actions";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import {
   Observable,
@@ -349,3 +349,7 @@ export class RootEffects {
   { dispatch: false }
   );
 }
+
+export const rootFeatureEffects = [
+    RootEffects,
+];

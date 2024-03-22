@@ -17,7 +17,7 @@ import {
   ContainerDefinition,
   ContainerType,
 } from "@app/models/container";
-import { selectActiveContainerByContainerDef } from "@app/store/root.selectors.containers";
+import { selectActiveContainerByContainerDef } from "@app/store/root/root.selectors.containers";
 import { Store } from "@ngrx/store";
 import { map, Subscription } from "rxjs";
 import { ITerminalInitOnlyOptions, ITerminalOptions, Terminal } from "xterm";

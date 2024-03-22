@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { RootState } from "@app/store/root.state";
+import { RootState } from "@app/store/root/root.state";
 import { Features } from "@app/store/index";
 import { Env } from "@app/models/env";
 import {

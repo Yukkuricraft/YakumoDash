@@ -1,4 +1,4 @@
-import { initialState, RootState } from "@app/store/root.state";
+import { initialState, RootState } from "@app/store/root/root.state";
 import { ActionReducer, createReducer, MetaReducer, on } from "@ngrx/store";
 import {
   RootActions,
@@ -10,14 +10,14 @@ import {
   PageTypeAndTabIndexProps,
   EnvsProp,
   UserProp,
-} from "@app/store/root.actions";
+} from "@app/store/root/root.actions";
 import {
   ContainerType,
   ContainerTypeToActiveContainerMapping,
   ContainerTypeToContainerDefinitionMapping,
 } from "@app/models/container";
 
-export const rootReducer = createReducer(
+export const RootReducer = createReducer(
   initialState,
   on(RootActions.setLoggedInUser, (state: RootState, { user }: UserProp): RootState => {
     return { ...state, user };

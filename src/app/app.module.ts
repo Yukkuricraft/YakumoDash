@@ -3,7 +3,7 @@ import { AppComponent } from "@app/app.component";
 import { AppRoutingModule } from "@app/app-routing.module";
 import { AppState } from "@app/store/app.state";
 import { AuthService } from "@app/services/auth/auth.service";
-import { BackupManagementComponent } from "./components/backup-management/backup-management.component";
+import { BackupsManagementDialogComponent } from "./components/backup-management/backup-management.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule } from "@angular/platform-browser";
 import { config as socketioConfig } from "@app/services/socketio/socketio.service";
@@ -42,8 +42,7 @@ import { MinecraftContainersTableComponent } from "@app/components/environment-m
 import { MonacoEditorModule } from "ngx-monaco-editor-v2";
 import { NewEnvironmentDialogComponent } from "@app/components/environment-management/subcomponents/new-environment-dialog/new-environment-dialog.component";
 import { NgModule, Type } from "@angular/core";
-import { RootEffects } from "@app/store/root.effects";
-import { rootReducer } from "@app/store/root.reducer";
+import { RootEffects } from "@app/store/root/root.effects";
 import { ServerConsoleDialogComponent } from "@app/components/shared/server-console-dialog/server-console-dialog.component";
 import { SocketIoModule } from "ngx-socket-io";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
@@ -66,21 +65,15 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarModule,
 } from "@angular/material/snack-bar";
-import { CapitalizePipe } from './pipes/capitalize/capitalize.pipe';
-
-
-const reducers: ActionReducerMap<AppState> = {
-  [Features.Root]: rootReducer,
-};
-
-const effects: Type<any>[] = [RootEffects];
+import { CapitalizePipe } from '@app/pipes/capitalize/capitalize.pipe';
+import { AppStoreModule } from "@app/store/app-store.module";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     ContentWithSideNavComponent,
-    BackupManagementComponent,
+    BackupsManagementDialogComponent,
     EnvironmentManagementComponent,
     NewEnvironmentDialogComponent,
     ServerConsoleDialogComponent,
@@ -95,14 +88,10 @@ const effects: Type<any>[] = [RootEffects];
     CapitalizePipe,
   ],
   imports: [
+    AppStoreModule,
     BrowserModule,
     SocialLoginModule,
-    StoreModule.forRoot(reducers),
-    StoreDevtoolsModule.instrument({ maxAge: 50 }),
-    EffectsModule.forRoot(effects),
     MonacoEditorModule.forRoot(),
-    SocketIoModule.forRoot(socketioConfig),
-
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,

@@ -10,7 +10,7 @@ import { Store } from "@ngrx/store";
 import { AuthService } from "@app/services/auth/auth.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { RootActions } from "@app/store/root.actions";
+import { RootActions } from "@app/store/root/root.actions";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {

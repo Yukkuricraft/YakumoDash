@@ -9,6 +9,11 @@ import { ContainerDefinition } from "@app/models/container";
 import { BackupDefinition } from "@app/models/backup";
 import { lowercaseKeys } from "@app/helpers/case";
 
+export interface RestoreBackupApiResponse {
+  success: boolean,
+  output: string,
+};
+
 @Injectable({
   providedIn: "root",
 })

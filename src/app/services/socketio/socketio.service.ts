@@ -1,4 +1,4 @@
-import { selectActiveContainerByContainerDef } from "@app/store/root.selectors.containers";
+import { selectActiveContainerByContainerDef } from "@app/store/root/root.selectors.containers";
 import { Injectable } from "@angular/core";
 import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 import { Env } from "@app/models/env";

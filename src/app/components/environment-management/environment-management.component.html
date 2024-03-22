@@ -86,7 +86,7 @@
                   <mat-icon> edit </mat-icon>
                 </button>
                 <button
-                  *ngIf="!(env.name === 'env1')"
+                  *ngIf="!(env.name === 'env1') && isDeleteEnvironmentDisabled"
                   mat-icon-button
                   (click)="deleteEnvironment()"
                   matTooltip="DELETE ENVIRONMENT"

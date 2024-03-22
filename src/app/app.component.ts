@@ -7,13 +7,13 @@ import {
 } from "@abacritt/angularx-social-login";
 import { Store } from "@ngrx/store";
 import { sendMessageToMaster } from "@angular/compiler-cli/ngcc/src/execution/cluster/utils";
-import { RootActions } from "@app/store/root.actions";
+import { RootActions } from "@app/store/root/root.actions";
 import { Observable, switchMap } from "rxjs";
 import { AuthService } from "@app/services/auth/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
-import { selectGlobalLoadingBarState } from "./store/root.selectors";
+import { selectGlobalLoadingBarState } from "./store/root/root.selectors";
 
 @Component({
   selector: "app-root",

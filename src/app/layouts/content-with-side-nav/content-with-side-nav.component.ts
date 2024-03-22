@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDrawer } from "@angular/material/sidenav";
 import { AuthService } from "@app/services/auth/auth.service";
 import { Router } from "@angular/router";
-import { RootActions } from "@app/store/root.actions";
+import { RootActions } from "@app/store/root/root.actions";
 import { Store } from "@ngrx/store";
 
 @Component({
