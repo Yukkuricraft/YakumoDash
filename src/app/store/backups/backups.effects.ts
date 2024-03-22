@@ -1,9 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { ContainerDefAndBackupChoiceProp, ContainerDefProp, backupChoiceConfirmed, backupsComponentInit, backupsListInit, rollbackCompleted } from "@app/store/backups/backups.actions";
-import { map, switchMap, mergeMap } from "rxjs/operators";
+import { of } from "rxjs";
+import { map, switchMap, withLatestFrom } from "rxjs/operators";
 import { BackupsService, RestoreBackupApiResponse } from "@app/services/backups/backups.service";
 import { BackupDefinition } from "@app/models/backup";
+import { getBackupChoice, getContainerDef } from "./backups.selectors";
+import { ContainerDefinition } from "@app/models/container";
+import { BackupsFacade } from "./backups.facade";
 
 
 @Injectable()
@@ -12,6 +16,7 @@ export class BackupsEffects {
     constructor(
         private actions$: Actions,
         private backupsService: BackupsService,
+        private backupsFacade: BackupsFacade,
     ) {
     }
 
@@ -33,12 +38,20 @@ export class BackupsEffects {
         () => this.actions$
             .pipe(
                 ofType(backupChoiceConfirmed),
-                switchMap(({ backupChoice }: ContainerDefAndBackupChoiceProp) => {
-                    return this.backupsService.restoreBackup(backupChoice).pipe(
+                withLatestFrom(this.backupsFacade.getBackupChoice$()),
+                switchMap(([_, backupDefinition]: [any, BackupDefinition | null]) => {
+                    if (backupDefinition === null) {
+                        console.warn(`A backupChoiceConfirmed action was dispatched but did not get a valid backupDefinition from the store!`);
+                        return of(rollbackCompleted({
+                            snapshotId: null,
+                            success: false,
+                        }));
+                    }
+                    return this.backupsService.restoreBackup(backupDefinition).pipe(
                         map(({ success, output }: any) => {
                             console.log({ log: 'Output from Restore Backup API Call', output, success});
                             return rollbackCompleted({
-                                snapshotId: backupChoice.id,
+                                snapshotId: backupDefinition.id,
                                 success,
                             });
                         }),

@@ -87,17 +87,12 @@ export class ContainerActionsComponent {
       data: {
         containerDef: this.containerDef,
       },
+      width: "85vw",
+      height: "85vh",
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-    });
-
-    this.router.navigate(["/", "backup-mgmt"], {
-      queryParams: {
-        env,
-        containerName: this.containerDef.getHostname(),
-      },
     });
   }
 

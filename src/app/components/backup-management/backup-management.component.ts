@@ -1,6 +1,6 @@
-import { Component, Input, Inject } from "@angular/core";
+import { Component, OnInit, OnDestroy, Input, Inject } from "@angular/core";
 import { isNil } from "lodash";
-import { map, Observable } from "rxjs";
+import { map, mergeMap, filter, Observable, takeLast } from "rxjs";
 import { Env } from "@app/models/env";
 import { ContainerDefinition } from "@app/models/container";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
@@ -24,17 +24,17 @@ export type BackupsManagementDialogReturn = {
   templateUrl: "./backup-management.component.html",
   styleUrls: ["./backup-management.component.scss"],
 })
-export class BackupsManagementDialogComponent {
+export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
+  public selectedBackup$: Observable<BackupDefinition | null>;
+  public backupsList$: Observable<BackupDefinition[]>;
+  public isLoadingBackup$: Observable<boolean>;
+  public isBackupSelected$: Observable<boolean>;
+
   private dataSource = new MatTableDataSource<BackupDefinition>();
   backupsDataSource$!: Observable<MatTableDataSource<BackupDefinition>>;
 
   displayedColumns = [ "date", "id", "tags" ];
-
   pageType: string = "BackupManagement";
-
-  activeTabIndex$!: Observable<number | undefined>;
-  activeEnv$!: Observable<Env>;
-  activeEnv: Env | null = null;
 
   containerDef: ContainerDefinition;
 
@@ -52,24 +52,25 @@ export class BackupsManagementDialogComponent {
     }
 
     this.containerDef = data!.containerDef;
-
+    this.backupsList$ = this.backupsFacade.getBackupsList$()
+    this.selectedBackup$ = this.backupsFacade.getBackupChoice$();
+    this.isBackupSelected$ = this.selectedBackup$.pipe(
+      map((backup: BackupDefinition | null) => {
+        return backup !== null;
+      }),
+    )
+    this.isLoadingBackup$ = this.backupsFacade.getBackupsLoading$();
     this.backupsDataSource$ = this.backupsFacade.getBackupsList$().pipe(
-      map((backups: BackupDefinition[] | undefined) => {
-        if (backups === undefined) {
-          console.warn("Got back an undefined backups list! This shouldn't be possible.");
-          backups = [];
-        }
+      map((backups: BackupDefinition[]) => {
         const dataSource: MatTableDataSource<BackupDefinition> = this.dataSource;
         dataSource.data = backups;
+
         console.log("backupsDataSource$");
         console.log(dataSource);
+
         return dataSource;
       })
     )
-  }
-
-  backupChoiceSelected(backupDef: BackupDefinition) {
-    return this.backupsFacade.onBackupChoiceSelected(this.containerDef, backupDef);
   }
 
   ngOnInit(): void {
@@ -78,5 +79,13 @@ export class BackupsManagementDialogComponent {
 
   ngOnDestroy(): void {
     this.backupsFacade.onDestroyBackupsComponent(this.containerDef);
+  }
+
+  backupChoiceSelected(backupDef: BackupDefinition) {
+    this.backupsFacade.onBackupChoiceSelected(this.containerDef, backupDef);
+  }
+
+  backupChoiceConfirmed() {
+    this.backupsFacade.onBackupChoiceConfirmed();
   }
 }

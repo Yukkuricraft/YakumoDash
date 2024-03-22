@@ -23,24 +23,26 @@ export class BackupsFacade {
     }
 
     public onBackupChoiceSelected(containerDef: ContainerDefinition, backupChoice: BackupDefinition): void {
-        // TODO: Temporarily making this backupChoiceConfirmed to bypass the 'selected' state.
-        //          Need to build the UI.
-        this.store.dispatch(backupChoiceConfirmed({ containerDef, backupChoice }))
+        this.store.dispatch(backupChoiceSelected({ containerDef, backupChoice }))
     }
 
-    public getContainerDef$(): Observable<ContainerDefinition | null | undefined> {
+    public onBackupChoiceConfirmed(): void {
+        this.store.dispatch(backupChoiceConfirmed())
+    }
+
+    public getContainerDef$(): Observable<ContainerDefinition | null> {
         return this.store.select(getContainerDef);
     }
 
-    public getBackupsLoading$(): Observable<boolean | undefined> {
+    public getBackupsLoading$(): Observable<boolean> {
         return this.store.select(getBackupsLoading);
     }
 
-    public getBackupsList$(): Observable<BackupDefinition[] | undefined> {
+    public getBackupsList$(): Observable<BackupDefinition[]> {
         return this.store.select(getBackupsList);
     }
 
-    public getBackupChoice$(): Observable<BackupDefinition | null | undefined> {
+    public getBackupChoice$(): Observable<BackupDefinition | null> {
         return this.store.select(getBackupChoice);
     }
 

@@ -22,10 +22,10 @@ export const getBackupsLoading = createSelector(
   (state: BackupsFeatureState, containerDef: ContainerDefinition | null) => {
     if (containerDef === null) {
       console.warn("Tried getting loading state but containerDef state was null!");
-      return undefined;
+      return false;
     } else if (Object.keys(state.backups).indexOf(containerDef.getHostname()) === -1) {
       console.warn("Tried getting loading state but containerDef was not initialized in our store state!")
-      return undefined;
+      return false;
     }
 
     return state.backups[containerDef.getHostname()].loading;
@@ -38,10 +38,10 @@ export const getBackupsList = createSelector(
   (state: BackupsFeatureState, containerDef: ContainerDefinition | null) => {
     if (containerDef === null) {
       console.warn("Tried getting backups list but containerDef state was null!");
-      return undefined;
+      return [];
     } else if (Object.keys(state.backups).indexOf(containerDef.getHostname()) === -1) {
       console.warn("Tried getting backups list but containerDef was not initialized in our store state!")
-      return undefined;
+      return [];
     }
 
     return state.backups[containerDef.getHostname()].backupsList;
@@ -54,10 +54,10 @@ export const getBackupChoice = createSelector(
   (state: BackupsFeatureState, containerDef: ContainerDefinition | null) => {
     if (containerDef === null) {
       console.warn("Tried getting backup choice but containerDef state was null!");
-      return undefined;
+      return null;
     } else if (Object.keys(state.backups).indexOf(containerDef.getHostname()) === -1) {
       console.warn("Tried getting backup choice but containerDef was not initialized in our store state!")
-      return undefined;
+      return null;
     }
 
     return state.backups[containerDef.getHostname()].backupChoice;

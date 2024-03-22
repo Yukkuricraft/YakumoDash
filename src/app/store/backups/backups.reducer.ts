@@ -71,6 +71,8 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
     }),
     on(backupChoiceSelected, (state: BackupsFeatureState, { containerDef, backupChoice }: ContainerDefAndBackupChoiceProp) => {
         const containerHostname = containerDef.getHostname();
+        console.log("asdf");
+        console.log(containerHostname);
         return {
             ...state,
             backups: {
@@ -108,7 +110,9 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
         let newState = {
             ...state,
         }
-        delete newState.rollbacks[snapshotId];
+        if (snapshotId  !== null) {
+            delete newState.rollbacks[snapshotId];
+        }
         return newState;
     }),
 );

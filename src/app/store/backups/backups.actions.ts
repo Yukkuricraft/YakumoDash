@@ -32,7 +32,7 @@ export interface SnapshotIdAndContainerDefProp {
 };
 
 export interface SnapshotIdAndSuccessProp {
-    snapshotId: string;
+    snapshotId: string | null;
     success: boolean;
 };
 
@@ -63,7 +63,6 @@ export const backupChoiceSelected = createAction(
 
 export const backupChoiceConfirmed = createAction(
     `[${moduleName}] Backup choice was confirmed`,
-    props<ContainerDefAndBackupChoiceProp>(),
 );
 
 export const rollbackInitiated = createAction(
