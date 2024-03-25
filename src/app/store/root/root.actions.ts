@@ -6,8 +6,9 @@ import {
 } from "@ngrx/store";
 import { User } from "@app/models/user";
 import { Env } from "@app/models/env";
-import { ActiveContainer, DataDirType, ContainerDefinition, ContainerType } from "@app/models/container";
+import { ActiveContainer, DataDirType, ContainerDefinition } from "@app/models/container";
 import { BackupDefinition } from "@app/models/backup";
+import { ProgressBarIdentifierProp } from "@app/store/progress-bars/progress-bars.actions";
 
 export interface CreateEnvProps {
   proxyPort: number;
@@ -73,8 +74,8 @@ export const RootActions = createActionGroup({
     "Set logout user": emptyProps(),
     "Fetch container status for env": props<EnvProp>(),
     "Copy configs for container and type": props<ContainerAndDataFileTypeProp>(),
-    "Set global loading bar active": emptyProps(),
-    "Set global loading bar inactive": emptyProps(),
+    "Set global loading bar active": props<ProgressBarIdentifierProp>(),
+    "Set global loading bar inactive": props<ProgressBarIdentifierProp>(),
     "Set tab index for page": props<PageTypeAndTabIndexProps>(),
   }
 });

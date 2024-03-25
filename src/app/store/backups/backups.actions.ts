@@ -1,6 +1,7 @@
 import { BackupDefinition } from "@app/models/backup";
 import { ContainerDefinition } from "@app/models/container";
 import { createAction, props } from "@ngrx/store";
+import { ProgressBarIdentifierProp } from "../progress-bars/progress-bars.actions";
 
 const moduleName = 'Backups';
 
@@ -63,6 +64,7 @@ export const backupChoiceSelected = createAction(
 
 export const backupChoiceConfirmed = createAction(
     `[${moduleName}] Backup choice was confirmed`,
+    props<ContainerDefAndBackupChoiceProp>(),
 );
 
 export const rollbackInitiated = createAction(

@@ -48,7 +48,7 @@ export class RootEffects {
     this.actions$.pipe(
       ofType(RootActions.beginForceNavigateToLogin),
       switchMap(() => [
-        RootActions.setGlobalLoadingBarInactive(),
+        RootActions.setGlobalLoadingBarInactive({ identifier: "*" }),
         RootActions.finishForceNavigateToLogin(),
       ])
     )
@@ -77,7 +77,7 @@ export class RootEffects {
       ofType(EnvActions.beginCreateNewEnv),
       switchMap((data: CreateEnvProps) => {
         return [
-          RootActions.setGlobalLoadingBarActive(),
+          RootActions.setGlobalLoadingBarActive({ identifier: `Creating Env: ${data.envAlias}` }),
           EnvActions.finishCreateNewEnv(data),
         ];
       })
@@ -103,7 +103,7 @@ export class RootEffects {
           }'`
         );
 
-        return [EnvActions.fetchAvailableEnvs(), RootActions.setGlobalLoadingBarInactive()];
+        return [EnvActions.fetchAvailableEnvs(), RootActions.setGlobalLoadingBarInactive({ identifier: `Creating Env: ${createdEnv.alias}`})];
       })
     );
   });
@@ -113,7 +113,7 @@ export class RootEffects {
     return this.actions$.pipe(
       ofType(EnvActions.beginDeleteEnv),
       switchMap(({ env }: EnvProp) => {
-        return [RootActions.setGlobalLoadingBarActive(), EnvActions.finishDeleteEnv({ env })];
+        return [RootActions.setGlobalLoadingBarActive({ identifier: `Deleting: ${env.formatted}` }), EnvActions.finishDeleteEnv({ env })];
       })
     );
   });
@@ -131,7 +131,7 @@ export class RootEffects {
           `Done deleting env '${env.getFormattedLabel()}'`
         );
 
-        return [EnvActions.fetchAvailableEnvs(), RootActions.setGlobalLoadingBarInactive()];
+        return [EnvActions.fetchAvailableEnvs(), RootActions.setGlobalLoadingBarInactive({ identifier: `Deleting: ${env.formatted}` })];
       })
     );
   });
@@ -141,7 +141,7 @@ export class RootEffects {
     return this.actions$.pipe(
       ofType(EnvActions.beginSpinupEnv),
       switchMap(({ env }: EnvProp) => {
-        return [RootActions.setGlobalLoadingBarActive(), EnvActions.finishSpinupEnv({ env })];
+        return [RootActions.setGlobalLoadingBarActive({ identifier: `Spinning up: ${env.formatted}` }), EnvActions.finishSpinupEnv({ env })];
       })
     );
   });
@@ -159,7 +159,7 @@ export class RootEffects {
 
         return [
           RootActions.fetchContainerStatusForEnv({ env }),
-          RootActions.setGlobalLoadingBarInactive(),
+          RootActions.setGlobalLoadingBarInactive({ identifier: `Spinning up: ${env.formatted}` }),
         ];
       })
     );
@@ -170,7 +170,7 @@ export class RootEffects {
       ofType(EnvActions.beginSpinupContainer),
       switchMap((data: ContainerProp) => {
         return [
-          RootActions.setGlobalLoadingBarActive(),
+          RootActions.setGlobalLoadingBarActive({ identifier: `Spinning up: ${data.containerDef.getHostname()}` }),
           EnvActions.finishSpinupContainer(data),
         ];
       })
@@ -190,7 +190,7 @@ export class RootEffects {
 
         return [
           RootActions.fetchContainerStatusForEnv({ env }),
-          RootActions.setGlobalLoadingBarInactive(),
+          RootActions.setGlobalLoadingBarInactive({ identifier: `Spinning up: ${containerName}` }),
         ];
       })
     );
@@ -202,7 +202,7 @@ export class RootEffects {
       ofType(EnvActions.beginShutdownEnv),
       switchMap(({ env }: EnvProp) => {
         return [
-          RootActions.setGlobalLoadingBarActive(),
+          RootActions.setGlobalLoadingBarActive({ identifier: `Shutting down: ${env.formatted}` }),
           EnvActions.finishShutdownEnv({ env }),
         ];
       })
@@ -222,7 +222,7 @@ export class RootEffects {
 
         return [
           RootActions.fetchContainerStatusForEnv({ env }),
-          RootActions.setGlobalLoadingBarInactive(),
+          RootActions.setGlobalLoadingBarInactive({ identifier: `Shutting down: ${env.formatted}`}),
         ];
       })
     );
@@ -233,7 +233,7 @@ export class RootEffects {
       ofType(EnvActions.beginShutdownContainer),
       switchMap((data: ContainerProp) => {
         return [
-          RootActions.setGlobalLoadingBarActive(),
+          RootActions.setGlobalLoadingBarActive({ identifier: `Shutting down: ${data.containerDef.getHostname()}` }),
           EnvActions.finishShutdownContainer(data),
         ];
       })
@@ -253,7 +253,7 @@ export class RootEffects {
 
         return [
           RootActions.fetchContainerStatusForEnv({ env }),
-          RootActions.setGlobalLoadingBarInactive(),
+          RootActions.setGlobalLoadingBarInactive({ identifier: `Shutting down: ${containerName}` }),
         ];
       })
     );

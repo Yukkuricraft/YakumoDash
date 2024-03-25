@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { ContainerDefAndBackupChoiceProp, ContainerDefAndBackupsListProp, SnapshotIdAndContainerDefProp, SnapshotIdAndSuccessProp, backupChoiceDeselected, backupChoiceSelected, backupsComponentClosed, backupsComponentInit, backupsListInit, rollbackCompleted, rollbackInitiated } from "@app/store/backups/backups.actions";
+import { ContainerDefAndBackupChoiceProp, ContainerDefAndBackupsListProp, SnapshotIdAndContainerDefProp, SnapshotIdAndSuccessProp, backupChoiceConfirmed, backupChoiceDeselected, backupChoiceSelected, backupsComponentClosed, backupsComponentInit, backupsListInit, rollbackCompleted, rollbackInitiated } from "@app/store/backups/backups.actions";
 import { BackupDefinition } from "@app/models/backup";
 import { ContainerDefinition } from "@app/models/container";
 import { ContainerDefProp } from "@app/store/backups/backups.actions";
@@ -117,18 +117,45 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
             },
         };
     }),
-    on(rollbackInitiated, (state: BackupsFeatureState, { snapshotId, containerDef }: SnapshotIdAndContainerDefProp ) => {
-        return {
-            ...state,
-            rollbacks: {
-                ...state.rollbacks,
-                [snapshotId]: containerDef,
-            },
-        };
-    }),
+    on(
+        rollbackInitiated,
+        backupChoiceConfirmed,
+        (state: BackupsFeatureState) => {
+            console.log("Rollback initiated or backup choice confirmed");
+            const containerDef = state.containerDef;
+            if (containerDef === null) {
+                console.warn(`Tried initiating rollback but state.containerDef was not set!`);
+                return {
+                    ...state,
+                };
+            }
+            const containerHostname = containerDef.getHostname();
+            const backupDef = state.backups[containerHostname].backupChoice
+            if (backupDef === null) {
+                console.warn(`Tried initiating rollback but state.backups[containerHostname].backupChoice was not set!`);
+                return {
+                    ...state,
+                };
+            }
+            const snapshotId = backupDef.id;
+
+            console.log("SETTING ROLLBACK INITIATED")
+            console.log({ containerDef, backupDef, snapshotId})
+            return {
+                ...state,
+                rollbacks: {
+                    ...state.rollbacks,
+                    [snapshotId]: containerDef,
+                },
+            };
+        }
+    ),
     on(rollbackCompleted, (state: BackupsFeatureState, { snapshotId }: SnapshotIdAndSuccessProp ) => {
         let newState = {
             ...state,
+            rollbacks: {
+                ...state.rollbacks,
+            }
         }
         if (snapshotId  !== null) {
             delete newState.rollbacks[snapshotId];

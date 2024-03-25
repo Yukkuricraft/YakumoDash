@@ -14,6 +14,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { selectGlobalLoadingBarState } from "./store/root/root.selectors";
+import { ProgressBarsFacade } from "./store/progress-bars/progress-bars.facade";
+import { ProgressBarIdentifierAndTimestampProp } from "./store/progress-bars/progress-bars.actions";
 
 @Component({
   selector: "app-root",
@@ -23,6 +25,7 @@ import { selectGlobalLoadingBarState } from "./store/root/root.selectors";
 export class AppComponent implements OnInit {
   title = "main";
   loadingBarActive$!: Observable<boolean>;
+  activeProgressBars$!: Observable<ProgressBarIdentifierAndTimestampProp[]>;
 
   constructor(
     private router: Router,
@@ -30,7 +33,8 @@ export class AppComponent implements OnInit {
     private ycAuthService: AuthService,
     private authService: SocialAuthService,
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private progressBarsFacade: ProgressBarsFacade,
   ) {}
 
   customIcons = {
@@ -69,5 +73,6 @@ export class AppComponent implements OnInit {
       });
 
     this.loadingBarActive$ = this.store.select(selectGlobalLoadingBarState);
+    this.activeProgressBars$ = this.progressBarsFacade.getSortedActiveProgressBars$();
   }
 }

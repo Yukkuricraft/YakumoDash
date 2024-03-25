@@ -27,8 +27,8 @@ export class BackupsFacade {
         this.store.dispatch(backupChoiceSelected({ containerDef, backupChoice }))
     }
 
-    public onBackupChoiceConfirmed(): void {
-        this.store.dispatch(backupChoiceConfirmed())
+    public onBackupChoiceConfirmed(containerDef: ContainerDefinition, backupChoice: BackupDefinition): void {
+        this.store.dispatch(backupChoiceConfirmed({ containerDef, backupChoice }))
     }
 
     public onDeselectBackupChoice(containerDef: ContainerDefinition): void {

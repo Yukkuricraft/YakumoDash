@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Inject } from "@angular/core";
 import { isNil } from "lodash";
-import { map, mergeMap, filter, Observable, takeLast } from "rxjs";
+import { take, map, mergeMap, filter, switchMap, Observable, takeLast } from "rxjs";
 import { Env } from "@app/models/env";
 import { ContainerDefinition } from "@app/models/container";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
@@ -83,7 +83,17 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
   }
 
   backupChoiceConfirmed() {
-    this.backupsFacade.onBackupChoiceConfirmed();
+    this.selectedBackup$.pipe(
+      take(1)
+    ).subscribe((backupChoice: BackupDefinition | null) => {
+        if (backupChoice === null) {
+          console.warn("backupChoiceConfirmed called but backupChoice was null!");
+          return;
+        }
+
+        this.backupsFacade.onBackupChoiceConfirmed(this.containerDef, backupChoice);
+      }
+    )
   }
 
   deselectBackupChoice() {

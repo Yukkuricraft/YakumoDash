@@ -1,9 +1,36 @@
-.progress-bar {
-  height: 8px;
+.progress-bars {
+  display: flex;
+  flex-direction: column;
   position: fixed;
-  bottom: 0%;
+  bottom: 0px;
+  z-index: 100;
   width: 100%;
-  background-color: #393838;
-  opacity: 1;
-  z-index: 999;
+
+  &_progress-bar-box {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 100%;
+    border-top: 1px #5a4564 solid;
+  }
+
+  &_bar {
+    height: 30px;
+    bottom: 0%;
+    width: 100%;
+    opacity: 1;
+    z-index: 999;
+  }
+
+  &_id {
+    position: absolute;
+    left: 0px;
+
+    font-size: 1rem;
+    font-style: italic;
+    color: white;
+
+    z-index: 9999;
+    padding: 8px;
+  }
 }

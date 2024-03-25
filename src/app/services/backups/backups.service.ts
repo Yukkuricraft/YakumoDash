@@ -55,7 +55,7 @@ export class BackupsService {
   }
 
   restoreBackup(backup: BackupDefinition) {
-    console.log("Creating backup?")
+    console.log("Restoring backup?")
 
     return this.http
       .post(`${this.basePath}/restore-minecraft-backup`, {

@@ -1,9 +1,19 @@
 <div style="height: 100vh; margin: 0" class="mat-app-background">
   <router-outlet></router-outlet>
-  <mat-progress-bar
-    *ngIf="loadingBarActive$ | async"
-    class="progress-bar"
-    mode="indeterminate"
-  >
-  </mat-progress-bar>
+
+  <div class="progress-bars">
+    <section
+      *ngFor="let progressBar of activeProgressBars$ | async"
+      class="progress-bars_progress-bar-box"
+    >
+      <mat-progress-bar
+        class="progress-bars_bar"
+        mode="indeterminate"
+      >
+      </mat-progress-bar>
+      <div class="progress-bars_id">
+        {{ progressBar.identifier}}
+      </div>
+    </section>
+  </div>
 </div>
