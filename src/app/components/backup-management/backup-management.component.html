@@ -3,10 +3,14 @@
     <span>Backups</span>
   </mat-toolbar>
 
-  <div class="backups-management">
-    <div class="backups">
-      <h3>Backups</h3>
-      <table mat-table [dataSource]="(backupsDataSource$ | async) ?? []" class="mat-elevation-z8">
+  <div class="backups">
+    <div class="backups_list">
+      <table
+        mat-table
+        [dataSource]="(backupsDataSource$ | async) ?? []"
+        class="mat-elevation-z8 backups_table"
+        *ngIf="areBackupsReadyToRender$ | async"
+      >
         <!-- Position Column -->
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef>Date</th>
@@ -16,7 +20,7 @@
         <!-- Name Column -->
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>Id</th>
-          <td mat-cell *matCellDef="let element">{{element.id.substring(0, 8)}}</td>
+          <td mat-cell *matCellDef="let element">{{element.shortId}}</td>
         </ng-container>
 
         <!-- Weight Column -->
@@ -34,19 +38,43 @@
         ></tr>
       </table>
     </div>
-    <div
+    <mat-card
       *ngIf="(isBackupSelected$ | async)"
       class="backup-choice"
     >
-      <div>
-        <span>Stuff</span>: <span>{{(selectedBackup$ | async)?.programVersion}}</span>
-      </div>
+      <mat-card-title class="backup-choice_title-box">
+        <div class="backup-choice_title">Backup Details</div>
+        <div class="backup-choice_deselect-choice" (click)="deselectBackupChoice()">
+          <button mat-icon-button>
+            <mat-icon>
+              cancel
+            </mat-icon>
+          </button>
+        </div>
+      </mat-card-title>
+      <mat-card-content>
+        <div class="backup-choice_details">
+          <div class="backup-choice_restic-version-title">Restic Version:</div>
+          <div class="backup-choice_restic-version-value">{{(selectedBackup$ | async)?.programVersion}}</div>
+
+          <div class="backup-choice_backup-date-title">Backup Date:</div>
+          <div class="backup-choice_backup-date-value">{{(selectedBackup$ | async)?.time}}</div>
+
+          <div class="backup-choice_snapshot-id-title">Shapshot ID:</div>
+          <div class="backup-choice_snapshot-id-value">{{(selectedBackup$ | async)?.shortId}}</div>
+
+          <div class="backup-choice_tags-title">Tags</div>
+          <div class="backup-choice_tags-value">{{(selectedBackup$ | async)?.tags}}</div>
+        </div>
+      </mat-card-content>
       <button
+        mat-raised-button
+        color="primary"
         matTooltip="Confirm backup"
         (click)="backupChoiceConfirmed()"
       >
         Confirm Rollback
       </button>
-    </div>
+    </mat-card>
   </div>
 </div>

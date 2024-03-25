@@ -27,13 +27,13 @@ export type BackupsManagementDialogReturn = {
 export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
   public selectedBackup$: Observable<BackupDefinition | null>;
   public backupsList$: Observable<BackupDefinition[]>;
-  public isLoadingBackup$: Observable<boolean>;
+  public areBackupsReadyToRender$: Observable<boolean>;
   public isBackupSelected$: Observable<boolean>;
 
   private dataSource = new MatTableDataSource<BackupDefinition>();
   backupsDataSource$!: Observable<MatTableDataSource<BackupDefinition>>;
 
-  displayedColumns = [ "date", "id", "tags" ];
+  displayedColumns = ["date", "id", "tags"];
   pageType: string = "BackupManagement";
 
   containerDef: ContainerDefinition;
@@ -52,15 +52,12 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
     }
 
     this.containerDef = data!.containerDef;
-    this.backupsList$ = this.backupsFacade.getBackupsList$()
+    this.isBackupSelected$ = this.backupsFacade.isBackupChoiceSelected$();
+    this.areBackupsReadyToRender$ = this.backupsFacade.isBackupsReadyToRender$();
     this.selectedBackup$ = this.backupsFacade.getBackupChoice$();
-    this.isBackupSelected$ = this.selectedBackup$.pipe(
-      map((backup: BackupDefinition | null) => {
-        return backup !== null;
-      }),
-    )
-    this.isLoadingBackup$ = this.backupsFacade.getBackupsLoading$();
-    this.backupsDataSource$ = this.backupsFacade.getBackupsList$().pipe(
+    this.backupsList$ = this.backupsFacade.getBackupsList$();
+    this.backupsList$.subscribe((data: any) => { console.log("BACKUPS LIST SUBSCRIPTION"); console.log(data) });
+    this.backupsDataSource$ = this.backupsList$.pipe(
       map((backups: BackupDefinition[]) => {
         const dataSource: MatTableDataSource<BackupDefinition> = this.dataSource;
         dataSource.data = backups;
@@ -87,5 +84,9 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
 
   backupChoiceConfirmed() {
     this.backupsFacade.onBackupChoiceConfirmed();
+  }
+
+  deselectBackupChoice() {
+    this.backupsFacade.onDeselectBackupChoice(this.containerDef);
   }
 }

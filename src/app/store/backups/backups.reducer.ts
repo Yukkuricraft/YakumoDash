@@ -14,18 +14,24 @@ export interface BackupsState {
     backupChoice: BackupDefinition | null,
 };
 
-export interface ContainerBackupsState {
-    [containerName: string]: BackupsState
+export const initialContainerBackupsState: BackupsState = {
+    loading: false,
+    backupsList: [],
+    backupChoice: null,
+};
+
+export interface ContainerToBackupsState {
+    [containerName: string]: BackupsState,
 };
 
 export interface BackupsFeatureState {
     componentOpen: boolean,
     containerDef: ContainerDefinition | null,
-    backups: ContainerBackupsState,
+    backups: ContainerToBackupsState,
     rollbacks: InProgressRollbacks,
 };
 
-export const initialBackupsState: BackupsFeatureState = {
+export const initialBackupFeatureState: BackupsFeatureState = {
     componentOpen: false,
     containerDef: null,
     backups: {},
@@ -33,12 +39,26 @@ export const initialBackupsState: BackupsFeatureState = {
 }
 
 export const BackupsReducer = createReducer<BackupsFeatureState>(
-    {...initialBackupsState },
+    {...initialBackupFeatureState },
     on(backupsComponentInit, (state: BackupsFeatureState, { containerDef }: ContainerDefProp) => {
+        const containerHostname = containerDef.getHostname();
+        let currBackupState = { ...initialContainerBackupsState };
+        if (Object.keys(state.backups).indexOf(containerHostname) !== -1) {
+            currBackupState = {
+                ...state.backups[containerHostname],
+            }
+        }
         return {
             ...state,
             componentOpen: true,
             containerDef,
+            backups: {
+                ...state.backups,
+                [containerHostname]: {
+                    ...currBackupState,
+                    loading: true,
+                }
+            }
         }
     }),
     on(backupsComponentClosed, (state: BackupsFeatureState, { containerDef }: ContainerDefProp) => {
@@ -58,6 +78,7 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
     }),
     on(backupsListInit, (state: BackupsFeatureState, { containerDef, backupsList }: ContainerDefAndBackupsListProp) => {
         const containerHostname = containerDef.getHostname();
+        console.log(`Updating backups list for ${containerHostname}`);
         return {
             ...state,
             backups: {
@@ -65,14 +86,13 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
                 [containerHostname]: {
                     ...state.backups[containerHostname],
                     backupsList,
+                    loading: false,
                 }
             },
         };
     }),
     on(backupChoiceSelected, (state: BackupsFeatureState, { containerDef, backupChoice }: ContainerDefAndBackupChoiceProp) => {
         const containerHostname = containerDef.getHostname();
-        console.log("asdf");
-        console.log(containerHostname);
         return {
             ...state,
             backups: {

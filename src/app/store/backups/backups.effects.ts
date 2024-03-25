@@ -5,8 +5,6 @@ import { of } from "rxjs";
 import { map, switchMap, withLatestFrom } from "rxjs/operators";
 import { BackupsService, RestoreBackupApiResponse } from "@app/services/backups/backups.service";
 import { BackupDefinition } from "@app/models/backup";
-import { getBackupChoice, getContainerDef } from "./backups.selectors";
-import { ContainerDefinition } from "@app/models/container";
 import { BackupsFacade } from "./backups.facade";
 
 
@@ -25,8 +23,12 @@ export class BackupsEffects {
             .pipe(
                 ofType(backupsComponentInit),
                 switchMap(({ containerDef }: ContainerDefProp) => {
+                    console.log("Backup component initialized");
+                    console.log(containerDef);
                     return this.backupsService.listBackups(containerDef).pipe(
                         map((backupsList: BackupDefinition[]) => {
+                            console.log("Backups from API:");
+                            console.log(backupsList);
                             return backupsListInit({ containerDef, backupsList });
                         })
                     );

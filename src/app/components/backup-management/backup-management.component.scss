@@ -6,16 +6,74 @@ h3 {
 
 .dialog-content {
   display: flex;
+  flex-direction: column;
 }
 
 .bot-margin-spacer {
   margin-bottom: 8px;
 }
 
-.backups-management {
+.backups {
+  display: flex;
+  flex-direction: row;
+
   width: 100%;
+
   & > div {
     margin: 8px;
+  }
+
+  &_list {
+    width: 100%;
+    height: 68vh;
+    overflow: auto;
+  }
+  &_table {
+    width: 100%;
+  }
+
+}
+
+.backup-choice {
+  &_title-box {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+  &_details {
+    display: grid;
+    grid-template-columns: 125px auto;
+    grid-template-rows: auto;
+    grid-template-areas: "restic-version-title restic-version-value"
+                         "backup-date-title backup-date-value"
+                         "snapshot-id-title snapshot-id-value"
+                         "tags-title tags-value";
+  }
+
+  &_restic-version-title {
+    grid-area: restic-version-title;
+  }
+  &_restic-version-value {
+    grid-area: restic-version-value;
+  }
+  &_backup-date-title {
+    grid-area: backup-date-title;
+  }
+  &_backup-date-value {
+    grid-area: backup-date-value;
+  }
+  &_snapshot-id-title {
+    grid-area: snapshot-id-title;
+  }
+  &_snapshot-id-value {
+    grid-area: snapshot-id-value;
+  }
+  &_tags-title {
+    grid-area: tags-title;
+  }
+  &_tags-value {
+    grid-area: tags-value;
   }
 }
 

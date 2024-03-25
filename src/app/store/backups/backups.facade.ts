@@ -1,11 +1,12 @@
 import { Store } from "@ngrx/store";
-import { backupChoiceConfirmed, backupChoiceSelected, backupsComponentClosed, backupsComponentInit } from "@app/store/backups/backups.actions";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { ContainerDefinition } from "@app/models/container";
-import { getBackupChoice, getBackupsList, getBackupsLoading, getContainerDef, getInProgressRollbacks } from "./backups.selectors";
+
+import { backupChoiceConfirmed, backupChoiceDeselected, backupChoiceSelected, backupsComponentClosed, backupsComponentInit } from "@app/store/backups/backups.actions";
+import { getBackupChoice, getBackupsList, isBackupsReadyToRender, getContainerDef, getInProgressRollbacks, isBackupChoiceSelected } from "@app/store/backups/backups.selectors";
+import { InProgressRollbacks } from "@app/store/backups/backups.reducer";
 import { BackupDefinition } from "@app/models/backup";
-import { InProgressRollbacks } from "./backups.reducer";
 
 @Injectable()
 export class BackupsFacade {
@@ -30,12 +31,20 @@ export class BackupsFacade {
         this.store.dispatch(backupChoiceConfirmed())
     }
 
-    public getContainerDef$(): Observable<ContainerDefinition | null> {
-        return this.store.select(getContainerDef);
+    public onDeselectBackupChoice(containerDef: ContainerDefinition): void {
+      this.store.dispatch(backupChoiceDeselected({ containerDef }));
     }
 
-    public getBackupsLoading$(): Observable<boolean> {
-        return this.store.select(getBackupsLoading);
+    public isBackupChoiceSelected$(): Observable<boolean> {
+        return this.store.select(isBackupChoiceSelected)
+    }
+
+    public isBackupsReadyToRender$(): Observable<boolean> {
+        return this.store.select(isBackupsReadyToRender);
+    }
+
+    public getContainerDef$(): Observable<ContainerDefinition | null> {
+        return this.store.select(getContainerDef);
     }
 
     public getBackupsList$(): Observable<BackupDefinition[]> {
