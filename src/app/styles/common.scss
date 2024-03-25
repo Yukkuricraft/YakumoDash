@@ -36,3 +36,9 @@
 .minitext {
   font-size: 0.7em;
 }
+
+::ng-deep .backups-mat-dialog {
+    mat-dialog-container {
+      overflow: hidden;
+    }
+  }

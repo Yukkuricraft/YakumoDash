@@ -89,6 +89,7 @@ export class ContainerActionsComponent {
       },
       width: "85vw",
       height: "85vh",
+      panelClass: 'backups-mat-dialog',
     });
 
     dialogRef.afterClosed().subscribe(result => {
