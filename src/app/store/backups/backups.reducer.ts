@@ -79,13 +79,18 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
     on(backupsListInit, (state: BackupsFeatureState, { containerDef, backupsList }: ContainerDefAndBackupsListProp) => {
         const containerHostname = containerDef.getHostname();
         console.log(`Updating backups list for ${containerHostname}`);
+        const sortedBackups = [ ...backupsList ];
+        sortedBackups.sort(
+            (a, b) => b.time.getTime() - a.time.getTime()
+        );
+
         return {
             ...state,
             backups: {
                 ...state.backups,
                 [containerHostname]: {
                     ...state.backups[containerHostname],
-                    backupsList,
+                    backupsList: sortedBackups,
                     loading: false,
                 }
             },
