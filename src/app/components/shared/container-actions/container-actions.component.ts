@@ -14,7 +14,7 @@ import {
 } from "@app/models/container";
 import { Env } from "@app/models/env";
 import { Router } from "@angular/router";
-import { RootActions, EnvActions, BackupActions } from "@app/store/root/root.actions";
+import { RootActions, EnvActions } from "@app/store/root/root.actions";
 import { selectActiveContainerByContainerDef } from "@app/store/root/root.selectors.containers";
 import { map, Observable, switchMap, BehaviorSubject } from "rxjs";
 import { BackupsManagementDialogComponent, BackupsManagementDialogData, BackupsManagementDialogReturn } from "@app/components/backup-management/backup-management.component";
@@ -75,7 +75,7 @@ export class ContainerActionsComponent {
     window.open(url, "_blank");
   }
 
-  restoreFromBackup() {
+  manageBackups() {
     const env = this.env.name;
     console.log("Sending to:", env, this.containerDef);
 
@@ -95,11 +95,6 @@ export class ContainerActionsComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
     });
-  }
-
-  createNewBackup() {
-    console.log(`Creating new backup for container in env ${this.env.getFormattedLabel()}`, this.containerDef);
-    this.store.dispatch(BackupActions.createNewBackup({ containerDef: this.containerDef }))
   }
 
   stopContainer() {

@@ -9,8 +9,10 @@ h3 {
   flex-direction: column;
 }
 
-.bot-margin-spacer {
-  margin-bottom: 8px;
+.mat-toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .backups {

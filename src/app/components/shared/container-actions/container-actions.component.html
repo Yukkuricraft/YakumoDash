@@ -35,18 +35,10 @@
   <button
     *ngIf="containerDef.isBackupsEnabled"
     mat-icon-button
-    matTooltip="Create new backup"
-    (click)="createNewBackup()"
+    matTooltip="Manage Backups"
+    (click)="manageBackups()"
   >
     <mat-icon> cloud_upload </mat-icon>
-  </button>
-  <button
-    *ngIf="containerDef.isBackupsEnabled"
-    mat-icon-button
-    matTooltip="Restore from Backups"
-    (click)="restoreFromBackup()"
-  >
-    <mat-icon> settings_backup_restore </mat-icon>
   </button>
   <button
     *ngIf="containerDef.isMinecraftContainer"

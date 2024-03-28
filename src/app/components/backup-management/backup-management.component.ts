@@ -96,6 +96,10 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
     )
   }
 
+  createNewBackup() {
+    this.backupsFacade.onCreateBackupButtonClicked(this.containerDef);
+  }
+
   deselectBackupChoice() {
     this.backupsFacade.onDeselectBackupChoice(this.containerDef);
   }

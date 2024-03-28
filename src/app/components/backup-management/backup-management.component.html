@@ -1,6 +1,15 @@
 <div class="dialog-content">
   <mat-toolbar>
-    <span>Backups</span>
+    <span>Backups for {{ containerDef.getHostname() }}</span>
+    <button
+      mat-icon-button
+      (click)="createNewBackup()"
+      matTooltip="Create New Backup"
+    >
+      <mat-icon>
+        create_new_folder
+      </mat-icon>
+    </button>
   </mat-toolbar>
 
   <div class="backups">
