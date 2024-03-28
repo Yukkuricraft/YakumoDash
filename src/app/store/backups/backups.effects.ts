@@ -82,6 +82,27 @@ export class BackupsEffects {
             )
     );
 
+    public displayRollbackSuccessSnackbar$ = createEffect(
+        () => this.actions$
+            .pipe(
+                ofType(rollbackSuccessful),
+                tap(({ backupDef }: BackupDefProp) => {
+                    this.snackbar.open(`Successfullly rolled back ${backupDef.hostname} to  ${backupDef.time.toLocaleString()}`);
+                }),
+            ),
+        { dispatch: false }
+    )
+    public displayRollbackFailedSnackbar$ = createEffect(
+        () => this.actions$
+            .pipe(
+                ofType(rollbackFailed),
+                tap(({ message }: NullableBackupDefAndMessageProp) => {
+                    this.snackbar.open(message);
+                }),
+            ),
+        { dispatch: false }
+    )
+
     public createNewBackup$ = createEffect(
         () => this.actions$
             .pipe(
