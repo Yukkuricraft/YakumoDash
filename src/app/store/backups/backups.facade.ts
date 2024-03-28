@@ -3,7 +3,7 @@ import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { ContainerDefinition } from "@app/models/container";
 
-import { backupChoiceConfirmed, backupChoiceDeselected, backupChoiceSelected, backupsComponentClosed, backupsComponentInit } from "@app/store/backups/backups.actions";
+import { backupChoiceConfirmed, backupChoiceDeselected, backupChoiceSelected, backupsComponentClosed, backupsComponentInit, createBackupButtonClicked } from "@app/store/backups/backups.actions";
 import { getBackupChoice, getBackupsList, isBackupsReadyToRender, getContainerDef, getInProgressRollbacks, isBackupChoiceSelected } from "@app/store/backups/backups.selectors";
 import { InProgressRollbacks } from "@app/store/backups/backups.reducer";
 import { BackupDefinition } from "@app/models/backup";
@@ -23,6 +23,10 @@ export class BackupsFacade {
         this.store.dispatch(backupsComponentClosed({ containerDef }));
     }
 
+    public onCreateBackupButtonClicked(containerDef: ContainerDefinition): void {
+        this.store.dispatch(createBackupButtonClicked({ containerDef }));
+    }
+
     public onBackupChoiceSelected(containerDef: ContainerDefinition, backupChoice: BackupDefinition): void {
         this.store.dispatch(backupChoiceSelected({ containerDef, backupChoice }))
     }
@@ -32,7 +36,7 @@ export class BackupsFacade {
     }
 
     public onDeselectBackupChoice(containerDef: ContainerDefinition): void {
-      this.store.dispatch(backupChoiceDeselected({ containerDef }));
+        this.store.dispatch(backupChoiceDeselected({ containerDef }));
     }
 
     public isBackupChoiceSelected$(): Observable<boolean> {

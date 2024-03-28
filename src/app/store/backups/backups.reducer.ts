@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { ContainerDefAndBackupChoiceProp, ContainerDefAndBackupsListProp, SnapshotIdAndContainerDefProp, SnapshotIdAndSuccessProp, backupChoiceConfirmed, backupChoiceDeselected, backupChoiceSelected, backupsComponentClosed, backupsComponentInit, backupsListInit, rollbackCompleted, rollbackInitiated } from "@app/store/backups/backups.actions";
+import { BackupDefProp, ContainerDefAndBackupChoiceProp, ContainerDefAndBackupsListProp, backupChoiceConfirmed, backupChoiceDeselected, backupChoiceSelected, backupsComponentClosed, backupsComponentInit, backupsListInit, rollbackSuccessful } from "@app/store/backups/backups.actions";
 import { BackupDefinition } from "@app/models/backup";
 import { ContainerDefinition } from "@app/models/container";
 import { ContainerDefProp } from "@app/store/backups/backups.actions";
@@ -118,7 +118,6 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
         };
     }),
     on(
-        rollbackInitiated,
         backupChoiceConfirmed,
         (state: BackupsFeatureState) => {
             console.log("Rollback initiated or backup choice confirmed");
@@ -150,13 +149,14 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
             };
         }
     ),
-    on(rollbackCompleted, (state: BackupsFeatureState, { snapshotId }: SnapshotIdAndSuccessProp ) => {
+    on(rollbackSuccessful, (state: BackupsFeatureState, { backupDef }: BackupDefProp ) => {
         let newState = {
             ...state,
             rollbacks: {
                 ...state.rollbacks,
             }
         }
+        const snapshotId = backupDef?.id;
         if (snapshotId  !== null) {
             delete newState.rollbacks[snapshotId];
         }

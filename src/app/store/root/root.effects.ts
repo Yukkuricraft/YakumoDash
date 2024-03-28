@@ -3,7 +3,6 @@ import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import {
   RootActions,
   EnvActions,
-  BackupActions,
   CreateEnvProps,
   EnvProp,
   ContainerProp,
@@ -302,52 +301,6 @@ export class RootEffects {
   { dispatch: false }
   );
 
-  fetchBackupsForContainer$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(BackupActions.fetchBackupsForContainer),
-      switchMap(({ containerDef }: ContainerProp) => {
-        console.log("fetchBackupsForContainer$")
-        return this.backupsApi.listBackups(containerDef).pipe(
-          concatLatestFrom(() => {
-            return of(containerDef);
-          }),
-          map(([backups, containerDef]: [backups: BackupDefinition[], containerDef: ContainerDefinition]) =>
-            BackupActions.setBackupsForContainer({ containerDef, backups })
-          )
-        );
-      })
-    );
-  });
-
-  createNewBackupForContainer$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(BackupActions.createNewBackup),
-      switchMap(({ containerDef }: ContainerProp) => {
-        console.log("createNewBackupForContainer$")
-        return this.backupsApi.createBackup(containerDef).pipe(
-          concatLatestFrom(() => {
-            return of(containerDef);
-          }),
-          map(() =>
-            EMPTY
-          )
-        );
-      })
-    );
-  },
-  { dispatch: false }
-  );
-  restoreBackup$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(BackupActions.restoreBackup),
-      switchMap(({ backup }: BackupProp) => {
-        console.log("restoreBackup$")
-        return this.backupsApi.restoreBackup(backup);
-      })
-    );
-  },
-  { dispatch: false }
-  );
 }
 
 export const rootFeatureEffects = [

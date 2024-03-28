@@ -1,8 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { ContainerDefAndBackupChoiceProp, SnapshotIdAndContainerDefProp, SnapshotIdAndSuccessProp, backupChoiceConfirmed, rollbackCompleted, rollbackInitiated } from "@app/store/backups/backups.actions";
-import { BackupDefinition } from "@app/models/backup";
-import { ContainerDefinition } from "@app/models/container";
-import { ContainerDefProp } from "@app/store/backups/backups.actions";
+import { BackupDefProp, ContainerDefAndBackupChoiceProp, backupChoiceConfirmed, rollbackSuccessful } from "@app/store/backups/backups.actions";
 import { RootActions } from "../root/root.actions";
 import { ProgressBarIdentifierProp } from "./progress-bars.actions";
 
@@ -35,7 +32,8 @@ export const ProgressBarsReducer = createReducer<ProgressBarsFeatureState>(
             }
         };
     }),
-    on(rollbackCompleted, (state: ProgressBarsFeatureState, { snapshotId }: SnapshotIdAndSuccessProp ) => {
+    on(rollbackSuccessful, (state: ProgressBarsFeatureState, { backupDef }: BackupDefProp ) => {
+        const snapshotId = backupDef?.id;
         const identifier = `Rolling back: ${snapshotId}`;
         let newState = {
             ...state,

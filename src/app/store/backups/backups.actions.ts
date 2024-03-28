@@ -1,7 +1,6 @@
 import { BackupDefinition } from "@app/models/backup";
 import { ContainerDefinition } from "@app/models/container";
 import { createAction, props } from "@ngrx/store";
-import { ProgressBarIdentifierProp } from "../progress-bars/progress-bars.actions";
 
 const moduleName = 'Backups';
 
@@ -23,56 +22,67 @@ export interface DialogIdProp {
     dialogId: string;
 };
 
-export interface RollbackStatusProp {
-    success: boolean;
+export interface BackupDefProp {
+    backupDef: BackupDefinition;
 };
 
-export interface SnapshotIdAndContainerDefProp {
-    snapshotId: string;
-    containerDef: ContainerDefinition;
-};
-
-export interface SnapshotIdAndSuccessProp {
-    snapshotId: string | null;
-    success: boolean;
+export interface NullableBackupDefProp {
+    backupDef: BackupDefinition | null;
 };
 
 export const backupsComponentInit = createAction(
-    `[${moduleName}] Backups Component Initialized`,
+    `[${moduleName}][Component] Backups Component Initialized`,
     props<ContainerDefProp>(),
 );
 
 export const backupsComponentClosed = createAction(
-    `[${moduleName}] Backups Component closed`,
+    `[${moduleName}][Component] Backups Component closed`,
     props<ContainerDefProp>(),
 );
 
 export const backupsListInit = createAction(
-    `[${moduleName}] Backups list initialized`,
+    `[${moduleName}][Component] Backups list initialized`,
     props<ContainerDefAndBackupsListProp>()
 );
 
+
+export const createBackupButtonClicked = createAction(
+    `[${moduleName}][Create] Create backup button clicked`,
+    props<ContainerDefProp>(),
+);
+
+export const backupCreationSuccessful = createAction(
+    `[${moduleName}][Create] Successfully created new backup`,
+    props<ContainerDefProp>(),
+);
+
+export const backupCreationFailed = createAction(
+    `[${moduleName}][Create] Failed creating new backup`,
+    props<ContainerDefProp>(),
+);
+
+
 export const backupChoiceDeselected = createAction(
-    `[${moduleName}] Backup choice was deselected`,
+    `[${moduleName}][Restore] Backup choice was deselected`,
     props<ContainerDefProp>(),
 );
 
 export const backupChoiceSelected = createAction(
-    `[${moduleName}] Backup choice was selected`,
+    `[${moduleName}][Restore] Backup choice was selected`,
     props<ContainerDefAndBackupChoiceProp>(),
 );
 
 export const backupChoiceConfirmed = createAction(
-    `[${moduleName}] Backup choice was confirmed`,
+    `[${moduleName}][Restore] Backup choice was confirmed`,
     props<ContainerDefAndBackupChoiceProp>(),
 );
 
-export const rollbackInitiated = createAction(
-    `[${moduleName}] Rollback Initiated`,
-    props<SnapshotIdAndContainerDefProp>(),
+export const rollbackSuccessful = createAction(
+    `[${moduleName}][Restore] Successfully restored from backup`,
+    props<BackupDefProp>(),
 );
 
-export const rollbackCompleted = createAction(
-    `[${moduleName}] Rollback Completed`,
-    props<SnapshotIdAndSuccessProp>(),
+export const rollbackFailed = createAction(
+    `[${moduleName}][Restore] Failed to restore from backup`,
+    props<NullableBackupDefProp>(),
 );
