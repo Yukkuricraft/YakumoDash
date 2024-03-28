@@ -8,6 +8,11 @@ export interface ContainerDefProp {
     containerDef: ContainerDefinition;
 };
 
+export interface ContainerDefAndMessageProp {
+    containerDef: ContainerDefinition;
+    message: string;
+};
+
 export interface ContainerDefAndBackupsListProp {
     containerDef: ContainerDefinition;
     backupsList: BackupDefinition[];
@@ -26,8 +31,9 @@ export interface BackupDefProp {
     backupDef: BackupDefinition;
 };
 
-export interface NullableBackupDefProp {
+export interface NullableBackupDefAndMessageProp {
     backupDef: BackupDefinition | null;
+    message: string;
 };
 
 export const backupsComponentInit = createAction(
@@ -58,7 +64,7 @@ export const backupCreationSuccessful = createAction(
 
 export const backupCreationFailed = createAction(
     `[${moduleName}][Create] Failed creating new backup`,
-    props<ContainerDefProp>(),
+    props<ContainerDefAndMessageProp>(),
 );
 
 
@@ -84,5 +90,5 @@ export const rollbackSuccessful = createAction(
 
 export const rollbackFailed = createAction(
     `[${moduleName}][Restore] Failed to restore from backup`,
-    props<NullableBackupDefProp>(),
+    props<NullableBackupDefAndMessageProp>(),
 );

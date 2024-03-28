@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { ContainerDefAndBackupChoiceProp, ContainerDefProp, backupChoiceConfirmed, backupCreationFailed, backupCreationSuccessful, backupsComponentInit, backupsListInit, createBackupButtonClicked, rollbackFailed, rollbackSuccessful } from "@app/store/backups/backups.actions";
-import { of, catchError, EMPTY } from "rxjs";
+import { NullableBackupDefAndMessageProp, ContainerDefProp, backupChoiceConfirmed, backupCreationFailed, backupCreationSuccessful, backupsComponentInit, backupsListInit, createBackupButtonClicked, rollbackFailed, rollbackSuccessful, BackupDefProp, ContainerDefAndMessageProp } from "@app/store/backups/backups.actions";
+import { of, tap, catchError, EMPTY } from "rxjs";
 import { map, switchMap, withLatestFrom } from "rxjs/operators";
 import { BackupsService, RestoreBackupApiResponse } from "@app/services/backups/backups.service";
 import { BackupDefinition } from "@app/models/backup";
 import { BackupsFacade } from "./backups.facade";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 
 @Injectable()
@@ -15,6 +16,7 @@ export class BackupsEffects {
         private actions$: Actions,
         private backupsService: BackupsService,
         private backupsFacade: BackupsFacade,
+        private snackbar: MatSnackBar,
     ) {
     }
 
@@ -47,9 +49,11 @@ export class BackupsEffects {
                 withLatestFrom(this.backupsFacade.getBackupChoice$()),
                 switchMap(([_, backupDef]: [any, BackupDefinition | null]) => {
                     if (backupDef === null) {
-                        console.warn(`A backupChoiceConfirmed action was dispatched but did not get a valid backupDefinition from the store!`);
+                        const message = `A backupChoiceConfirmed action was dispatched but did not get a valid backupDefinition from the store!`;
+                        console.warn(message);
                         return of(rollbackFailed({
                             backupDef,
+                            message,
                         }));
                     }
                     return this.backupsService.restoreBackup(backupDef).pipe(
@@ -62,6 +66,7 @@ export class BackupsEffects {
                             } else {
                                 return rollbackFailed({
                                     backupDef,
+                                    message: output,
                                 });
                             }
                         }),
@@ -69,6 +74,7 @@ export class BackupsEffects {
                             console.warn(error);
                             return of(rollbackFailed({
                                 backupDef,
+                                message: error?.message ?? "No Error Message Provided",
                             }))
                         }),
                     )
@@ -92,6 +98,7 @@ export class BackupsEffects {
                             } else {
                                 return backupCreationFailed({
                                     containerDef,
+                                    message: output,
                                 })
                             }
                         }),
@@ -99,13 +106,34 @@ export class BackupsEffects {
                             console.warn(error);
                             return of(backupCreationFailed({
                                 containerDef,
+                                message: error?.message ?? "No Error Message Provided",
                             }))
                         })
                     );
                 }),
             ),
-        { dispatch: false }
     );
+
+    public displayBackupSuccessSnackbar$ = createEffect(
+        () => this.actions$
+            .pipe(
+                ofType(backupCreationSuccessful),
+                tap(({ containerDef }: ContainerDefProp) => {
+                    this.snackbar.open(`Successfullly created backup for ${containerDef.getHostname()}`);
+                }),
+            ),
+        { dispatch: false }
+    )
+    public displayBackupFailedSnackbar$ = createEffect(
+        () => this.actions$
+            .pipe(
+                ofType(backupCreationFailed),
+                tap(({ message }: ContainerDefAndMessageProp) => {
+                    this.snackbar.open(message);
+                }),
+            ),
+        { dispatch: false }
+    )
 }
 
 export const backupsFeatureEffects = [
