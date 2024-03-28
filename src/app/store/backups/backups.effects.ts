@@ -23,7 +23,10 @@ export class BackupsEffects {
     public getBackupsList$ = createEffect(
         () => this.actions$
             .pipe(
-                ofType(backupsComponentInit),
+                ofType(
+                    backupsComponentInit,
+                    backupCreationSuccessful,
+                ),
                 switchMap(({ containerDef }: ContainerDefProp) => {
                     console.log("Backup component initialized");
                     console.log(containerDef);
