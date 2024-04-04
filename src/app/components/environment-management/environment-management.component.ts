@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, AfterViewInit } from "@angular/core";
 import { DockerService } from "@app/services/docker/docker.service";
 import { EnvironmentsService } from "@app/services/environments/environments.service";
 import { Store } from "@ngrx/store";
@@ -33,7 +33,7 @@ import { isNil } from "lodash";
   templateUrl: "./environment-management.component.html",
   styleUrls: ["./environment-management.component.scss"],
 })
-export class EnvironmentManagementComponent {
+export class EnvironmentManagementComponent implements AfterViewInit {
   ContainerType = ContainerType;
 
   pageType: string = "EnvironmentManagement";
@@ -67,6 +67,14 @@ export class EnvironmentManagementComponent {
       if (!isNil(env)) {
         this.refreshContainersForEnv(env);
       }
+    });
+  }
+
+  ngAfterViewInit() {
+    const tabsHeader = document.getElementsByTagName("mat-tab-header")[0];
+    tabsHeader.addEventListener("wheel", (e: any) => {
+      tabsHeader.scrollLeft += e.deltaY;
+      e.preventDefault();
     });
   }
 

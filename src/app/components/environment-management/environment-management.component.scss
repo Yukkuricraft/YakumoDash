@@ -26,3 +26,20 @@ h3 {
 .filter-to-white {
   filter: brightness(0) saturate(100%) invert(100%);
 }
+
+::ng-deep .mat-tab-header {
+  overflow-x: scroll !important;
+}
+
+::ng-deep .mat-tab-label-container {
+  overflow: visible !important;
+  scroll-behavior: smooth;
+}
+
+::ng-deep .mat-tab-header::-webkit-scrollbar {
+  display: none;
+}
+
+::ng-deep .mat-tab-header-pagination {
+  display: none;
+}

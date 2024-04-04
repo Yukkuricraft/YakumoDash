@@ -12,6 +12,7 @@
 <mat-tab-group
   (selectedIndexChange)="selectedIndexChanged($event)"
   [selectedIndex]="activeTabIndex$ | async"
+  [disablePagination]="true"
 >
   <mat-tab
     *ngFor="let env of availableEnvs$ | async"
