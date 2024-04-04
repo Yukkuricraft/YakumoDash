@@ -86,6 +86,7 @@ export class ContainerActionsComponent {
     >(BackupsManagementDialogComponent, {
       data: {
         containerDef: this.containerDef,
+        containerRunning$: this.containerRunning$,
       },
       width: "85vw",
       height: "85vh",

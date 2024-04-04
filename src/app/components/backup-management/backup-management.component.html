@@ -80,8 +80,9 @@
       <button
         mat-raised-button
         color="primary"
-        matTooltip="Confirm backup"
+        matTooltip="{{(containerRunning$ | async) ? 'Cannot restore while container is running' : 'Confirm backup'}}"
         (click)="backupChoiceConfirmed()"
+        [disabled]="(containerRunning$ | async)"
       >
         Confirm Rollback
       </button>

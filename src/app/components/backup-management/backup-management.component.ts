@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, Input, Inject } from "@angular/core";
 import { isNil } from "lodash";
-import { take, map, mergeMap, filter, switchMap, Observable, takeLast } from "rxjs";
+import { take, map, mergeMap, filter, switchMap, Observable, takeLast, BehaviorSubject } from "rxjs";
 import { Env } from "@app/models/env";
-import { ContainerDefinition } from "@app/models/container";
+import { ActiveContainer, ContainerDefinition, ContainerStates, DockerContainerState } from "@app/models/container";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatTableDataSource } from '@angular/material/table';
 import { BackupDefinition } from "@app/models/backup";
@@ -11,6 +11,7 @@ import { BackupsFacade } from "@app/store/backups/backups.facade";
 export type BackupsManagementDialogData = {
   title?: string;
   containerDef: ContainerDefinition;
+  containerRunning$: BehaviorSubject<boolean>;
   extraActionPrompt?: string;
 };
 
@@ -37,6 +38,7 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
   pageType: string = "BackupManagement";
 
   containerDef: ContainerDefinition;
+  containerRunning$: Observable<boolean>;
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -52,9 +54,12 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
     }
 
     this.containerDef = data!.containerDef;
+    this.containerRunning$ = data!.containerRunning$.asObservable();
+
     this.isBackupSelected$ = this.backupsFacade.isBackupChoiceSelected$();
     this.areBackupsReadyToRender$ = this.backupsFacade.isBackupsReadyToRender$();
     this.selectedBackup$ = this.backupsFacade.getBackupChoice$();
+
     this.backupsList$ = this.backupsFacade.getBackupsList$();
     this.backupsList$.subscribe((data: any) => { console.log("BACKUPS LIST SUBSCRIPTION"); console.log(data) });
     this.backupsDataSource$ = this.backupsList$.pipe(
