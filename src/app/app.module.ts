@@ -33,6 +33,7 @@ import { MatListModule } from "@angular/material/list";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -117,6 +118,7 @@ import { AppStoreModule } from "@app/store/app-store.module";
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatProgressSpinnerModule,
     MatTreeModule,
     ReactiveFormsModule,
   ],

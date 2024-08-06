@@ -14,12 +14,14 @@
   </mat-toolbar>
 
   <div class="backups">
-    <div class="backups_list">
+    <div
+      class="backups_list"
+      *ngIf="areBackupsReadyToRender$ | async"
+    >
       <table
         mat-table
         [dataSource]="(backupsDataSource$ | async) ?? []"
         class="mat-elevation-z8 backups_table"
-        *ngIf="areBackupsReadyToRender$ | async"
       >
         <!-- Position Column -->
         <ng-container matColumnDef="date">
@@ -47,6 +49,12 @@
             *matRowDef="let row; columns: displayedColumns;"
         ></tr>
       </table>
+    </div>
+    <div
+      *ngIf="!(areBackupsReadyToRender$ | async)"
+      class="center-contents"
+    >
+      <mat-spinner></mat-spinner>
     </div>
     <mat-card
       *ngIf="(isBackupSelected$ | async)"
