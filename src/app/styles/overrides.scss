@@ -19,7 +19,6 @@ mat-card {
 mat-dialog-container {
   padding: 24px;
   max-height: 95vh;
-  overflow: scroll;
   height: fit-content !important;
   margin: auto;
 }
@@ -27,8 +26,4 @@ mat-dialog-container {
 .cdk-overlay-pane.mat-mdc-dialog-panel {
   height: 100% !important;
   margin: auto !important;
-}
-
-.mat-mdc-dialog-container.mdc-dialog__surface {
-  max-height: 100%;
 }
