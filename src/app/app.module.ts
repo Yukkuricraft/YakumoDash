@@ -19,7 +19,7 @@ import { EnvironmentManagementComponent } from "@app/components/environment-mana
 import { Features } from "@app/store";
 import { FilesService } from "@app/services/files/files.service";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { GoogleLoginProvider } from "@abacritt/angularx-social-login";
+import { GoogleLoginProvider, GoogleSigninButtonModule } from "@abacritt/angularx-social-login";
 import { LoginComponent } from "@app/components/login/login.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -51,7 +51,7 @@ import { TextEditorDialogComponent } from "@app/components/shared/text-editor-di
 import { TokenInterceptor } from "@app/interceptors/token/token.interceptor";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 
-import { LetModule } from "@ngrx/component";
+import { LetDirective } from "@ngrx/component";
 
 import {
   HTTP_INTERCEPTORS,
@@ -99,7 +99,7 @@ import { AppStoreModule } from "@app/store/app-store.module";
     FormsModule,
     HttpClientModule,
     // NgTerminalModule,
-    LetModule,
+    LetDirective,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
@@ -121,6 +121,7 @@ import { AppStoreModule } from "@app/store/app-store.module";
     MatProgressSpinnerModule,
     MatTreeModule,
     ReactiveFormsModule,
+    GoogleSigninButtonModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

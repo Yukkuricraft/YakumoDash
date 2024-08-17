@@ -1,12 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import {
-  GoogleLoginProvider,
   SocialAuthService,
-  SocialUser,
 } from "@abacritt/angularx-social-login";
 import { Store } from "@ngrx/store";
-import { sendMessageToMaster } from "@angular/compiler-cli/ngcc/src/execution/cluster/utils";
 import { RootActions } from "@app/store/root/root.actions";
 import { Observable, switchMap } from "rxjs";
 import { AuthService } from "@app/services/auth/auth.service";
