@@ -3,7 +3,7 @@ import {
   dockerStringArrayTransformer,
 } from "@app/helpers/dto-transformers";
 import { Transform, Exclude } from "class-transformer";
-import { capitalize, includes } from "lodash";
+import { capitalize, includes } from "lodash-es";
 import { Env } from "./env";
 
 export enum ContainerType {

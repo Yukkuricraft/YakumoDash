@@ -1,4 +1,4 @@
-import { camelCase, snakeCase } from 'lodash';
+import { camelCase, snakeCase } from 'lodash-es';
 
 export type CaseOptions = { exclude?: string[]; excludeValuesForKeys?: string[] };
 

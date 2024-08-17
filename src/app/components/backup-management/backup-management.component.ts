@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Inject } from "@angular/core";
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 import { take, map, mergeMap, filter, switchMap, Observable, takeLast, BehaviorSubject } from "rxjs";
 import { Env } from "@app/models/env";
 import { ActiveContainer, ContainerDefinition, ContainerStates, DockerContainerState } from "@app/models/container";

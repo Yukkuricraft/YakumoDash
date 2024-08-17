@@ -1,5 +1,4 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { isNil } from 'lodash';
 import { BackupsFeatureKey } from "@app/store/backups/feature-key";
 import { BackupsFeatureState } from "@app/store/backups/backups.reducer";
 import { ContainerDefinition } from "@app/models/container";

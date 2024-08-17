@@ -6,7 +6,6 @@ import { AuthService } from "@app/services/auth/auth.service";
 import { BackupsManagementDialogComponent } from "./components/backup-management/backup-management.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule } from "@angular/platform-browser";
-import { config as socketioConfig } from "@app/services/socketio/socketio.service";
 import { ConfirmationDialogComponent } from "@app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { ContainerActionsComponent } from "@app/components/shared/container-actions/container-actions.component";
 import { ContainerStatusCardComponent } from "@app/components/shared/container-status-card/container-status-card.component";
@@ -45,7 +44,6 @@ import { NewEnvironmentDialogComponent } from "@app/components/environment-manag
 import { NgModule, Type } from "@angular/core";
 import { RootEffects } from "@app/store/root/root.effects";
 import { ServerConsoleDialogComponent } from "@app/components/shared/server-console-dialog/server-console-dialog.component";
-import { SocketIoModule } from "ngx-socket-io";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { TextEditorDialogComponent } from "@app/components/shared/text-editor-dialog/text-editor-dialog.component";
 import { TokenInterceptor } from "@app/interceptors/token/token.interceptor";

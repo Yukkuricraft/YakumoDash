@@ -6,16 +6,7 @@
       {{ (activeContainer$ | async)?.names?.[0] ?? "Inactive Container" }}
     </h3>
     <div>
-      <!-- <ng-terminal #term [draggable]="true"></ng-terminal> -->
       <div #myTerminal></div>
-      <textarea
-        #myTerminalInput
-        (keypress)="handleConsoleInput($event)"
-        style="width: 100%"
-        rows="1"
-      ></textarea>
     </div>
-    <button (click)="button1Clicked()">message1</button>
-    <button (click)="button2Clicked()">message2</button>
   </mat-card-content>
 </mat-card>

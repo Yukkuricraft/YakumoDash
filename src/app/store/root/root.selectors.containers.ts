@@ -7,7 +7,7 @@ import {
   ContainerDefinition,
   ContainerType,
 } from "@app/models/container";
-import { has, isNil, includes } from "lodash";
+import { has, isNil, includes } from "lodash-es";
 
 const selectRootState = createFeatureSelector<RootState>(Features.Root);
 

@@ -20,7 +20,7 @@ export const featureStores = [
     CommonModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
-    StoreDevtoolsModule.instrument(),
+    StoreDevtoolsModule.instrument({connectInZone: true}),
     ...featureStores,
   ]
 })

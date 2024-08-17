@@ -26,7 +26,7 @@ import {
   TextEditorDialogData,
   TextEditorDialogReturn,
 } from "../shared/text-editor-dialog/text-editor-dialog.component";
-import { isNil } from "lodash";
+import { isNil } from "lodash-es";
 
 @Component({
   selector: "app-server-management",
