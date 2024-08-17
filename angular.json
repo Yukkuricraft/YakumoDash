@@ -36,8 +36,9 @@
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "src/theme.scss"
+              "src/app/styles/styles.scss",
+              "src/app/styles/theme.scss",
+              "src/app/styles/overrides.scss"
             ],
             "scripts": []
           },

@@ -14,7 +14,7 @@ $custom-typography: mat.define-typography-config(
 
 /* Define palettes */
 $my-custom-primary: mat.define-palette(custom-palette.$md-purple);
-$my-custom-accent: mat.define-palette(custom-palette.$md-yellow);
+$my-custom-accent: mat.define-palette(custom-palette.$md-gray);
 $my-custom-warn: mat.define-palette(custom-palette.$md-red);
 
 /* Define themes */

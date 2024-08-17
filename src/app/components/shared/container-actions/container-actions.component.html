@@ -1,6 +1,6 @@
 <div>
   <button
-    mat-icon-button
+    mat-mini-fab
     matTooltip="Start the container"
     (click)="startContainer()"
     [disabled]="containerRunning$ | async"
@@ -8,7 +8,7 @@
     <mat-icon> play_circle_filled </mat-icon>
   </button>
   <button
-    mat-icon-button
+    mat-mini-fab
     matTooltip="Stop Container"
     (click)="stopContainer()"
     [disabled]="!(containerRunning$ | async)"
@@ -17,7 +17,7 @@
   </button>
   <button
     *ngIf="containerDef.isMinecraftContainer"
-    mat-icon-button
+    mat-mini-fab
     matTooltip="Edit filesystem and configs"
     (click)="editContainerConfig()"
   >
@@ -26,7 +26,7 @@
   <!-- Really need to make this functional/useful first -->
   <!-- <button
     *ngIf="containerDef.isMinecraftContainer"
-    mat-icon-button
+    mat-mini-fab
     matTooltip="Connect to this world group's server console."
     (click)="openServerConsole()"
   >
@@ -34,7 +34,7 @@
   </button> -->
   <button
     *ngIf="containerDef.isBackupsEnabled"
-    mat-icon-button
+    mat-mini-fab
     matTooltip="Manage Backups"
     (click)="manageBackups()"
   >
@@ -43,7 +43,7 @@
   <!-- Should be a dedicated dialog popup -->
   <!-- <button
     *ngIf="containerDef.isMinecraftContainer"
-    mat-icon-button
+    mat-mini-fab
     matTooltip="Copy configs from container to bindmounts"
     (click)="copyConfigs()"
   >

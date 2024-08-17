@@ -45,3 +45,7 @@ h3 {
 ::ng-deep .mat-tab-header-pagination {
   display: none;
 }
+
+::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: white !important;
+}

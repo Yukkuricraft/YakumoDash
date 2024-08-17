@@ -56,7 +56,7 @@
             <div class="env-actions">
               <div>
                 <button
-                  mat-icon-button
+                  mat-mini-fab
                   matTooltip="Start Environment"
                   (click)="startEnvironment()"
                   [disabled]="startEnvironmentDisabled()"
@@ -64,7 +64,7 @@
                   <mat-icon> play_circle_filled </mat-icon>
                 </button>
                 <button
-                  mat-icon-button
+                  mat-mini-fab
                   matTooltip="Shut Down Environment"
                   (click)="stopEnvironment()"
                   [disabled]="stopEnvironmentDisabled()"
@@ -72,7 +72,7 @@
                   <mat-icon> stop </mat-icon>
                 </button>
                 <button
-                  mat-icon-button
+                  mat-mini-fab
                   matTooltip="Attempt to Restart Environment"
                   (click)="restartEnvironment()"
                   [disabled]="restartEnvironmentDisabled()"
@@ -80,7 +80,7 @@
                   <mat-icon> replay </mat-icon>
                 </button>
                 <button
-                  mat-icon-button
+                  mat-mini-fab
                   (click)="editEnvironment()"
                   matTooltip="Edit Environment Config"
                 >
@@ -88,7 +88,7 @@
                 </button>
                 <button
                   *ngIf="!(env.name === 'env1') && isDeleteEnvironmentDisabled"
-                  mat-icon-button
+                  mat-mini-fab
                   (click)="deleteEnvironment()"
                   matTooltip="DELETE ENVIRONMENT"
                 >
