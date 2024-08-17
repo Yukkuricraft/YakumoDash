@@ -1,11 +1,6 @@
 @use "@angular/material" as mat;
 
 // Overrides for angular components
-// Because a lot of shit changed from angular14 -> angular18 and I want it to look closer to angular14's styling.
-
-button{
-  margin: 10px 10px 0px 0px;
-}
 
 /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version.*/
 mat-card {
@@ -14,16 +9,4 @@ mat-card {
   .mat-mdc-card-content, .mat-mdc-card-content:last-child {
     padding: 0px;
   }
-}
-
-mat-dialog-container {
-  padding: 24px;
-  max-height: 95vh;
-  height: fit-content !important;
-  margin: auto;
-}
-
-.cdk-overlay-pane.mat-mdc-dialog-panel {
-  height: 100% !important;
-  margin: auto !important;
 }

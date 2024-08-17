@@ -137,7 +137,6 @@ export class NewEnvironmentDialogComponent {
           <br/>
           <p>Are you sure?</p>`,
       },
-      width: "50vw",
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

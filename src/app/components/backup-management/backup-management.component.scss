@@ -28,7 +28,7 @@ h3 {
 
   &_list {
     width: 100%;
-    height: 68vh;
+    min-height: 68vh;
     overflow: auto;
   }
   &_table {

@@ -84,7 +84,7 @@ export class EnvironmentManagementComponent implements AfterViewInit {
   }
 
   openNewEnvDialog(): void {
-    this.dialog.open(NewEnvironmentDialogComponent, { width: "50vw" });
+    this.dialog.open(NewEnvironmentDialogComponent);
   }
 
   getDefinedContainersForEnvAndType$(env: Env, type: ContainerType) {
@@ -124,7 +124,6 @@ export class EnvironmentManagementComponent implements AfterViewInit {
         title: "Confirm Shutdown of Environment",
         description: `This action will stop all containers (servers) for the environment '${activeEnv.getFormattedLabel()}'.`,
       },
-      width: "50vw",
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -172,8 +171,8 @@ export class EnvironmentManagementComponent implements AfterViewInit {
         uri: `env/${activeEnv.name}.toml`,
         extraActionPrompt: `Would you like to disable regenerating all env configs after saving? (You must regenerate configs to reflect changes in the UI)`,
       },
-      width: "100vw",
-      height: "90vh",
+      width: "95vw",
+      height: "85vh",
       disableClose: true,
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -227,7 +226,6 @@ export class EnvironmentManagementComponent implements AfterViewInit {
 				<br />
 				<p><i>Are you sure?</i></p>`,
       },
-      width: "50vw",
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
