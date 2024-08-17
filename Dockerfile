@@ -1,5 +1,5 @@
 # Copy src and install packages.json
-FROM node:14.20-alpine AS node
+FROM node:22-alpine AS node
 ENV PATH=/app/node_modules/.bin:$PATH
 
 WORKDIR /app

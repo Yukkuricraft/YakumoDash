@@ -27,19 +27,21 @@ h3 {
   filter: brightness(0) saturate(100%) invert(100%);
 }
 
-::ng-deep .mat-tab-header {
+::ng-deep .mat-mdc-tab-header {
   overflow-x: scroll !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 ::ng-deep .mat-tab-label-container {
   overflow: visible !important;
   scroll-behavior: smooth;
 }
 
-::ng-deep .mat-tab-header::-webkit-scrollbar {
+::ng-deep .mat-mdc-tab-header::-webkit-scrollbar {
   display: none;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 ::ng-deep .mat-tab-header-pagination {
   display: none;
 }

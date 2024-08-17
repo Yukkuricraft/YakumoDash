@@ -5,30 +5,12 @@
 /* Custom Typography */
 $custom-typography: mat.define-typography-config(
   $font-family: "'Rubik', sans-serif",
-  //$aa: mat.define-typography-level;
-  $display-4:
-    mat.define-typography-level(8rem, 8rem, 300, $letter-spacing: -0.05em),
-  $display-3:
-    mat.define-typography-level(4rem, 4rem, 400, $letter-spacing: -0.02em),
-  $display-2:
-    mat.define-typography-level(
-      3.21rem,
-      3.42rem,
-      400,
-      $letter-spacing: -0.005em
-    ),
-  $display-1: mat.define-typography-level(2.42rem, 2.85rem, 400),
-  $headline: mat.define-typography-level(1.71rem, 2.28rem, 400),
-  $title: mat.define-typography-level(1.42rem, 2.28rem, 500),
-  $subheading-2: mat.define-typography-level(1.14rem, 2rem, 400),
-  $subheading-1: mat.define-typography-level(1.07rem, 1.71rem, 400),
   $body-2: mat.define-typography-level(1rem, 1.71rem, 500),
   $body-1: mat.define-typography-level(1rem, 1.42rem, 400),
   $caption: mat.define-typography-level(0.85rem, 1.42rem, 400),
   $button: mat.define-typography-level(1rem, 1rem, 500),
-  $input: mat.define-typography-level(inherit, 1.125, 400),
 );
-@include mat.core($custom-typography);
+@include mat.core();
 
 /* Define palettes */
 $my-custom-primary: mat.define-palette(custom-palette.$md-purple);
