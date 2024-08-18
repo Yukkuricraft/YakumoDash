@@ -126,6 +126,8 @@ export class ContainerActionsComponent {
         env: activeEnv,
         containerDef: this.containerDef,
       },
+      width: "95vw",
+      height: "95vh",
     });
 
     dialogRef.afterClosed().subscribe(result => {
