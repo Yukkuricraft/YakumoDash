@@ -15,7 +15,6 @@ export class DockerService {
   private basePath: string = `https://${environment.API_HOST}/server`;
 
   constructor(private http: HttpClient) {}
-
   upEnv(env: Env): Observable<DockerEnvActionResponse> {
     console.log("DockerService.upEnv asdf");
     return this.http
