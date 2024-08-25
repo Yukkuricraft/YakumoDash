@@ -16,6 +16,11 @@ export class DockerService {
 
   constructor(private http: HttpClient) {}
 
+  resizeTty(container: ActiveContainer, height: number, width: number) {
+    return this.http
+      .post(`https://dev.docker.yukkuricraft.net/containers/${container.id}/resize?h=${height}&w=${width}`, {});
+  }
+
   upEnv(env: Env): Observable<DockerEnvActionResponse> {
     console.log("DockerService.upEnv asdf");
     return this.http

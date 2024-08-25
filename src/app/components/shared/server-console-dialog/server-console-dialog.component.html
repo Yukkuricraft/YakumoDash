@@ -5,8 +5,6 @@
       <!-- {{ (activeContainer$ | async)?.names[0] ?? "Unknown Container" }} -->
       {{ (activeContainer$ | async)?.names?.[0] ?? "Inactive Container" }}
     </h3>
-    <div>
-      <div #myTerminal></div>
-    </div>
+    <div #myTerminal></div>
   </mat-card-content>
 </mat-card>
