@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   API_HOST: 'dev.api.yukkuricraft.net',
+  WSS_HOST: 'dev.docker.yukkuricraft.net',
 };
 
 /*

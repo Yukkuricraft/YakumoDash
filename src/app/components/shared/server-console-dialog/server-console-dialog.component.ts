@@ -22,7 +22,7 @@ import { AttachAddon } from '@xterm/addon-attach';
 import { Terminal } from "@xterm/xterm";
 import { AuthService } from "@app/services/auth/auth.service";
 import { FitAddon } from '@xterm/addon-fit';
-import { DockerService } from "@app/services/docker/docker.service";
+import { environment } from "src/environments/environment";
 
 export type ServerConsoleDialogData = {
   env: Env;
@@ -72,7 +72,7 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
       }
 
       // TODO: Should change auth token to a WSS specific auth token with request origin validation because it's not encrypted - traffic snooping could reuse it in theory
-      const wsEndpoint = `wss://dev.docker.yukkuricraft.net/containers/${activeContainer.id}/attach/ws?stdin=1&stdout=1&stderr=1&stream=1&logs=1&Authorization=${this.authService.accessToken}`;
+      const wsEndpoint = `wss://${environment.WSS_HOST}/containers/${activeContainer.id}/attach/ws?stdin=1&stdout=1&stderr=1&stream=1&logs=1&Authorization=${this.authService.accessToken}`;
       this.socket = new WebSocket(wsEndpoint);
 
       const attachAddon = new AttachAddon(this.socket);

@@ -6,4 +6,5 @@
 export const environment = {
   production: false,
   API_HOST: 'localhost',
+  WSS_HOST: 'localhost', // This probably doesn't work as is.
 };
