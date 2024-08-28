@@ -10,6 +10,7 @@ import {
   ViewChild,
   ViewEncapsulation,
   OnDestroy,
+  HostListener,
 } from "@angular/core";
 import {
   ActiveContainer,
@@ -36,11 +37,16 @@ export type ServerConsoleDialogData = {
   encapsulation: ViewEncapsulation.None,
 })
 export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
-  @ViewChild("myTerminalInput", { static: true })
-  myTerminalInputDiv!: ElementRef;
   @ViewChild("myTerminal", { static: true }) terminalDiv!: ElementRef;
   terminal!: Terminal;
   socket: WebSocket | undefined;
+  fitAddon: FitAddon | undefined;
+
+  logsLoaded: boolean = false;
+  lastLogReceivedTime: number | undefined;
+  lastLogReceivedThresholdMs = 250;
+
+  checkLogsLoadedIntervalHandler: ReturnType<typeof setInterval> | undefined;
 
   constructor(
     private store: Store,
@@ -48,6 +54,36 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
     private authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data?: ServerConsoleDialogData
   ) {
+    this.fitAddon = new FitAddon();
+    this.checkLogsLoadedIntervalHandler = setInterval(this.checkLogsLoaded.bind(this), 500);
+  }
+
+  checkLogsLoaded() {
+    const now = Date.now();
+
+    if (this.lastLogReceivedTime) {
+      const timeSinceLastLog = now - this.lastLogReceivedTime;
+
+      if (timeSinceLastLog > this.lastLogReceivedThresholdMs) {
+
+        this.logsLoaded = true;
+
+        clearInterval(this.checkLogsLoadedIntervalHandler);
+        this.checkLogsLoadedIntervalHandler = undefined;
+
+        if (this.socket) {
+          this.socket.removeEventListener("message", this.onWsMessageReceived);
+        }
+
+        this.terminal.input("\n");
+      }
+    }
+  }
+
+  onWsMessageReceived() {
+    if (!this.logsLoaded) {
+      this.lastLogReceivedTime = Date.now();
+    }
   }
 
   get activeContainer$() {
@@ -58,12 +94,17 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
     );
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    if (this.fitAddon !== undefined) {
+      this.fitAddon.fit();
+    }
+  }
+
   ngAfterViewInit() {
     this.terminal = new Terminal({
 
     });
-    console.log("Attaching websocket?")
-
 
     this.activeContainer$.subscribe((activeContainer: ActiveContainer | null) => {
       if (activeContainer === null) {
@@ -74,16 +115,20 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
       // TODO: Should change auth token to a WSS specific auth token with request origin validation because it's not encrypted - traffic snooping could reuse it in theory
       const wsEndpoint = `wss://${environment.WSS_HOST}/containers/${activeContainer.id}/attach/ws?stdin=1&stdout=1&stderr=1&stream=1&logs=1&Authorization=${this.authService.accessToken}`;
       this.socket = new WebSocket(wsEndpoint);
-
       const attachAddon = new AttachAddon(this.socket);
-      const fitAddon = new FitAddon();
+
+      this.socket.addEventListener("message", this.onWsMessageReceived.bind(this));
 
       // Attach the socket to term
       this.terminal.loadAddon(attachAddon);
-      this.terminal.loadAddon(fitAddon);
       this.terminal.open(this.terminalDiv.nativeElement);
-      fitAddon.fit();
-    })
+        this.terminal.input("list\n");
+
+      if (this.fitAddon !== undefined) {
+        this.terminal.loadAddon(this.fitAddon);
+        this.fitAddon.fit();
+      }
+    });
   }
 
 
@@ -97,5 +142,8 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
 
     this.terminal.clear();
 
+    if (this.checkLogsLoadedIntervalHandler) {
+      clearInterval(this.checkLogsLoadedIntervalHandler);
+    }
   }
 }
