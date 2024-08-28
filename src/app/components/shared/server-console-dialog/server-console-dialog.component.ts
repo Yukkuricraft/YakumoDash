@@ -44,7 +44,7 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
 
   logsLoaded: boolean = false;
   lastLogReceivedTime: number | undefined;
-  lastLogReceivedThresholdMs = 250;
+  lastLogReceivedCheckIntervalMs = 250;
 
   checkLogsLoadedIntervalHandler: ReturnType<typeof setInterval> | undefined;
 
@@ -55,7 +55,7 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data?: ServerConsoleDialogData
   ) {
     this.fitAddon = new FitAddon();
-    this.checkLogsLoadedIntervalHandler = setInterval(this.checkLogsLoaded, 500);
+    this.checkLogsLoadedIntervalHandler = setInterval(this.checkLogsLoaded, this.lastLogReceivedCheckIntervalMs);
   }
 
   checkLogsLoaded = () => {
@@ -64,8 +64,7 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
     if (this.lastLogReceivedTime) {
       const timeSinceLastLog = now - this.lastLogReceivedTime;
 
-      if (timeSinceLastLog > this.lastLogReceivedThresholdMs) {
-
+      if (timeSinceLastLog > this.lastLogReceivedCheckIntervalMs) {
         this.logsLoaded = true;
 
         clearInterval(this.checkLogsLoadedIntervalHandler);
@@ -91,16 +90,12 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
       throw Error("Called onWsSocketOpen while this.socket was undefined!");
     }
     const attachAddon = new AttachAddon(this.socket);
-    // Attach the socket to term
     this.terminal.loadAddon(attachAddon);
-
-    // TODO: Open after the websocket 'open' event comes in
     this.terminal.open(this.terminalDiv.nativeElement);
 
     if (this.fitAddon === undefined) {
       throw Error("Called onWsSocketOpen but this.fitAddon was undefined!");
     }
-
     this.terminal.loadAddon(this.fitAddon);
     this.fitAddon.fit();
   }
@@ -116,7 +111,6 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
   onResize = () => {
     if (this.fitAddon !== undefined) {
-      console.log("Resizing", { proposedDimensionL: this.fitAddon.proposeDimensions()});
       this.fitAddon.fit();
     }
   }
