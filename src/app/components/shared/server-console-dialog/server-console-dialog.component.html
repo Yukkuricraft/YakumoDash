@@ -1,10 +1,5 @@
-<mat-card appearance="outlined">
-  <mat-card-title>Server Console</mat-card-title>
-  <mat-card-content>
-    <h3>
-      <!-- {{ (activeContainer$ | async)?.names[0] ?? "Unknown Container" }} -->
-      {{ (activeContainer$ | async)?.names?.[0] ?? "Inactive Container" }}
-    </h3>
-    <div #myTerminal></div>
-  </mat-card-content>
-</mat-card>
+<h3 mat-dialog-title>
+  Server Console - {{ (activeContainer$ | async)?.names?.[0] ?? "Inactive Container" }}
+</h3>
+<mat-dialog-content #myTerminal>
+</mat-dialog-content>
