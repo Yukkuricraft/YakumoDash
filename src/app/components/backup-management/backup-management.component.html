@@ -85,16 +85,19 @@
           <div class="backup-choice_tags-title">Tags</div>
           <div class="backup-choice_tags-value">{{(selectedBackup$ | async)?.tags?.join(", ")}}</div>
         </div>
+        <div
+          class="backup-choice_confirm-button"
+          matTooltip="{{(containerRunning$ | async) ? 'Cannot perform rollback while container is running' : 'Confirm rollback'}}">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="backupChoiceConfirmed()"
+            [disabled]="(containerRunning$ | async)"
+          >
+            Confirm Rollback
+          </button>
+        </div>
       </mat-card-content>
-      <button
-        mat-raised-button
-        color="primary"
-        matTooltip="{{(containerRunning$ | async) ? 'Cannot restore while container is running' : 'Confirm backup'}}"
-        (click)="backupChoiceConfirmed()"
-        [disabled]="(containerRunning$ | async)"
-      >
-        Confirm Rollback
-      </button>
     </mat-card>
   </div>
 </div>
