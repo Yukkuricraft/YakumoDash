@@ -55,10 +55,10 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data?: ServerConsoleDialogData
   ) {
     this.fitAddon = new FitAddon();
-    this.checkLogsLoadedIntervalHandler = setInterval(this.checkLogsLoaded.bind(this), 500);
+    this.checkLogsLoadedIntervalHandler = setInterval(this.checkLogsLoaded, 500);
   }
 
-  checkLogsLoaded() {
+  checkLogsLoaded = () => {
     const now = Date.now();
 
     if (this.lastLogReceivedTime) {
@@ -80,10 +80,29 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  onWsMessageReceived() {
+  onWsMessageReceived = () => {
     if (!this.logsLoaded) {
       this.lastLogReceivedTime = Date.now();
     }
+  }
+
+  onWsSocketOpen = () => {
+    if (this.socket === undefined) {
+      throw Error("Called onWsSocketOpen while this.socket was undefined!");
+    }
+    const attachAddon = new AttachAddon(this.socket);
+    // Attach the socket to term
+    this.terminal.loadAddon(attachAddon);
+
+    // TODO: Open after the websocket 'open' event comes in
+    this.terminal.open(this.terminalDiv.nativeElement);
+
+    if (this.fitAddon === undefined) {
+      throw Error("Called onWsSocketOpen but this.fitAddon was undefined!");
+    }
+
+    this.terminal.loadAddon(this.fitAddon);
+    this.fitAddon.fit();
   }
 
   get activeContainer$() {
@@ -95,8 +114,9 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize() {
+  onResize = () => {
     if (this.fitAddon !== undefined) {
+      console.log("Resizing", { proposedDimensionL: this.fitAddon.proposeDimensions()});
       this.fitAddon.fit();
     }
   }
@@ -115,19 +135,9 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
       // TODO: Should change auth token to a WSS specific auth token with request origin validation because it's not encrypted - traffic snooping could reuse it in theory
       const wsEndpoint = `wss://${environment.WSS_HOST}/containers/${activeContainer.id}/attach/ws?stdin=1&stdout=1&stderr=1&stream=1&logs=1&Authorization=${this.authService.accessToken}`;
       this.socket = new WebSocket(wsEndpoint);
-      const attachAddon = new AttachAddon(this.socket);
 
-      this.socket.addEventListener("message", this.onWsMessageReceived.bind(this));
-
-      // Attach the socket to term
-      this.terminal.loadAddon(attachAddon);
-      this.terminal.open(this.terminalDiv.nativeElement);
-        this.terminal.input("list\n");
-
-      if (this.fitAddon !== undefined) {
-        this.terminal.loadAddon(this.fitAddon);
-        this.fitAddon.fit();
-      }
+      this.socket.addEventListener("message", this.onWsMessageReceived);
+      this.socket.addEventListener("open", this.onWsSocketOpen);
     });
   }
 
