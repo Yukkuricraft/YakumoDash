@@ -168,7 +168,7 @@ export class EnvironmentManagementComponent implements AfterViewInit {
     >(TextEditorDialogComponent, {
       data: {
         title: "Edit Environment Config",
-        uri: `env/env-toml/${activeEnv.name}.toml`,
+        uri: `gen/env-toml/${activeEnv.name}.toml`,
         extraActionPrompt: `Would you like to disable regenerating all env configs after saving? (You must regenerate configs to reflect changes in the UI)`,
       },
       width: "95vw",
