@@ -17,8 +17,12 @@ COPY tsconfig.json /app
 
 ENTRYPOINT ["yarn", "serve:dev"]
 
+FROM dev AS local
+
+ENTRYPOINT ["yarn", "serve:local"]
+
 # Build dev assets - to be copied into dev nginx image
-FROM dev as dev_built
+FROM dev AS dev_built
 RUN yarn build:dev
 
 # Build prod assets - to be copied into prod nginx image
@@ -26,11 +30,11 @@ FROM dev AS prod_built
 RUN yarn build:prod
 
 # Nginx - Dev
-FROM nginx:1.23.0 as nginx_dev
+FROM nginx:1.23.0 AS nginx_dev
 COPY --from=dev_built /app/dist/yakumo-dash /usr/share/nginx/html
 COPY conf/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Nginx - Prod
-FROM nginx:1.23.0 as nginx_prod
+FROM nginx:1.23.0 AS nginx_prod
 COPY --from=prod_built /app/dist/yakumo-dash /usr/share/nginx/html
 COPY conf/nginx/default.conf /etc/nginx/conf.d/default.conf

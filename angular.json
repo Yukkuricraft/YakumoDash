@@ -97,6 +97,9 @@
             },
             "development": {
               "buildTarget": "main:build:development"
+            },
+            "local": {
+              "buildTarget": "main:build:local"
             }
           },
           "defaultConfiguration": "development"

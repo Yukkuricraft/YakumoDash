@@ -10,7 +10,7 @@ import { environment } from "src/environments/environment";
   providedIn: "root",
 })
 export class EnvironmentsService {
-  private basePath: string = `https://${environment.API_HOST}/environments`;
+  private basePath: string = `${environment.PROTOCOL}://${environment.API_HOST}/environments`;
 
   constructor(private http: HttpClient) {}
 

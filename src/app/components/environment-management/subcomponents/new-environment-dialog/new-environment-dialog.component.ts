@@ -13,6 +13,7 @@ import {
   ConfirmationDialogData,
 } from "@app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Env } from "@app/models/env";
+import { environment } from "src/environments/environment";
 
 interface ServerType {
   name: string;
@@ -30,12 +31,6 @@ export class NewEnvironmentDialogComponent {
   MAX_ALIAS_LEN = 32;
 
   MAX_DESCRIPTION_LEN = 2048;
-
-  // TODO: This really should be supplied by the yc-api rather than hardcoded in the frontend.
-  MIN_PORT = 25600;
-  MAX_PORT = 25700;
-  // MIN_PORT = 26600;
-  // MAX_PORT = 26700;
 
   numbersReg = /^\d+$/;
 
@@ -75,8 +70,8 @@ export class NewEnvironmentDialogComponent {
       ]),
       proxyPort: new FormControl("", [
         Validators.required,
-        Validators.min(this.MIN_PORT),
-        Validators.max(this.MAX_PORT),
+        Validators.min(environment.MIN_PROXY_PORT),
+        Validators.max(environment.MAX_PROXY_PORT),
         Validators.pattern(this.numbersReg),
       ]),
       serverType: new FormControl(""),
@@ -89,8 +84,8 @@ export class NewEnvironmentDialogComponent {
     minlength: `You must enter a value longer than ${this.MIN_ALIAS_LEN} chars!`,
     maxlength: `You must enter a value shorter than ${this.MAX_ALIAS_LEN} chars!`,
     required: "You must enter a value!",
-    min: `You must enter a value larger than ${this.MIN_PORT}!`,
-    max: `You must enter a value smaller than ${this.MAX_PORT}!`,
+    min: `You must enter a value larger than ${environment.MIN_PROXY_PORT}!`,
+    max: `You must enter a value smaller than ${environment.MAX_PROXY_PORT}!`,
     pattern: "You must enter a numeric value!",
   };
 

@@ -18,6 +18,7 @@ import { RootActions, EnvActions } from "@app/store/root/root.actions";
 import { selectActiveContainerByContainerDef } from "@app/store/root/root.selectors.containers";
 import { map, Observable, switchMap, BehaviorSubject } from "rxjs";
 import { BackupsManagementDialogComponent, BackupsManagementDialogData, BackupsManagementDialogReturn } from "@app/components/backup-management/backup-management.component";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-container-actions",
@@ -69,7 +70,7 @@ export class ContainerActionsComponent {
 
     // TODO: API-authorative configs...
     const isDev = window.location.hostname.indexOf("dev") > -1;
-    const url = `https://${isDev ? 'dev.' : '' }files.yakumo.yukkuricraft.net/${subPath}`;
+    const url = `${environment.PROTOCOL}://${environment.FILEBROWSER_HOST}/${subPath}`;
     console.log("Sending to:", env, url);
 
     window.open(url, "_blank");

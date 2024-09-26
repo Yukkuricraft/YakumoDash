@@ -11,7 +11,7 @@ import { environment } from "src/environments/environment";
   providedIn: "root",
 })
 export class FilesService {
-  private basePath: string = `https://${environment.API_HOST}/files`;
+  private basePath: string = `${environment.PROTOCOL}://${environment.API_HOST}/files`;
 
   constructor(private http: HttpClient) {}
 

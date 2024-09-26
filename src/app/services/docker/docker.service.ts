@@ -12,7 +12,7 @@ import { environment } from "src/environments/environment";
   providedIn: "root",
 })
 export class DockerService {
-  private basePath: string = `https://${environment.API_HOST}/server`;
+  private basePath: string = `${environment.PROTOCOL}://${environment.API_HOST}/server`;
 
   constructor(private http: HttpClient) {}
   upEnv(env: Env): Observable<DockerEnvActionResponse> {
