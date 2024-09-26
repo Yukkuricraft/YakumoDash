@@ -30,6 +30,9 @@ export class NewEnvironmentDialogComponent {
   MIN_ALIAS_LEN = 3;
   MAX_ALIAS_LEN = 32;
 
+  MIN_PROXY_PORT = environment.MIN_PROXY_PORT;
+  MAX_PROXY_PORT = environment.MAX_PROXY_PORT;
+
   MAX_DESCRIPTION_LEN = 2048;
 
   numbersReg = /^\d+$/;
@@ -70,8 +73,8 @@ export class NewEnvironmentDialogComponent {
       ]),
       proxyPort: new FormControl("", [
         Validators.required,
-        Validators.min(environment.MIN_PROXY_PORT),
-        Validators.max(environment.MAX_PROXY_PORT),
+        Validators.min(this.MIN_PROXY_PORT),
+        Validators.max(this.MAX_PROXY_PORT),
         Validators.pattern(this.numbersReg),
       ]),
       serverType: new FormControl(""),
@@ -84,8 +87,8 @@ export class NewEnvironmentDialogComponent {
     minlength: `You must enter a value longer than ${this.MIN_ALIAS_LEN} chars!`,
     maxlength: `You must enter a value shorter than ${this.MAX_ALIAS_LEN} chars!`,
     required: "You must enter a value!",
-    min: `You must enter a value larger than ${environment.MIN_PROXY_PORT}!`,
-    max: `You must enter a value smaller than ${environment.MAX_PROXY_PORT}!`,
+    min: `You must enter a value larger than ${this.MIN_PROXY_PORT}!`,
+    max: `You must enter a value smaller than ${this.MAX_PROXY_PORT}!`,
     pattern: "You must enter a numeric value!",
   };
 

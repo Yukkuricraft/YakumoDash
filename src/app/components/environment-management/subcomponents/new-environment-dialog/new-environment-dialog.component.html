@@ -31,7 +31,7 @@
           <!-- TODO: The port values should be supplied by the env dialog, which should be getting it from the yc-api instead. -->
           <mat-hint
             >The port the proxy will run on. This will be the port you connect to
-            in Minecraft. Port must be between 25600-25700 and not already used by
+            in Minecraft. Port must be between {{MIN_PROXY_PORT}}-{{MAX_PROXY_PORT}} and not already used by
             another environment.</mat-hint
           >
           <input
