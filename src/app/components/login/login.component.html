@@ -7,7 +7,12 @@
       <div style="margin-bottom: 8px; font-style: italic">
         Let The Machine Consume You
       </div>
-      <asl-google-signin-button></asl-google-signin-button>
+      @if (bypassGoogleAuth) {
+        <button mat-raised-button (click)="bypassLogin()">"Log in"</button>
+      }
+      @else {
+        <asl-google-signin-button></asl-google-signin-button>
+      }
     </mat-card>
   </section>
 </div>

@@ -4,6 +4,7 @@ import { map, Observable, of } from "rxjs";
 import { Store } from "@ngrx/store";
 import { selectUser } from "@app/store/root/root.selectors";
 import { AuthService } from "@app/services/auth/auth.service";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: "root",

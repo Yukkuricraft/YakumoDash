@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { catchError, map, Observable, of, tap } from "rxjs";
+import { catchError, map, Observable, of, tap, BehaviorSubject } from "rxjs";
 import { SocialAuthService, SocialUser } from "@abacritt/angularx-social-login";
 import { HttpClient } from "@angular/common/http";
 import { DomainConverter } from "@app/helpers/domain";
@@ -19,13 +19,13 @@ const accessTokenName = "auth.yakumo.access_token";
   providedIn: "root",
 })
 export class AuthService {
-  private basePath: string = `https://${environment.API_HOST}/auth`;
+  private basePath: string = `${environment.PROTOCOL}://${environment.API_HOST}/auth`;
   private _accessToken: string | null = null;
+  authSubject$ = new BehaviorSubject({});
 
   constructor(
     private http: HttpClient,
     private store: Store,
-    private socialAuthService: SocialAuthService
   ) {}
 
   get accessToken(): string | null {

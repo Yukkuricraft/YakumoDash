@@ -1,6 +1,6 @@
 version: "3.4"
 
-# Run this one if you already have nginx and acme-companion running from Yukkuricraft/Yukkuricraft
+# Run this one if you already have the nginx reverse-proxy running from Yukkuricraft/Yukkuricraft
 
 services:
   yakumo-dash:

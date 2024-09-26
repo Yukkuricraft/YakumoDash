@@ -5,7 +5,7 @@ import {
 } from "@abacritt/angularx-social-login";
 import { Store } from "@ngrx/store";
 import { RootActions } from "@app/store/root/root.actions";
-import { Observable, switchMap } from "rxjs";
+import { Observable, switchMap, filter, BehaviorSubject } from "rxjs";
 import { AuthService } from "@app/services/auth/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatIconRegistry } from "@angular/material/icon";
@@ -54,8 +54,12 @@ export class AppComponent implements OnInit {
     this.store.dispatch(RootActions.initializeApp());
 
     this.authService.authState
+      .subscribe(this.ycAuthService.authSubject$);
+    
+    this.ycAuthService.authSubject$
       .pipe(
-        switchMap(user => {
+        filter(v => !!v),
+        switchMap((user: any) => {
           /* eslint-disable-next-line camelcase */
           return this.ycAuthService.login({ id_token: user.idToken });
         })

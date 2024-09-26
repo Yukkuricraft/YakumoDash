@@ -66,6 +66,7 @@ import {
 } from "@angular/material/snack-bar";
 import { CapitalizePipe } from '@app/pipes/capitalize/capitalize.pipe';
 import { AppStoreModule } from "@app/store/app-store.module";
+import { environment } from "src/environments/environment";
 
 @NgModule({
   declarations: [
@@ -135,7 +136,7 @@ import { AppStoreModule } from "@app/store/app-store.module";
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              "1084736521175-2b5rrrpcs422qdc5458dhisdsj8auo0p.apps.googleusercontent.com",
+              environment.G_OAUTH2_CLIENT_ID,
               {
                 oneTapEnabled: false,
               }
