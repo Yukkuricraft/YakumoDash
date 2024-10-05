@@ -99,7 +99,8 @@ export class RootEffects {
         this.snackbar.open(
           `Created new env '${createdEnv.env.getFormattedLabel()} running on port '${
             createdEnv.port
-          }'`
+          }'`,
+          "Ok"
         );
 
         return [EnvActions.fetchAvailableEnvs(), RootActions.setGlobalLoadingBarInactive({ identifier: `Creating Env: ${createdEnv.alias}`})];
@@ -127,7 +128,8 @@ export class RootEffects {
         console.log("RESULT FOR DELETE ENV");
         console.log(env);
         this.snackbar.open(
-          `Done deleting env '${env.getFormattedLabel()}'`
+          `Done deleting env '${env.getFormattedLabel()}'`,
+          "Ok"
         );
 
         return [EnvActions.fetchAvailableEnvs(), RootActions.setGlobalLoadingBarInactive({ identifier: `Deleting: ${env.formatted}` })];
@@ -153,7 +155,8 @@ export class RootEffects {
       }),
       concatMap(({ env }: EnvProp) => {
         this.snackbar.open(
-          `Done starting env '${env.getFormattedLabel()}'`
+          `Done starting env '${env.getFormattedLabel()}'`,
+          "Ok"
         );
 
         return [
@@ -184,7 +187,8 @@ export class RootEffects {
       }),
       concatMap(({ env, containerName }: DockerContainerActionResponse) => {
         this.snackbar.open(
-          `Done spinning up '${containerName}'`
+          `Done spinning up '${containerName}'`,
+          "Ok"
         );
 
         return [
@@ -216,7 +220,8 @@ export class RootEffects {
       }),
       concatMap(({ env }: EnvProp) => {
         this.snackbar.open(
-          `Done shutting down env '${env.getFormattedLabel()}'`
+          `Done shutting down env '${env.getFormattedLabel()}'`,
+          "Ok"
         );
 
         return [
@@ -247,7 +252,8 @@ export class RootEffects {
       }),
       concatMap(({ env, containerName }: DockerContainerActionResponse) => {
         this.snackbar.open(
-          `Done shutting down container '${containerName}'`
+          `Done shutting down container '${containerName}'`,
+          "Ok"
         );
 
         return [

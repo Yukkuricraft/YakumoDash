@@ -207,7 +207,8 @@ export class EnvironmentManagementComponent implements AfterViewInit {
       return;
     } else if (this.activeEnv.enableEnvProtection) {
       this.snackbar.open(
-        `Env Protection is enabled on ${this.activeEnv.formatted}. Disable it in the env configs before deleting this env.`
+        `Env Protection is enabled on ${this.activeEnv.formatted}. Disable it in the env configs before deleting this env.`,
+        "Ok"
       );
       return;
     }

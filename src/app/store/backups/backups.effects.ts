@@ -90,7 +90,10 @@ export class BackupsEffects {
             .pipe(
                 ofType(rollbackSuccessful),
                 tap(({ backupDef }: BackupDefProp) => {
-                    this.snackbar.open(`Successfullly rolled back ${backupDef.hostname} to  ${backupDef.time.toLocaleString()}`);
+                    this.snackbar.open(
+                        `Successfullly rolled back ${backupDef.hostname} to ${backupDef.time.toLocaleString()}`,
+                        "Ok"
+                    );
                 }),
             ),
         { dispatch: false }
@@ -100,7 +103,7 @@ export class BackupsEffects {
             .pipe(
                 ofType(rollbackFailed),
                 tap(({ message }: NullableBackupDefAndMessageProp) => {
-                    this.snackbar.open(message);
+                    this.snackbar.open(message, "Ok");
                 }),
             ),
         { dispatch: false }
@@ -143,7 +146,7 @@ export class BackupsEffects {
             .pipe(
                 ofType(backupCreationSuccessful),
                 tap(({ containerDef }: ContainerDefProp) => {
-                    this.snackbar.open(`Successfullly created backup for ${containerDef.getHostname()}`);
+                    this.snackbar.open(`Successfullly created backup for ${containerDef.getHostname()}`, "Ok");
                 }),
             ),
         { dispatch: false }
@@ -153,7 +156,7 @@ export class BackupsEffects {
             .pipe(
                 ofType(backupCreationFailed),
                 tap(({ message }: ContainerDefAndMessageProp) => {
-                    this.snackbar.open(message);
+                    this.snackbar.open(message, "Ok");
                 }),
             ),
         { dispatch: false }

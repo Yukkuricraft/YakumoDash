@@ -42,7 +42,8 @@ export class TokenInterceptor implements HttpInterceptor {
       catchError(error => {
         if (error.status === 401 && !request.url.includes("login")) {
           this.snackbar.open(
-            "Could not authenticate you. Redirecting to Login Page"
+            "Could not authenticate you. Redirecting to Login Page",
+            "Ok"
           );
           this.store.dispatch(RootActions.beginForceNavigateToLogin());
         }

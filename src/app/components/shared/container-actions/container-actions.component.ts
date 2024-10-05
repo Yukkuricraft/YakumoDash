@@ -133,7 +133,7 @@ export class ContainerActionsComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.snackbar.open("Closing console.");
+        this.snackbar.open("Closing console.", "Ok");
       }
     });
   }
