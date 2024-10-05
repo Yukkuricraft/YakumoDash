@@ -73,8 +73,6 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
         if (this.socket) {
           this.socket.removeEventListener("message", this.onWsMessageReceived);
         }
-
-        this.terminal.input("\n");
       }
     }
   }

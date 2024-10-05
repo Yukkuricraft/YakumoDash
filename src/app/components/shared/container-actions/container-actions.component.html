@@ -16,16 +16,16 @@
     <mat-icon> stop_circle </mat-icon>
   </button>
   <button
-    *ngIf="containerDef.isMinecraftContainer"
+    *ngIf="containerDef.isMinecraftContainer || containerDef.isVelocityContainer"
     mat-mini-fab
     matTooltip="Edit filesystem and configs"
-    (click)="editContainerConfig()"
+    (click)="editContainerConfig(containerDef)"
   >
     <mat-icon> edit </mat-icon>
   </button>
   <!-- Really need to make this functional/useful first -->
   <button
-    *ngIf="containerDef.isMinecraftContainer"
+    *ngIf="containerDef.isMinecraftContainer || containerDef.isVelocityContainer"
     mat-mini-fab
     matTooltip="Connect to this world group's server console."
     (click)="openServerConsole()"
@@ -40,13 +40,4 @@
   >
     <mat-icon> cloud_upload </mat-icon>
   </button>
-  <!-- Should be a dedicated dialog popup -->
-  <!-- <button
-    *ngIf="containerDef.isMinecraftContainer"
-    mat-mini-fab
-    matTooltip="Copy configs from container to bindmounts"
-    (click)="copyConfigs()"
-  >
-    <mat-icon> file_copy </mat-icon>
-  </button> -->
 </div>

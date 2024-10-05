@@ -144,6 +144,11 @@ export class ContainerDefinition implements IContainerDefinition {
   get isMinecraftContainer() {
     return this.getContainerType() === ContainerType.Minecraft;
   }
+
+  get isVelocityContainer() {
+    return this.getContainerType() === ContainerType.MCProxy;
+  }
+
   get isAuxContainer() {
     return includes(
       [ContainerType.MCProxy, ContainerType.MySQL, ContainerType.Postgres, ContainerType.Redis],

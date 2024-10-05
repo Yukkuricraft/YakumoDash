@@ -63,13 +63,17 @@ export class ContainerActionsComponent {
     this.store.dispatch(EnvActions.beginSpinupContainer({ containerDef: this.containerDef }));
   }
 
-  editContainerConfig() {
+  editContainerConfig(containerDef: ContainerDefinition) {
     const env = this.env.name;
-    const worldGroup = this.containerDef.getContainerNameLabel();
-    const subPath = `files/${env}/minecraft/${worldGroup}`;
 
-    // TODO: API-authorative configs...
-    const isDev = window.location.hostname.indexOf("dev") > -1;
+    let subPath;
+    if (containerDef.isMinecraftContainer) {
+      const worldGroup = this.containerDef.getContainerNameLabel();
+      subPath = `files/${env}/minecraft/${worldGroup}`;
+    } else if (containerDef.isVelocityContainer) {
+      subPath = `files/${env}/velocity`;
+    }
+
     const url = `${environment.PROTOCOL}://${environment.FILEBROWSER_HOST}/${subPath}`;
     console.log("Sending to:", env, url);
 
