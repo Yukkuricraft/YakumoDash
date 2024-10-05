@@ -124,9 +124,16 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
         return;
       }
 
+      let useLogs;
+      if (activeContainer.isVelocityContainer) {
+        useLogs = "logs=1&";
+      } else {
+        useLogs = "";
+      }
+
       // TODO: Should change auth token to a WSS specific auth token with request origin validation because it's not encrypted - traffic snooping could reuse it in theory
       const protocol = environment.USE_AUTH ? "wss" : "ws";
-      const wsEndpoint = `${protocol}://${environment.WSS_HOST}/containers/${activeContainer.id}/attach/ws?stdin=1&stdout=1&stderr=1&stream=1&Authorization=${this.authService.accessToken}`;
+      const wsEndpoint = `${protocol}://${environment.WSS_HOST}/containers/${activeContainer.id}/attach/ws?${useLogs}stdin=1&stdout=1&stderr=1&stream=1&Authorization=${this.authService.accessToken}`;
       this.socket = new WebSocket(wsEndpoint);
 
       this.socket.addEventListener("message", this.onWsMessageReceived);
