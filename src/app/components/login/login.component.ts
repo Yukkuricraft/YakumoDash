@@ -25,7 +25,7 @@ export class LoginComponent {
   bypassToken = "bypass"
   bypassLogin() {
     this.ycAuthService.accessToken = this.bypassToken;
-    this.ycAuthService.authSubject$.next({ idToken: 'YC-Token bypass' });
+    this.ycAuthService.authSubject$.next({ idToken: 'Bearer token bypass' });
     this.ycAuthService.authSubject$.subscribe(console.log)
   }
 }

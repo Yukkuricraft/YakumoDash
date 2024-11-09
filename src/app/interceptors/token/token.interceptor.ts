@@ -25,7 +25,7 @@ export class TokenInterceptor implements HttpInterceptor {
     if (accessToken) {
       return request.clone({
         setHeaders: {
-          Authorization: `YC-Token ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
     }
