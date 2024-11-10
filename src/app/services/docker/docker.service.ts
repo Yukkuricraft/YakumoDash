@@ -15,6 +15,18 @@ export class DockerService {
   private basePath: string = `${environment.PROTOCOL}://${environment.API_HOST}/server`;
 
   constructor(private http: HttpClient) {}
+  prepareForWsAttach(activeContainer: ActiveContainer): Observable<DockerContainerActionResponse> {
+    return this.http
+      .post(`${this.basePath}/${activeContainer.env.name}/containers/prepare_ws_attach`, {
+        container_name: activeContainer.getHostname(),
+      })
+      .pipe(
+        map((data: any) =>
+          DomainConverter.fromDto(DockerContainerActionResponse, data)
+        )
+      );
+  }
+
   upEnv(env: Env): Observable<DockerEnvActionResponse> {
     console.log("DockerService.upEnv asdf");
     return this.http

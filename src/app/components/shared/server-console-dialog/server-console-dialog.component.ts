@@ -24,6 +24,9 @@ import { Terminal } from "@xterm/xterm";
 import { AuthService } from "@app/services/auth/auth.service";
 import { FitAddon } from '@xterm/addon-fit';
 import { environment } from "src/environments/environment";
+import { DockerService } from "@app/services/docker/docker.service";
+import { filter, forkJoin, map, mergeMap, of, switchMap } from "rxjs";
+import { DockerContainerActionResponse } from "@app/models/docker";
 
 export type ServerConsoleDialogData = {
   env: Env;
@@ -52,6 +55,7 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
     private store: Store,
     public dialogRef: MatDialogRef<ServerConsoleDialogComponent, boolean>,
     private authService: AuthService,
+    private dockerService: DockerService,
     @Inject(MAT_DIALOG_DATA) public data?: ServerConsoleDialogData
   ) {
     this.fitAddon = new FitAddon();
@@ -115,30 +119,34 @@ export class ServerConsoleDialogComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.terminal = new Terminal({
-
     });
 
-    this.activeContainer$.subscribe((activeContainer: ActiveContainer | null) => {
-      if (activeContainer === null) {
-        console.log("Got a null active container object!");
-        return;
-      }
+    this.activeContainer$
+      .pipe(
+        filter((activeContainer: ActiveContainer | null): activeContainer is ActiveContainer => {
+          return activeContainer !== null;
+        }),
+        mergeMap((activeContainer: ActiveContainer) => forkJoin([
+            of(activeContainer),
+            this.dockerService.prepareForWsAttach(activeContainer),
+        ])),
+      )
+      .subscribe(([activeContainer, containerResponse]: [ActiveContainer, DockerContainerActionResponse]) => {
+        let useLogs;
+        if (activeContainer.isVelocityContainer) {
+          useLogs = "logs=1&";
+        } else {
+          useLogs = "";
+        }
 
-      let useLogs;
-      if (activeContainer.isVelocityContainer) {
-        useLogs = "logs=1&";
-      } else {
-        useLogs = "";
-      }
+        // TODO: Should change auth token to a WSS specific auth token with request origin validation because it's not encrypted - traffic snooping could reuse it in theory
+        const protocol = environment.USE_AUTH ? "wss" : "ws";
+        const wsEndpoint = `${protocol}://${environment.WSS_HOST}/containers/${activeContainer.id}/attach/ws?${useLogs}stdin=1&stdout=1&stderr=1&stream=1&Authorization=${this.authService.accessToken}`;
+        this.socket = new WebSocket(wsEndpoint);
 
-      // TODO: Should change auth token to a WSS specific auth token with request origin validation because it's not encrypted - traffic snooping could reuse it in theory
-      const protocol = environment.USE_AUTH ? "wss" : "ws";
-      const wsEndpoint = `${protocol}://${environment.WSS_HOST}/containers/${activeContainer.id}/attach/ws?${useLogs}stdin=1&stdout=1&stderr=1&stream=1&Authorization=${this.authService.accessToken}`;
-      this.socket = new WebSocket(wsEndpoint);
-
-      this.socket.addEventListener("message", this.onWsMessageReceived);
-      this.socket.addEventListener("open", this.onWsSocketOpen);
-    });
+        this.socket.addEventListener("message", this.onWsMessageReceived);
+        this.socket.addEventListener("open", this.onWsSocketOpen);
+      });
   }
 
 
