@@ -30,7 +30,7 @@ export class BackupsService {
       })
       .pipe(
         map((data: any) =>
-          data.map((obj: any) => {
+          data.backups.map((obj: any) => {
             return DomainConverter.fromDto<BackupDefinition>(BackupDefinition, lowercaseKeys(obj));
           })
         )
