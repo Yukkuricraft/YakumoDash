@@ -295,18 +295,6 @@ export class RootEffects {
       })
     );
   });
-
-  copyConfigsForContainerAndType$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(RootActions.copyConfigsForContainerAndType),
-      switchMap(({ containerDef, dataFileType }: ContainerAndDataFileTypeProp) => {
-        return this.dockerApi.copyConfigs(containerDef, dataFileType)
-      })
-    )
-  },
-  { dispatch: false }
-  );
-
 }
 
 export const rootFeatureEffects = [

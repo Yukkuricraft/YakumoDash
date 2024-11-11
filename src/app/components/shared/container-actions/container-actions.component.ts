@@ -108,12 +108,6 @@ export class ContainerActionsComponent {
     this.store.dispatch(EnvActions.beginShutdownContainer({ containerDef: this.containerDef }));
   }
 
-  copyConfigs() {
-    // TODO: Dropdown select config type?
-    console.log(`Copying configs back to bindmount for container in env ${this.env.getFormattedLabel()}`, this.containerDef);
-    this.store.dispatch(RootActions.copyConfigsForContainerAndType({ containerDef: this.containerDef, dataFileType: DataDirType.ModConfigs }));
-  }
-
   openServerConsole() {
     console.log("Nyooom");
     if (this.env === null) {

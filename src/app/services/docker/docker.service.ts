@@ -17,9 +17,7 @@ export class DockerService {
   constructor(private http: HttpClient) {}
   prepareForWsAttach(activeContainer: ActiveContainer): Observable<DockerContainerActionResponse> {
     return this.http
-      .post(`${this.basePath}/${activeContainer.env.name}/containers/prepare_ws_attach`, {
-        container_name: activeContainer.getHostname(),
-      })
+      .post(`${this.basePath}/container/${activeContainer.getHostname()}/prepare_ws_attach`, {})
       .pipe(
         map((data: any) =>
           DomainConverter.fromDto(DockerContainerActionResponse, data)
@@ -30,7 +28,7 @@ export class DockerService {
   upEnv(env: Env): Observable<DockerEnvActionResponse> {
     console.log("DockerService.upEnv asdf");
     return this.http
-      .post(`${this.basePath}/${env.name}/containers/up`, {})
+      .post(`${this.basePath}/cluster/${env.name}/up`, {})
       .pipe(
         map((data: any) =>
           DomainConverter.fromDto(DockerEnvActionResponse, data)
@@ -40,9 +38,7 @@ export class DockerService {
 
   upContainer(containerDef: ContainerDefinition): Observable<DockerContainerActionResponse> {
     return this.http
-      .post(`${this.basePath}/${containerDef.env.name}/containers/up_one`, {
-        container_name: containerDef.getHostname(),
-      })
+      .post(`${this.basePath}/container/${containerDef.getHostname()}/up`, {})
       .pipe(
         map((data: any) =>
           DomainConverter.fromDto(DockerContainerActionResponse, data)
@@ -52,7 +48,7 @@ export class DockerService {
 
   downEnv(env: Env): Observable<DockerEnvActionResponse> {
     return this.http
-      .post(`${this.basePath}/${env.name}/containers/down`, {})
+      .post(`${this.basePath}/cluster/${env.name}/down`, {})
       .pipe(
         map((data: any) =>
           DomainConverter.fromDto(DockerEnvActionResponse, data)
@@ -62,7 +58,7 @@ export class DockerService {
 
   downContainer(containerDef: ContainerDefinition): Observable<DockerContainerActionResponse> {
     return this.http
-      .post(`${this.basePath}/${containerDef.env.name}/containers/down_one`, {
+      .post(`${this.basePath}/container/${containerDef.getHostname()}/down`, {
         container_name: containerDef.getHostname(),
       })
       .pipe(
@@ -74,25 +70,15 @@ export class DockerService {
 
   restartEnv(env: Env) {
     console.log("Restart Env not implemented")
-    return this.http.post(`${this.basePath}/${env.name}/containers/restart`, {});
-  }
-
-  copyConfigs(containerDef: ContainerDefinition, dataFileType: DataDirType) {
-    const hostname = containerDef.getHostname();
-
-    return this.http
-      .post(`${this.basePath}/containers/copy-configs-to-bindmount`, {
-        container_name: hostname,
-        data_file_type: dataFileType,
-      })
+    return this.http.post(`${this.basePath}/clusters/${env.name}/restart`, {});
   }
 
   listDefined(env: Env) {
     return this.http
-      .get(`${this.basePath}/${env.name}/containers`)
+      .get(`${this.basePath}/cluster/${env.name}/defined`)
       .pipe(
         map((data: any) =>
-          data.map((obj: any) => {
+          data.defined_containers.map((obj: any) => {
             let containerDef = DomainConverter.fromDto<ContainerDefinition>(ContainerDefinition, obj, {
               caseOptions: {
                 excludeValuesForKeys: [
@@ -109,10 +95,10 @@ export class DockerService {
 
   listActive(env: Env) {
     return this.http
-      .get(`${this.basePath}/${env.name}/containers/active`)
+      .get(`${this.basePath}/cluster/${env.name}/active`)
       .pipe(
         map((data: any) =>
-          data.map((obj: any) => {
+          data.active_containers.map((obj: any) => {
             let activeContainer = DomainConverter.fromDto<ActiveContainer>(ActiveContainer, lowercaseKeys(obj), {
               caseOptions: {
                 excludeValuesForKeys: [
