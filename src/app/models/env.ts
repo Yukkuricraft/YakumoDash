@@ -79,32 +79,11 @@ export class Env implements IEnv {
   }
 }
 
-export interface IEnvField {
-  env: Env;
-}
-
-export class EnvField implements IEnvField {
-  @Transform(modelTransformer(Env))
-  env = new Env();
-}
-
-export interface ICreatedEnv extends IEnvField {
-  alias: string;
-  port: number;
-  description?: string;
-}
-
-export class CreatedEnv extends EnvField {
-  alias = "";
-  port = 0;
-  description = "";
-}
-
 export interface ICreateEnvResponse {
-  createdEnv: ICreatedEnv;
+  createdEnv: IEnv;
 }
 
 export class CreateEnvResponse implements ICreateEnvResponse {
-  @Transform(modelTransformer(CreatedEnv))
-  createdEnv = new CreatedEnv();
+  @Transform(modelTransformer(Env))
+  createdEnv = new Env();
 }

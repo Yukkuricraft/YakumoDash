@@ -2,8 +2,6 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { map, tap, of, Observable } from "rxjs";
 import { DomainConverter } from "@app/helpers/domain";
-import { CreateEnvResponse, Env } from "@app/models/env";
-import { DockerEnvActionResponse } from "@app/models/docker";
 import { environment } from "src/environments/environment";
 import { ContainerDefinition } from "@app/models/container";
 import { BackupDefinition } from "@app/models/backup";

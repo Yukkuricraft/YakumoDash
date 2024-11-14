@@ -97,7 +97,7 @@ export class RootEffects {
       }),
       switchMap(({ createdEnv }: CreateEnvResponse ) => {
         this.snackbar.open(
-          `Created new env '${createdEnv.env.getFormattedLabel()} running on port '${
+          `Created new env '${createdEnv.formatted}' running on port '${
             createdEnv.port
           }'`,
           "Ok"

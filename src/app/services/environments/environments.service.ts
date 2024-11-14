@@ -23,7 +23,7 @@ export class EnvironmentsService {
     description?: string
   ): Observable<CreateEnvResponse> {
     return this.http
-      .post(`${this.basePath}/create-env`, {
+      .post(`${this.basePath}/create`, {
         PROXY_PORT: proxyPort,
         ENV_ALIAS: envAlias,
         ENABLE_ENV_PROTECTION: enableEnvProtection,
@@ -46,7 +46,7 @@ export class EnvironmentsService {
 
   regenerateEnvConfigs(env: Env) {
     return this.http
-      .post(`${this.basePath}/${env.name}/generate-configs`, {})
+      .post(`${this.basePath}/${env.name}/generate/configs`, {})
       .pipe(
         map((data: any) =>
           // TODO: Refactor api side to use a py script and not a bash script. Change return sig accordingly
@@ -57,7 +57,7 @@ export class EnvironmentsService {
 
   listEnvsWithConfigs() {
     return this.http
-      .get<any[]>(`${this.basePath}/list-envs-with-configs`)
-      .pipe(map(envs => envs.map(env => DomainConverter.fromDto(Env, env))));
+      .get<any>(`${this.basePath}/list`)
+      .pipe(map(resp => resp.envs.map((env: object) => DomainConverter.fromDto(Env, env))));
   }
 }

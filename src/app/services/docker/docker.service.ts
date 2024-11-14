@@ -3,9 +3,9 @@ import { map, Observable, tap } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { DomainConverter } from "@app/helpers/domain";
 import { lowercaseKeys } from "@app/helpers/case";
-import { Env, CreateEnvResponse } from "@app/models/env";
+import { Env } from "@app/models/env";
 import { DockerContainerActionResponse, DockerEnvActionResponse } from "@app/models/docker";
-import { ActiveContainer, DataDirType, ContainerDefinition } from "@app/models/container";
+import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 import { environment } from "src/environments/environment";
 
 @Injectable({
