@@ -12,7 +12,6 @@ import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from "@app/components/shared/confirmation-dialog/confirmation-dialog.component";
-import { Env } from "@app/models/env";
 import { environment } from "src/environments/environment";
 
 interface ServerType {
@@ -78,7 +77,7 @@ export class NewEnvironmentDialogComponent {
         Validators.pattern(this.numbersReg),
       ]),
       serverType: new FormControl(""),
-      enableEnvProtection: new FormControl(""),
+      enableEnvProtection: new FormControl(false),
     });
   }
 
@@ -144,7 +143,7 @@ export class NewEnvironmentDialogComponent {
             envAlias,
             description: this.description.value,
             serverType: this.serverType.value?.id,
-            enableEnvProtection: this.enableEnvProtection.value,
+            enableEnvProtection: this.enableEnvProtection.value === "true" ? true : false,
           })
         );
         this.dialogRef.close();

@@ -22,7 +22,7 @@ export class BackupsService {
 
   listBackups(container: ContainerDefinition): Observable<BackupDefinition[]> {
     return this.http
-      .post(`${this.basePath}/list-by-tags`, {
+      .post(`${this.basePath}/list`, {
         env_str: container.env.name,
         target_tags: [container.getContainerNameLabel()],
       })
