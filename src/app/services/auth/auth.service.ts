@@ -74,9 +74,4 @@ export class AuthService {
       })
     );
   }
-
-  createdb(): Observable<object> {
-    console.log("CREATEDB");
-    return this.http.get(`${this.basePath}/createdbdeleteme`);
-  }
 }

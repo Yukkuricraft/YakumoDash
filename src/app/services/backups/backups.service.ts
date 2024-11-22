@@ -39,7 +39,7 @@ export class BackupsService {
     console.log("Creating backup?")
 
     return this.http
-      .post(`${this.basePath}/create-new-minecraft-backup`, {
+      .post(`${this.basePath}/create`, {
         target_env: container.env.name,
         target_world_group: container.getContainerNameLabel(),
       })
@@ -49,7 +49,7 @@ export class BackupsService {
     console.log("Restoring backup?")
 
     return this.http
-      .post(`${this.basePath}/restore-minecraft-backup`, {
+      .post(`${this.basePath}/restore`, {
         target_hostname: backup.hostname,
         target_snapshot_id: backup.id,
       })
