@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { NullableBackupDefAndMessageProp, ContainerDefProp, backupChoiceConfirmed, backupCreationFailed, backupCreationSuccessful, backupsComponentInit, backupsListInit, createBackupButtonClicked, rollbackFailed, rollbackSuccessful, BackupDefProp, ContainerDefAndMessageProp } from "@app/store/backups/backups.actions";
+import { NullableBackupDefAndMessageProp, ContainerDefProp, backupChoiceConfirmed, backupCreationFailed, backupCreationSuccessful, backupsComponentInit, backupsListInit, createBackupButtonClicked, rollbackFailed, rollbackSuccessful, BackupDefProp, ContainerDefAndMessageProp, backupChoiceSelected, ContainerDefAndBackupChoiceProp, backupChoiceWorldsInit, ContainerDefAndBackupChoiceAndWorldsProp } from "@app/store/backups/backups.actions";
 import { of, tap, catchError, EMPTY } from "rxjs";
 import { map, switchMap, withLatestFrom } from "rxjs/operators";
 import { BackupsService, RestoreBackupApiResponse } from "@app/services/backups/backups.service";
@@ -45,12 +45,28 @@ export class BackupsEffects {
             )
     );
 
+    public getSnapshotWorldsList$ = createEffect(
+        () => this.actions$
+            .pipe(
+                ofType(backupChoiceSelected),
+                switchMap(({ containerDef, backupChoice }: ContainerDefAndBackupChoiceProp) => {
+                    console.log("Getting worlds list for backup");
+                    console.log(backupChoice);
+                    return this.backupsService.listSnapshotWorlds(backupChoice).pipe(
+                        map((worlds: string[]) => {
+                            return backupChoiceWorldsInit({ containerDef, worlds})
+                        })
+                    );
+                })
+            )
+    );
+
     public restoreBackup$ = createEffect(
         () => this.actions$
             .pipe(
                 ofType(backupChoiceConfirmed),
                 withLatestFrom(this.backupsFacade.getBackupChoice$()),
-                switchMap(([_, backupDef]: [any, BackupDefinition | null]) => {
+                switchMap(([{ worlds }, backupDef]: [ContainerDefAndBackupChoiceAndWorldsProp, BackupDefinition | null]) => {
                     if (backupDef === null) {
                         const message = `A backupChoiceConfirmed action was dispatched but did not get a valid backupDefinition from the store!`;
                         console.warn(message);
@@ -59,7 +75,7 @@ export class BackupsEffects {
                             message,
                         }));
                     }
-                    return this.backupsService.restoreBackup(backupDef).pipe(
+                    return this.backupsService.restoreBackup(backupDef, worlds).pipe(
                         map(({ success, output }: any) => {
                             console.log({ log: 'Output from Restore Backup API Call', output, success});
                             if (success) {

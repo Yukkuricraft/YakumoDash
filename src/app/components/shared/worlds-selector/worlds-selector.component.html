@@ -1,0 +1,29 @@
+<div class="root">
+  <h4 class="mat-mdc-card-title">Select Worlds To Restore</h4>
+  <ng-container
+    *ngIf="(isSnapshotWorldsListReadyToRender$ | async)"
+  >
+    <mat-checkbox [checked]="allSelected"
+                  [indeterminate]="someSelected()"
+                  (change)="selectAll($event.checked)">
+      All
+    </mat-checkbox>
+    <ul>
+      @for (selection of selections; track selection) {
+        <li>
+          <mat-checkbox [(ngModel)]="selection.selected"
+                        (ngModelChange)="updateAllSelected()">
+            {{selection.name}}
+          </mat-checkbox>
+        </li>
+      }
+    </ul>
+  </ng-container>
+  <ng-container
+    *ngIf="!(isSnapshotWorldsListReadyToRender$ | async)"
+    class="center-contents"
+  >
+      <mat-spinner></mat-spinner>
+  </ng-container>
+</div>
+

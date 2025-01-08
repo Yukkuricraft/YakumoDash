@@ -37,6 +37,8 @@ h3 {
 }
 
 .backup-choice {
+  --mdc-checkbox-state-layer-size: 25px;
+
   &_title-box {
     width: 100%;
     display: flex;
@@ -44,6 +46,7 @@ h3 {
     flex-direction: row;
   }
   &_details {
+    font-weight: 1;
     display: grid;
     grid-template-columns: 125px auto;
     grid-template-rows: auto;
@@ -79,7 +82,7 @@ h3 {
   }
 
   &_confirm-button {
-    margin-top: 10px;
+    margin-top: 35px;
     display: flex;
     align-items: center;
     justify-content: center;

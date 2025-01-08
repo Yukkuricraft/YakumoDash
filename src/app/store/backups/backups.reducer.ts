@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { BackupDefProp, ContainerDefAndBackupChoiceProp, ContainerDefAndBackupsListProp, backupChoiceConfirmed, backupChoiceDeselected, backupChoiceSelected, backupsComponentClosed, backupsComponentInit, backupsListInit, rollbackSuccessful } from "@app/store/backups/backups.actions";
+import { BackupDefProp, ContainerDefAndBackupChoiceProp, ContainerDefAndBackupsListProp, ContainerDefAndWorldListProp, backupChoiceConfirmed, backupChoiceDeselected, backupChoiceSelected, backupChoiceWorldsInit, backupsComponentClosed, backupsComponentInit, backupsListInit, rollbackSuccessful } from "@app/store/backups/backups.actions";
 import { BackupDefinition } from "@app/models/backup";
 import { ContainerDefinition } from "@app/models/container";
 import { ContainerDefProp } from "@app/store/backups/backups.actions";
@@ -9,15 +9,19 @@ export interface InProgressRollbacks {
 };
 
 export interface BackupsState {
-    loading: boolean,
+    loadingBackupsList: boolean,
+    loadingBackupChoiceWorldsList: boolean,
     backupsList: BackupDefinition[],
     backupChoice: BackupDefinition | null,
+    backupChoiceWorldsList: string[]
 };
 
 export const initialContainerBackupsState: BackupsState = {
-    loading: false,
+    loadingBackupsList: false,
+    loadingBackupChoiceWorldsList: false,
     backupsList: [],
     backupChoice: null,
+    backupChoiceWorldsList: [],
 };
 
 export interface ContainerToBackupsState {
@@ -56,7 +60,7 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
                 ...state.backups,
                 [containerHostname]: {
                     ...currBackupState,
-                    loading: true,
+                    loadingBackupsList: true,
                 }
             }
         }
@@ -71,7 +75,10 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
                 ...state.backups,
                 [containerHostname]: {
                     ...state.backups[containerHostname],
+                    loadingBackupChoiceWorldsList: false,
+                    loadingBackupsList: false,
                     backupChoice: null,
+                    backupChoiceWorldsList: [],
                 }
             }
         };
@@ -91,7 +98,7 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
                 [containerHostname]: {
                     ...state.backups[containerHostname],
                     backupsList: sortedBackups,
-                    loading: false,
+                    loadingBackupsList: false,
                 }
             },
         };
@@ -105,9 +112,26 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
                 [containerHostname]: {
                     ...state.backups[containerHostname],
                     backupChoice,
+                    backupChoiceWorldsList: [],
+                    loadingBackupChoiceWorldsList: true,
                 }
             },
         };
+    }),
+    on(backupChoiceWorldsInit, (state: BackupsFeatureState, { containerDef, worlds }: ContainerDefAndWorldListProp) => {
+        const containerHostname = containerDef.getHostname();
+
+        return {
+            ...state,
+            backups: {
+                ...state.backups,
+                [containerHostname]: {
+                    ...state.backups[containerHostname],
+                    loadingBackupChoiceWorldsList: false,
+                    backupChoiceWorldsList: worlds,
+                }
+            }
+        }
     }),
     on(backupChoiceDeselected, (state: BackupsFeatureState, { containerDef }: ContainerDefProp) => {
         const containerHostname = containerDef.getHostname();
@@ -118,6 +142,7 @@ export const BackupsReducer = createReducer<BackupsFeatureState>(
                 [containerHostname]: {
                     ...state.backups[containerHostname],
                     backupChoice: null,
+                    backupChoiceWorldsList: [],
                 },
             },
         };

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Inject } from "@angular/core";
 import { isNil } from "lodash-es";
-import { take, map, mergeMap, filter, switchMap, Observable, takeLast, BehaviorSubject } from "rxjs";
+import { take, map, mergeMap, filter, switchMap, Observable, takeLast, BehaviorSubject, merge } from "rxjs";
 import { Env } from "@app/models/env";
 import { ActiveContainer, ContainerDefinition, ContainerStates, DockerContainerState } from "@app/models/container";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
@@ -37,6 +37,9 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
   displayedColumns = ["date", "id", "tags"];
   pageType: string = "BackupManagement";
 
+  worlds$: Observable<string[]>;
+  worldsToRestore: string[] = [];
+
   containerDef: ContainerDefinition;
   containerRunning$: Observable<boolean>;
 
@@ -59,6 +62,9 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
     this.isBackupSelected$ = this.backupsFacade.isBackupChoiceSelected$();
     this.areBackupsReadyToRender$ = this.backupsFacade.isBackupsReadyToRender$();
     this.selectedBackup$ = this.backupsFacade.getBackupChoice$();
+
+    this.worlds$ = this.backupsFacade.getSnapshotWorlds$();
+    this.worlds$.subscribe((data: any) => { console.log("WORLDS LIST"); console.log(data); });
 
     this.backupsList$ = this.backupsFacade.getBackupsList$();
     this.backupsList$.subscribe((data: any) => { console.log("BACKUPS LIST SUBSCRIPTION"); console.log(data) });
@@ -87,6 +93,10 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
     this.backupsFacade.onBackupChoiceSelected(this.containerDef, backupDef);
   }
 
+  handleSelectedWorldChange({ worlds }: any) {
+    this.worldsToRestore = worlds;
+  }
+
   backupChoiceConfirmed() {
     this.selectedBackup$.pipe(
       take(1)
@@ -96,7 +106,7 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.backupsFacade.onBackupChoiceConfirmed(this.containerDef, backupChoice);
+        this.backupsFacade.onBackupChoiceConfirmed(this.containerDef, backupChoice, this.worldsToRestore);
       }
     )
   }

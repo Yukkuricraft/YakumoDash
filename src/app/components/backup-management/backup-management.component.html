@@ -85,16 +85,23 @@
           <div class="backup-choice_tags-title">Tags</div>
           <div class="backup-choice_tags-value">{{(selectedBackup$ | async)?.tags?.join(", ")}}</div>
         </div>
+        <app-worlds-selector
+          [worlds]="(worlds$ | async) ?? []"
+          (onSelectedWorldsChange)="handleSelectedWorldChange($event)"
+        >
+        </app-worlds-selector>
         <div
           class="backup-choice_confirm-button"
-          matTooltip="{{(containerRunning$ | async) ? 'Cannot perform rollback while container is running' : 'Confirm rollback'}}">
+          matTooltip="{{(containerRunning$ | async) || worldsToRestore.length === 0
+                          ? 'Container must be stopped and at least one world must be selected'
+                          : 'Confirm rollback'}}">
           <button
             mat-raised-button
             color="primary"
             (click)="backupChoiceConfirmed()"
-            [disabled]="(containerRunning$ | async)"
+            [disabled]="(containerRunning$ | async) || worldsToRestore.length === 0"
           >
-            Confirm Rollback
+           Rollback {{ worldsToRestore.length }} {{worldsToRestore.length === 1 ? 'World' : 'Worlds'}}
           </button>
         </div>
       </mat-card-content>

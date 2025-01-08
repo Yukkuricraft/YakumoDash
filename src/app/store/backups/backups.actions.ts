@@ -23,6 +23,17 @@ export interface ContainerDefAndBackupChoiceProp {
     backupChoice: BackupDefinition;
 };
 
+export interface ContainerDefAndWorldListProp {
+    containerDef: ContainerDefinition;
+    worlds: string[];
+};
+
+export interface ContainerDefAndBackupChoiceAndWorldsProp {
+    containerDef: ContainerDefinition;
+    backupChoice: BackupDefinition;
+    worlds: string[];
+};
+
 export interface DialogIdProp {
     dialogId: string;
 };
@@ -78,9 +89,14 @@ export const backupChoiceSelected = createAction(
     props<ContainerDefAndBackupChoiceProp>(),
 );
 
+export const backupChoiceWorldsInit = createAction(
+    `[${moduleName}][Restore] Backup choice's world list has been initialized`,
+    props<ContainerDefAndWorldListProp>(),
+)
+
 export const backupChoiceConfirmed = createAction(
     `[${moduleName}][Restore] Backup choice was confirmed`,
-    props<ContainerDefAndBackupChoiceProp>(),
+    props<ContainerDefAndBackupChoiceAndWorldsProp>(),
 );
 
 export const rollbackSuccessful = createAction(

@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "scripts": {
     "ng": "ng",
-    "serve:local": "ng serve --verbose --host 0.0.0.0 --port 25699 --disable-host-check --configuration local",
-    "serve:dev": "ng serve --verbose --host 0.0.0.0 --port 25699 --disable-host-check --configuration development",
+    "serve:local": "ng serve --verbose --host 0.0.0.0 --port 25699 --disable-host-check --poll 2000 --configuration local",
+    "serve:dev": "ng serve --verbose --host 0.0.0.0 --port 25699 --disable-host-check --poll 2000 --configuration development",
     "build:dev": "ng build --configuration development",
     "build:prod": "ng build --configuration production",
     "test": "ng test",

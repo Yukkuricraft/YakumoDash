@@ -34,7 +34,34 @@ export const getBackupsList = createSelector(
   },
 );
 
-export const isBackupsReadyToRender = createSelector(
+export const getSnapshotWorldsList = createSelector(
+  getBackupsState,
+  getContainerDef,
+  (state: BackupsFeatureState, containerDef: ContainerDefinition | null): string[] => {
+    console.log("getSnapshotWorldsList");
+    if (containerDef === null) {
+      console.warn("Tried getting snapshot worlds list but containerDef state was null!");
+      return [];
+    }
+
+    const containerHostname = containerDef.getHostname();
+    if (Object.keys(state.backups).indexOf(containerHostname) === -1) {
+      console.warn("Tried getting snapshot worlds list but containerDef was not initialized in our store state!")
+      return [];
+    } else if (state.backups[containerHostname].backupChoice === null) {
+      console.warn("Tried getting snapshot worlds list but no backup was selected!")
+      return [];
+    }
+
+    console.log(state);
+    console.log(state.backups);
+    console.log(state.backups[containerHostname]);
+    console.log(state.backups[containerHostname].backupChoiceWorldsList);
+    return state.backups[containerHostname].backupChoiceWorldsList;
+  }
+);
+
+export const isBackupsListReadyToRender = createSelector(
   getBackupsState,
   getContainerDef,
   (state: BackupsFeatureState, containerDef: ContainerDefinition | null) => {
@@ -57,10 +84,31 @@ export const isBackupsReadyToRender = createSelector(
       return true;
     }
 
-    console.log("Returning backupsState.loading");
-    return !backupsState.loading;
+    console.log("Returning backupsState.loadingBackupsList");
+    return !backupsState.loadingBackupsList;
   },
 );
+
+export const isSnapshotWorldsListReadyToRender = createSelector(
+  getBackupsState,
+  getContainerDef,
+  (state: BackupsFeatureState, containerDef: ContainerDefinition | null) => {
+    const containerHostname = containerDef?.getHostname() ?? "";
+    console.log({msg: "isSnapshotWorldsListReadyToRender", state, containerDef });
+    if (containerDef === null) {
+      console.warn("Tried getting snapshot worlds loading state but containerDef state was null!");
+      return false;
+    } else if (Object.keys(state.backups).indexOf(containerHostname) === -1) {
+      console.warn("Tried getting snapshot worlds loading state but containerDef was not initialized in our store state!")
+      return false;
+    }
+
+    const backupsState = state.backups[containerHostname];
+
+    console.log("Returning backupsState.loadingBackupChoiceWorldsList");
+    return !backupsState.loadingBackupChoiceWorldsList;
+  },
+)
 
 export const getBackupChoice = createSelector(
   getBackupsState,

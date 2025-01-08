@@ -11,6 +11,7 @@ import { ContainerActionsComponent } from "@app/components/shared/container-acti
 import { ContainerStatusCardComponent } from "@app/components/shared/container-status-card/container-status-card.component";
 import { ContainerStatusComponent } from "@app/components/shared/container-status/container-status.component";
 import { ContainerStatusLightComponent } from "@app/components/shared/container-status-light/container-status-light.component";
+import { WorldsSelectorComponent } from "@app/components/shared/worlds-selector/worlds-selector.component";
 import { ContentWithSideNavComponent } from "@app/layouts/content-with-side-nav/content-with-side-nav.component";
 import { DateToShorthandPipe } from "@app/pipes/date-to-shorthand/date-to-shorthand.pipe";
 import { EffectsModule } from "@ngrx/effects";
@@ -80,6 +81,7 @@ import { environment } from "src/environments/environment";
     MinecraftContainersTableComponent,
     ContainerActionsComponent,
     ContainerStatusLightComponent,
+    WorldsSelectorComponent,
     ConfirmationDialogComponent,
     TextEditorDialogComponent,
     ContainerStatusComponent,

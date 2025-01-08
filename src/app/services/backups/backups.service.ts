@@ -35,6 +35,16 @@ export class BackupsService {
       );
   }
 
+  listSnapshotWorlds(backup: BackupDefinition): Observable<string[]> {
+    return this.http
+      .get(`${this.basePath}/snapshot/${backup.shortId}/worlds`)
+      .pipe(
+        map(({ worlds }: any) =>
+            worlds
+        )
+      );
+  }
+
   createBackup(container: ContainerDefinition) {
     console.log("Creating backup?")
 
@@ -45,13 +55,14 @@ export class BackupsService {
       })
   }
 
-  restoreBackup(backup: BackupDefinition) {
-    console.log("Restoring backup?")
+  restoreBackup(backup: BackupDefinition, worlds: string[]) {
+    console.log("Restoring backup?");
 
     return this.http
       .post(`${this.basePath}/restore`, {
         target_hostname: backup.hostname,
         target_snapshot_id: backup.id,
+        target_worlds: worlds,
       })
   }
 }
