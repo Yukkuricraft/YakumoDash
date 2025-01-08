@@ -55,7 +55,7 @@ export class BackupsService {
       })
   }
 
-  restoreBackup(backup: BackupDefinition, worlds: string[]) {
+  restoreBackup(backup: BackupDefinition, worlds: string[], bypassRunningContainerRestriction: boolean) {
     console.log("Restoring backup?");
 
     return this.http
@@ -63,6 +63,7 @@ export class BackupsService {
         target_hostname: backup.hostname,
         target_snapshot_id: backup.id,
         target_worlds: worlds,
+        bypass_running_container_restriction: bypassRunningContainerRestriction,
       })
   }
 }

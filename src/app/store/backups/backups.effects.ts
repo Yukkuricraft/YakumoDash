@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { NullableBackupDefAndMessageProp, ContainerDefProp, backupChoiceConfirmed, backupCreationFailed, backupCreationSuccessful, backupsComponentInit, backupsListInit, createBackupButtonClicked, rollbackFailed, rollbackSuccessful, BackupDefProp, ContainerDefAndMessageProp, backupChoiceSelected, ContainerDefAndBackupChoiceProp, backupChoiceWorldsInit, ContainerDefAndBackupChoiceAndWorldsProp } from "@app/store/backups/backups.actions";
+import { NullableBackupDefAndMessageProp, ContainerDefProp, backupChoiceConfirmed, backupCreationFailed, backupCreationSuccessful, backupsComponentInit, backupsListInit, createBackupButtonClicked, rollbackFailed, rollbackSuccessful, BackupDefProp, ContainerDefAndMessageProp, backupChoiceSelected, ContainerDefAndBackupChoiceProp, backupChoiceWorldsInit, ContainerDefAndBackupChoiceAndWorldsAndBypassProp } from "@app/store/backups/backups.actions";
 import { of, tap, catchError, EMPTY } from "rxjs";
 import { map, switchMap, withLatestFrom } from "rxjs/operators";
 import { BackupsService, RestoreBackupApiResponse } from "@app/services/backups/backups.service";
@@ -66,7 +66,7 @@ export class BackupsEffects {
             .pipe(
                 ofType(backupChoiceConfirmed),
                 withLatestFrom(this.backupsFacade.getBackupChoice$()),
-                switchMap(([{ worlds }, backupDef]: [ContainerDefAndBackupChoiceAndWorldsProp, BackupDefinition | null]) => {
+                switchMap(([{ worlds, bypassRunningContainerRestriction }, backupDef]: [ContainerDefAndBackupChoiceAndWorldsAndBypassProp, BackupDefinition | null]) => {
                     if (backupDef === null) {
                         const message = `A backupChoiceConfirmed action was dispatched but did not get a valid backupDefinition from the store!`;
                         console.warn(message);
@@ -75,7 +75,7 @@ export class BackupsEffects {
                             message,
                         }));
                     }
-                    return this.backupsService.restoreBackup(backupDef, worlds).pipe(
+                    return this.backupsService.restoreBackup(backupDef, worlds, bypassRunningContainerRestriction).pipe(
                         map(({ success, output }: any) => {
                             console.log({ log: 'Output from Restore Backup API Call', output, success});
                             if (success) {

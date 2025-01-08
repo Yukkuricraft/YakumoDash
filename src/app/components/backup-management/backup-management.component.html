@@ -91,17 +91,36 @@
         >
         </app-worlds-selector>
         <div
+          *ngIf="(containerRunning$ | async)"
+          class="backup-choice_bypass-running-container-restriction"
+        >
+          <h4 class="mat-mdc-card-title">Bypass Running Container Restriction?</h4>
+          <mat-checkbox
+            [(ngModel)]="preBypassRunningContainerRestriction$.value"
+            (ngModelChange)="onPreBypassClicked($event)"
+          >
+            Rolling back while the server is running can cause CATASTROPHIC DAMAGE if done incorrectly. Be 100% sure the worlds you are restoring are unloaded in Multiverse before proceeding.
+          </mat-checkbox>
+          <mat-checkbox
+            *ngIf="preBypassRunningContainerRestriction$ | async"
+            [(ngModel)]="bypassRunningContainerRestriction$.value"
+            (ngModelChange)="onBypassClicked($event)"
+          >
+            Absolutely sure?
+          </mat-checkbox>
+        </div>
+        <div
           class="backup-choice_confirm-button"
-          matTooltip="{{(containerRunning$ | async) || worldsToRestore.length === 0
-                          ? 'Container must be stopped and at least one world must be selected'
-                          : 'Confirm rollback'}}">
+          matTooltip="{{(isConfirmBackupButtonDisabled$ | async)
+                          ? confirmBackupDisabledTooltipText
+                          : confirmBackupEnabledTooltipText}}">
           <button
             mat-raised-button
             color="primary"
             (click)="backupChoiceConfirmed()"
-            [disabled]="(containerRunning$ | async) || worldsToRestore.length === 0"
+            [disabled]="(isConfirmBackupButtonDisabled$ | async)"
           >
-           Rollback {{ worldsToRestore.length }} {{worldsToRestore.length === 1 ? 'World' : 'Worlds'}}
+           Rollback {{ worldsLength$ | async }} {{(worldsLength$ | async) === 1 ? 'World' : 'Worlds'}}
           </button>
         </div>
       </mat-card-content>

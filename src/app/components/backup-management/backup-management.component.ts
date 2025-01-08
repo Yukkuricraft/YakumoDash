@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Inject } from "@angular/core";
 import { isNil } from "lodash-es";
-import { take, map, mergeMap, filter, switchMap, Observable, takeLast, BehaviorSubject, merge } from "rxjs";
+import { take, map, mergeMap, filter, switchMap, Observable, takeLast, BehaviorSubject, merge, combineLatest } from "rxjs";
 import { Env } from "@app/models/env";
 import { ActiveContainer, ContainerDefinition, ContainerStates, DockerContainerState } from "@app/models/container";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
@@ -38,10 +38,18 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
   pageType: string = "BackupManagement";
 
   worlds$: Observable<string[]>;
-  worldsToRestore: string[] = [];
+  worldsToRestore$ = new BehaviorSubject<string[]>([]);
+  worldsLength$: Observable<number>;
 
   containerDef: ContainerDefinition;
   containerRunning$: Observable<boolean>;
+  preBypassRunningContainerRestriction$ = new BehaviorSubject<boolean>(false);
+  bypassRunningContainerRestriction$ = new BehaviorSubject<boolean>(false);
+
+  isConfirmBackupButtonDisabled$: Observable<boolean>;
+
+  confirmBackupDisabledTooltipText = "You must select at least one world to restore AND the container must be stopped UNLESS the bypass checkbox is ticked."
+  confirmBackupEnabledTooltipText = "Start rollback"
 
   constructor(
     public dialogRef: MatDialogRef<
@@ -65,6 +73,12 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
 
     this.worlds$ = this.backupsFacade.getSnapshotWorlds$();
     this.worlds$.subscribe((data: any) => { console.log("WORLDS LIST"); console.log(data); });
+    this.worldsLength$ = this.worldsToRestore$.pipe(
+      filter((worlds: string[] | null): worlds is string[] => {
+        return worlds !== null;
+      }),
+      map((worlds) => worlds.length),
+    )
 
     this.backupsList$ = this.backupsFacade.getBackupsList$();
     this.backupsList$.subscribe((data: any) => { console.log("BACKUPS LIST SUBSCRIPTION"); console.log(data) });
@@ -72,11 +86,26 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
       map((backups: BackupDefinition[]) => {
         const dataSource: MatTableDataSource<BackupDefinition> = this.dataSource;
         dataSource.data = backups;
-
-        console.log("backupsDataSource$");
-        console.log(dataSource);
-
         return dataSource;
+      })
+    )
+
+    this.isConfirmBackupButtonDisabled$ = combineLatest([
+      this.containerRunning$,
+      this.worlds$,
+      this.bypassRunningContainerRestriction$,
+    ]).pipe(
+      map(([containerRunning, worldsToRestore, bypassRunningContainerRestrictions]) => {
+         if (worldsToRestore.length === 0) {
+          // If no worlds are selected to restore
+          return true;
+        } else if (containerRunning && !bypassRunningContainerRestrictions) {
+          // If container is running and user did NOT bypass
+          return true;
+        }
+
+        // Otherwise should be good to proceed with a restore.
+        return false;
       })
     )
   }
@@ -91,10 +120,13 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
 
   backupChoiceSelected(backupDef: BackupDefinition) {
     this.backupsFacade.onBackupChoiceSelected(this.containerDef, backupDef);
+
+    this.preBypassRunningContainerRestriction$.next(false);
+    this.bypassRunningContainerRestriction$.next(false);
   }
 
   handleSelectedWorldChange({ worlds }: any) {
-    this.worldsToRestore = worlds;
+    this.worldsToRestore$.next(worlds);
   }
 
   backupChoiceConfirmed() {
@@ -106,7 +138,7 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.backupsFacade.onBackupChoiceConfirmed(this.containerDef, backupChoice, this.worldsToRestore);
+        this.backupsFacade.onBackupChoiceConfirmed(this.containerDef, backupChoice, this.worldsToRestore$.getValue(), this.bypassRunningContainerRestriction$.getValue());
       }
     )
   }
@@ -117,5 +149,12 @@ export class BackupsManagementDialogComponent implements OnInit, OnDestroy {
 
   deselectBackupChoice() {
     this.backupsFacade.onDeselectBackupChoice(this.containerDef);
+  }
+
+  onPreBypassClicked(val: boolean) {
+    this.preBypassRunningContainerRestriction$.next(val);
+  }
+  onBypassClicked(val: boolean) {
+    this.bypassRunningContainerRestriction$.next(val);
   }
 }

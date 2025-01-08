@@ -31,8 +31,8 @@ export class BackupsFacade {
         this.store.dispatch(backupChoiceSelected({ containerDef, backupChoice }))
     }
 
-    public onBackupChoiceConfirmed(containerDef: ContainerDefinition, backupChoice: BackupDefinition, worlds: string[]): void {
-        this.store.dispatch(backupChoiceConfirmed({ containerDef, backupChoice, worlds }))
+    public onBackupChoiceConfirmed(containerDef: ContainerDefinition, backupChoice: BackupDefinition, worlds: string[], bypassRunningContainerRestriction: boolean): void {
+        this.store.dispatch(backupChoiceConfirmed({ containerDef, backupChoice, worlds, bypassRunningContainerRestriction }))
     }
 
     public onDeselectBackupChoice(containerDef: ContainerDefinition): void {

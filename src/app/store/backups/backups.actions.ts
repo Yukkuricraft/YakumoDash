@@ -28,10 +28,11 @@ export interface ContainerDefAndWorldListProp {
     worlds: string[];
 };
 
-export interface ContainerDefAndBackupChoiceAndWorldsProp {
+export interface ContainerDefAndBackupChoiceAndWorldsAndBypassProp {
     containerDef: ContainerDefinition;
     backupChoice: BackupDefinition;
     worlds: string[];
+    bypassRunningContainerRestriction: boolean;
 };
 
 export interface DialogIdProp {
@@ -96,7 +97,7 @@ export const backupChoiceWorldsInit = createAction(
 
 export const backupChoiceConfirmed = createAction(
     `[${moduleName}][Restore] Backup choice was confirmed`,
-    props<ContainerDefAndBackupChoiceAndWorldsProp>(),
+    props<ContainerDefAndBackupChoiceAndWorldsAndBypassProp>(),
 );
 
 export const rollbackSuccessful = createAction(

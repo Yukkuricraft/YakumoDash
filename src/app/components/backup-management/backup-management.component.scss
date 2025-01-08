@@ -4,6 +4,10 @@ h3 {
   margin-bottom: 8px;
 }
 
+button[mat-icon-button] {
+  --mdc-icon-button-icon-color: #eee;
+}
+
 .dialog-content {
   display: flex;
   flex-direction: column;
@@ -44,6 +48,9 @@ h3 {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
+  }
+  &_bypass-running-container-restriction {
+    margin-top: 28px;
   }
   &_details {
     font-weight: 1;
