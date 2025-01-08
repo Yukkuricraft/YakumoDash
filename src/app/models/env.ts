@@ -6,7 +6,7 @@ export interface IGeneralConfig {
   description: string;
   hostname: string;
 }
-export class GeneralConfig implements IGeneralConfig{
+export class GeneralConfig implements IGeneralConfig {
   description = "";
   hostname = "";
 }

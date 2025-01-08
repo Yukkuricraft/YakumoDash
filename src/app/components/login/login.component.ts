@@ -22,10 +22,10 @@ export class LoginComponent {
     private router: Router
   ) {}
 
-  bypassToken = "bypass"
+  bypassToken = "bypass";
   bypassLogin() {
     this.ycAuthService.accessToken = this.bypassToken;
-    this.ycAuthService.authSubject$.next({ idToken: 'Bearer token bypass' });
-    this.ycAuthService.authSubject$.subscribe(console.log)
+    this.ycAuthService.authSubject$.next({ idToken: "Bearer token bypass" });
+    this.ycAuthService.authSubject$.subscribe(console.log);
   }
 }

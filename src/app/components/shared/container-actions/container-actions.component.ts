@@ -17,7 +17,11 @@ import { Router } from "@angular/router";
 import { RootActions, EnvActions } from "@app/store/root/root.actions";
 import { selectActiveContainerByContainerDef } from "@app/store/root/root.selectors.containers";
 import { map, Observable, switchMap, BehaviorSubject } from "rxjs";
-import { BackupsManagementDialogComponent, BackupsManagementDialogData, BackupsManagementDialogReturn } from "@app/components/backup-management/backup-management.component";
+import {
+  BackupsManagementDialogComponent,
+  BackupsManagementDialogData,
+  BackupsManagementDialogReturn,
+} from "@app/components/backup-management/backup-management.component";
 import { environment } from "src/environments/environment";
 
 @Component({
@@ -37,13 +41,15 @@ export class ContainerActionsComponent {
     private dialog: MatDialog,
     private router: Router,
     private snackbar: MatSnackBar,
-    private store: Store,
+    private store: Store
   ) {
     this.containerRunning$ = new BehaviorSubject(true);
   }
 
   ngOnInit() {
-    this.activeContainer$ = this.store.select(selectActiveContainerByContainerDef(this.containerDef));
+    this.activeContainer$ = this.store.select(
+      selectActiveContainerByContainerDef(this.containerDef)
+    );
 
     this.activeContainer$.subscribe(
       (activeContainer: ActiveContainer | null) => {
@@ -52,15 +58,22 @@ export class ContainerActionsComponent {
         if (activeContainer === null) {
           this.containerRunning$.next(false);
         } else {
-          this.containerRunning$.next(activeContainer.getContainerState() == ContainerStates.Up);
+          this.containerRunning$.next(
+            activeContainer.getContainerState() == ContainerStates.Up
+          );
         }
       }
-    )
+    );
   }
 
   startContainer() {
-    console.log(`Starting container in env ${this.env.getFormattedLabel()}`, this.containerDef);
-    this.store.dispatch(EnvActions.beginSpinupContainer({ containerDef: this.containerDef }));
+    console.log(
+      `Starting container in env ${this.env.getFormattedLabel()}`,
+      this.containerDef
+    );
+    this.store.dispatch(
+      EnvActions.beginSpinupContainer({ containerDef: this.containerDef })
+    );
   }
 
   editContainerConfig(containerDef: ContainerDefinition) {
@@ -95,7 +108,7 @@ export class ContainerActionsComponent {
       },
       width: "85vw",
       height: "85vh",
-      panelClass: 'backups-mat-dialog',
+      panelClass: "backups-mat-dialog",
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -104,8 +117,13 @@ export class ContainerActionsComponent {
   }
 
   stopContainer() {
-    console.log(`Stopping container in env ${this.env.getFormattedLabel()}`, this.containerDef);
-    this.store.dispatch(EnvActions.beginShutdownContainer({ containerDef: this.containerDef }));
+    console.log(
+      `Stopping container in env ${this.env.getFormattedLabel()}`,
+      this.containerDef
+    );
+    this.store.dispatch(
+      EnvActions.beginShutdownContainer({ containerDef: this.containerDef })
+    );
   }
 
   openServerConsole() {

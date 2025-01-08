@@ -76,7 +76,9 @@ export class RootEffects {
       ofType(EnvActions.beginCreateNewEnv),
       switchMap((data: CreateEnvProps) => {
         return [
-          RootActions.setGlobalLoadingBarActive({ identifier: `Creating Env: ${data.envAlias}` }),
+          RootActions.setGlobalLoadingBarActive({
+            identifier: `Creating Env: ${data.envAlias}`,
+          }),
           EnvActions.finishCreateNewEnv(data),
         ];
       })
@@ -86,24 +88,35 @@ export class RootEffects {
   finishCreateNewEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.finishCreateNewEnv),
-      switchMap(({ proxyPort, envAlias, enableEnvProtection, serverType, description }: CreateEnvProps) => {
-        return this.envsApi.createEnv(
+      switchMap(
+        ({
           proxyPort,
           envAlias,
           enableEnvProtection,
           serverType,
-          description
-        );
-      }),
-      switchMap(({ createdEnv }: CreateEnvResponse ) => {
+          description,
+        }: CreateEnvProps) => {
+          return this.envsApi.createEnv(
+            proxyPort,
+            envAlias,
+            enableEnvProtection,
+            serverType,
+            description
+          );
+        }
+      ),
+      switchMap(({ createdEnv }: CreateEnvResponse) => {
         this.snackbar.open(
-          `Created new env '${createdEnv.formatted}' running on port '${
-            createdEnv.port
-          }'`,
+          `Created new env '${createdEnv.formatted}' running on port '${createdEnv.port}'`,
           "Ok"
         );
 
-        return [EnvActions.fetchAvailableEnvs(), RootActions.setGlobalLoadingBarInactive({ identifier: `Creating Env: ${createdEnv.alias}`})];
+        return [
+          EnvActions.fetchAvailableEnvs(),
+          RootActions.setGlobalLoadingBarInactive({
+            identifier: `Creating Env: ${createdEnv.alias}`,
+          }),
+        ];
       })
     );
   });
@@ -113,7 +126,12 @@ export class RootEffects {
     return this.actions$.pipe(
       ofType(EnvActions.beginDeleteEnv),
       switchMap(({ env }: EnvProp) => {
-        return [RootActions.setGlobalLoadingBarActive({ identifier: `Deleting: ${env.formatted}` }), EnvActions.finishDeleteEnv({ env })];
+        return [
+          RootActions.setGlobalLoadingBarActive({
+            identifier: `Deleting: ${env.formatted}`,
+          }),
+          EnvActions.finishDeleteEnv({ env }),
+        ];
       })
     );
   });
@@ -121,7 +139,7 @@ export class RootEffects {
   deleteEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(EnvActions.finishDeleteEnv),
-      switchMap(({ env }: EnvProp ) => {
+      switchMap(({ env }: EnvProp) => {
         return this.envsApi.deleteEnv(env);
       }),
       switchMap(({ env }: EnvProp) => {
@@ -132,7 +150,12 @@ export class RootEffects {
           "Ok"
         );
 
-        return [EnvActions.fetchAvailableEnvs(), RootActions.setGlobalLoadingBarInactive({ identifier: `Deleting: ${env.formatted}` })];
+        return [
+          EnvActions.fetchAvailableEnvs(),
+          RootActions.setGlobalLoadingBarInactive({
+            identifier: `Deleting: ${env.formatted}`,
+          }),
+        ];
       })
     );
   });
@@ -142,7 +165,12 @@ export class RootEffects {
     return this.actions$.pipe(
       ofType(EnvActions.beginSpinupEnv),
       switchMap(({ env }: EnvProp) => {
-        return [RootActions.setGlobalLoadingBarActive({ identifier: `Spinning up: ${env.formatted}` }), EnvActions.finishSpinupEnv({ env })];
+        return [
+          RootActions.setGlobalLoadingBarActive({
+            identifier: `Spinning up: ${env.formatted}`,
+          }),
+          EnvActions.finishSpinupEnv({ env }),
+        ];
       })
     );
   });
@@ -161,7 +189,9 @@ export class RootEffects {
 
         return [
           RootActions.fetchContainerStatusForEnv({ env }),
-          RootActions.setGlobalLoadingBarInactive({ identifier: `Spinning up: ${env.formatted}` }),
+          RootActions.setGlobalLoadingBarInactive({
+            identifier: `Spinning up: ${env.formatted}`,
+          }),
         ];
       })
     );
@@ -172,7 +202,9 @@ export class RootEffects {
       ofType(EnvActions.beginSpinupContainer),
       switchMap((data: ContainerProp) => {
         return [
-          RootActions.setGlobalLoadingBarActive({ identifier: `Spinning up: ${data.containerDef.getHostname()}` }),
+          RootActions.setGlobalLoadingBarActive({
+            identifier: `Spinning up: ${data.containerDef.getHostname()}`,
+          }),
           EnvActions.finishSpinupContainer(data),
         ];
       })
@@ -186,14 +218,13 @@ export class RootEffects {
         return this.dockerApi.upContainer(containerDef);
       }),
       concatMap(({ env, containerName }: DockerContainerActionResponse) => {
-        this.snackbar.open(
-          `Done spinning up '${containerName}'`,
-          "Ok"
-        );
+        this.snackbar.open(`Done spinning up '${containerName}'`, "Ok");
 
         return [
           RootActions.fetchContainerStatusForEnv({ env }),
-          RootActions.setGlobalLoadingBarInactive({ identifier: `Spinning up: ${containerName}` }),
+          RootActions.setGlobalLoadingBarInactive({
+            identifier: `Spinning up: ${containerName}`,
+          }),
         ];
       })
     );
@@ -205,7 +236,9 @@ export class RootEffects {
       ofType(EnvActions.beginShutdownEnv),
       switchMap(({ env }: EnvProp) => {
         return [
-          RootActions.setGlobalLoadingBarActive({ identifier: `Shutting down: ${env.formatted}` }),
+          RootActions.setGlobalLoadingBarActive({
+            identifier: `Shutting down: ${env.formatted}`,
+          }),
           EnvActions.finishShutdownEnv({ env }),
         ];
       })
@@ -226,7 +259,9 @@ export class RootEffects {
 
         return [
           RootActions.fetchContainerStatusForEnv({ env }),
-          RootActions.setGlobalLoadingBarInactive({ identifier: `Shutting down: ${env.formatted}`}),
+          RootActions.setGlobalLoadingBarInactive({
+            identifier: `Shutting down: ${env.formatted}`,
+          }),
         ];
       })
     );
@@ -237,7 +272,9 @@ export class RootEffects {
       ofType(EnvActions.beginShutdownContainer),
       switchMap((data: ContainerProp) => {
         return [
-          RootActions.setGlobalLoadingBarActive({ identifier: `Shutting down: ${data.containerDef.getHostname()}` }),
+          RootActions.setGlobalLoadingBarActive({
+            identifier: `Shutting down: ${data.containerDef.getHostname()}`,
+          }),
           EnvActions.finishShutdownContainer(data),
         ];
       })
@@ -258,7 +295,9 @@ export class RootEffects {
 
         return [
           RootActions.fetchContainerStatusForEnv({ env }),
-          RootActions.setGlobalLoadingBarInactive({ identifier: `Shutting down: ${containerName}` }),
+          RootActions.setGlobalLoadingBarInactive({
+            identifier: `Shutting down: ${containerName}`,
+          }),
         ];
       })
     );
@@ -267,13 +306,16 @@ export class RootEffects {
   fetchDefinedContainersForEnv$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(RootActions.fetchContainerStatusForEnv),
-      switchMap(({ env }: { env: Env}) => {
+      switchMap(({ env }: { env: Env }) => {
         return this.dockerApi.listDefined(env).pipe(
           concatLatestFrom(() => {
             return of(env);
           }),
-          map(([containers, env]: [containers: ContainerDefinition[], env: Env]) =>
-            EnvActions.setDefinedContainersForEnv({ env, containers })
+          map(
+            ([containers, env]: [
+              containers: ContainerDefinition[],
+              env: Env
+            ]) => EnvActions.setDefinedContainersForEnv({ env, containers })
           )
         );
       })
@@ -297,6 +339,4 @@ export class RootEffects {
   });
 }
 
-export const rootFeatureEffects = [
-    RootEffects,
-];
+export const rootFeatureEffects = [RootEffects];

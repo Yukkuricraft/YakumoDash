@@ -23,10 +23,7 @@ export class AuthService {
   private _accessToken: string | null = null;
   authSubject$ = new BehaviorSubject({});
 
-  constructor(
-    private http: HttpClient,
-    private store: Store,
-  ) {}
+  constructor(private http: HttpClient, private store: Store) {}
 
   get accessToken(): string | null {
     if (!this._accessToken) {

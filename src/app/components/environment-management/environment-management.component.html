@@ -5,7 +5,6 @@
     (click)="openNewEnvDialog()"
     matTooltip="Create New Environment"
   >
-
     <mat-icon> add_box </mat-icon>
   </button>
 </mat-toolbar>
@@ -30,19 +29,27 @@
                 <ul class="ul-left-margin">
                   <li>
                     <span class="item-key">Running on Port: </span
-                    ><span class="item-val">{{ env.config.clusterVariables["velocityPort"] }}</span>
+                    ><span class="item-val">{{
+                      env.config.clusterVariables["velocityPort"]
+                    }}</span>
                   </li>
                   <li>
                     <span class="item-key">Server Version: </span
-                    ><span class="item-val">{{ env.config.clusterVariables["mcVersion"] }}</span>
+                    ><span class="item-val">{{
+                      env.config.clusterVariables["mcVersion"]
+                    }}</span>
                   </li>
                   <li>
                     <span class="item-key">Server Type: </span
-                    ><span class="item-val">{{ env.config.clusterVariables["mcType"] }}</span>
+                    ><span class="item-val">{{
+                      env.config.clusterVariables["mcType"]
+                    }}</span>
                   </li>
                   <li>
                     <span class="item-key">Server Build: </span
-                    ><span class="item-val">{{ env.config.clusterVariables["paperBuild"] }}</span>
+                    ><span class="item-val">{{
+                      env.config.clusterVariables["paperBuild"]
+                    }}</span>
                     <!-- TODO: Make this read from actual jar? Version between paper/fabric/etc will not necessarily match env vars. -->
                     <!-- TODO: Do I care that PASCAL_CASE env vars are being camelCase'd--->
                   </li>

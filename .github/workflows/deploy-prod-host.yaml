@@ -10,8 +10,8 @@ on:
     branches:
       - main
     paths:
-      - '**'
-      - '!README.md'
+      - "**"
+      - "!README.md"
 
 jobs:
   deploy:
@@ -32,12 +32,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
         with:
-          repository: 'Yukkuricraft/yc-deployer'
+          repository: "Yukkuricraft/yc-deployer"
 
       - name: Extract and Set Env Vars
         id: set_repo_name
         run: |
-          echo "REPO_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_OUTPUT 
+          echo "REPO_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_OUTPUT
 
       - name: Deploy
         if: steps.extract_branch.outputs.branch == 'main'

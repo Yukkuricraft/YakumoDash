@@ -1,1 +1,1 @@
-export const RootFeatureKey = 'root';
+export const RootFeatureKey = "root";

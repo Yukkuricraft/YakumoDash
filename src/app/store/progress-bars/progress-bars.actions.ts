@@ -1,8 +1,8 @@
 export interface ProgressBarIdentifierProp {
-    identifier: string;
+  identifier: string;
 }
 
 export interface ProgressBarIdentifierAndTimestampProp {
-    identifier: string;
-    timestamp: Date;
+  identifier: string;
+  timestamp: Date;
 }

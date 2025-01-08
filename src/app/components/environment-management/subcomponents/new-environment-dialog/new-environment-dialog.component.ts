@@ -1,10 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { DockerService } from "@app/services/docker/docker.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import {
-  RootActions,
-  EnvActions,
-} from "@app/store/root/root.actions";
+import { RootActions, EnvActions } from "@app/store/root/root.actions";
 import { Store } from "@ngrx/store";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -92,9 +89,21 @@ export class NewEnvironmentDialogComponent {
   };
 
   serverTypes: ServerType[] = [
-    { name: "Paper", id: "PAPER", hint: "Spins up a Paper server with Velocity compatibility settings preconfigured" },
-    { name: "Fabric", id: "FABRIC", hint: "Spins up a Fabric server with (eventually) Velocity comaptibility mods automatically installed" },
-    { name: "Custom", id: "CUSTOM", hint: "You can use any type supported by itzg/minecraft-server but you'll need to manually configure it" },
+    {
+      name: "Paper",
+      id: "PAPER",
+      hint: "Spins up a Paper server with Velocity compatibility settings preconfigured",
+    },
+    {
+      name: "Fabric",
+      id: "FABRIC",
+      hint: "Spins up a Fabric server with (eventually) Velocity comaptibility mods automatically installed",
+    },
+    {
+      name: "Custom",
+      id: "CUSTOM",
+      hint: "You can use any type supported by itzg/minecraft-server but you'll need to manually configure it",
+    },
   ];
 
   getErrorMessage(formControl: FormControl) {
@@ -143,7 +152,8 @@ export class NewEnvironmentDialogComponent {
             envAlias,
             description: this.description.value,
             serverType: this.serverType.value?.id,
-            enableEnvProtection: this.enableEnvProtection.value === "true" ? true : false,
+            enableEnvProtection:
+              this.enableEnvProtection.value === "true" ? true : false,
           })
         );
         this.dialogRef.close();

@@ -1,1 +1,1 @@
-export const ProgressBarsFeatureKey = 'progress-bars';
+export const ProgressBarsFeatureKey = "progress-bars";

@@ -6,7 +6,11 @@ import {
 } from "@ngrx/store";
 import { User } from "@app/models/user";
 import { Env } from "@app/models/env";
-import { ActiveContainer, DataDirType, ContainerDefinition } from "@app/models/container";
+import {
+  ActiveContainer,
+  DataDirType,
+  ContainerDefinition,
+} from "@app/models/container";
 import { BackupDefinition } from "@app/models/backup";
 import { ProgressBarIdentifierProp } from "@app/store/progress-bars/progress-bars.actions";
 
@@ -16,7 +20,7 @@ export interface CreateEnvProps {
   enableEnvProtection: boolean;
   serverType: string;
   description?: string;
-};
+}
 
 export interface UserProp {
   user: User;
@@ -24,15 +28,15 @@ export interface UserProp {
 
 export interface EnvProp {
   env: Env;
-};
+}
 
 export interface EnvsProp {
   envs: Env[];
 }
 
 export interface ContainerProp {
-  containerDef: ContainerDefinition
-};
+  containerDef: ContainerDefinition;
+}
 
 export interface ContainerAndBackupProps {
   containerDef: ContainerDefinition;
@@ -55,14 +59,13 @@ export interface EnvAndContainerDefinitionsProps {
 
 export interface PageTypeAndTabIndexProps {
   pageType: string;
-  tabIndex: number
+  tabIndex: number;
 }
 
 export interface ContainerAndDataFileTypeProp {
-  containerDef: ContainerDefinition,
-  dataFileType: DataDirType,
+  containerDef: ContainerDefinition;
+  dataFileType: DataDirType;
 }
-
 
 export const RootActions = createActionGroup({
   source: "Root",
@@ -73,30 +76,29 @@ export const RootActions = createActionGroup({
     "Set logged in user": props<UserProp>(),
     "Set logout user": emptyProps(),
     "Fetch container status for env": props<EnvProp>(),
-    "Copy configs for container and type": props<ContainerAndDataFileTypeProp>(),
+    "Copy configs for container and type":
+      props<ContainerAndDataFileTypeProp>(),
     "Set global loading bar active": props<ProgressBarIdentifierProp>(),
     "Set global loading bar inactive": props<ProgressBarIdentifierProp>(),
     "Set tab index for page": props<PageTypeAndTabIndexProps>(),
-  }
+  },
 });
-
 
 export const SocketActions = createActionGroup({
   source: "Environment",
   events: {
     "Connect To Websocket": props<{
-      endpoint: string
+      endpoint: string;
     }>(),
     "Disconnect To Websocket": props<{
-      endpoint: string
+      endpoint: string;
     }>(),
     "Send Message": props<{
       endpoint: string;
-      data: any
+      data: any;
     }>(),
   },
 });
-
 
 export const EnvActions = createActionGroup({
   source: "Environment",
@@ -126,7 +128,6 @@ export const EnvActions = createActionGroup({
   },
 });
 
-
 export const BackupActions = createActionGroup({
   source: "Backups",
   events: {
@@ -134,5 +135,5 @@ export const BackupActions = createActionGroup({
     "Set Backups For Container": props<ContainerAndBackupProps>(),
     "Create new backup": props<ContainerProp>(),
     "Restore Backup": props<BackupProp>(),
-  }
+  },
 });

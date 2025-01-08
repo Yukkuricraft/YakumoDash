@@ -4,7 +4,10 @@ import { HttpClient } from "@angular/common/http";
 import { DomainConverter } from "@app/helpers/domain";
 import { lowercaseKeys } from "@app/helpers/case";
 import { Env } from "@app/models/env";
-import { DockerContainerActionResponse, DockerEnvActionResponse } from "@app/models/docker";
+import {
+  DockerContainerActionResponse,
+  DockerEnvActionResponse,
+} from "@app/models/docker";
 import { ActiveContainer, ContainerDefinition } from "@app/models/container";
 import { environment } from "src/environments/environment";
 
@@ -15,9 +18,16 @@ export class DockerService {
   private basePath: string = `${environment.PROTOCOL}://${environment.API_HOST}/server`;
 
   constructor(private http: HttpClient) {}
-  prepareForWsAttach(activeContainer: ActiveContainer): Observable<DockerContainerActionResponse> {
+  prepareForWsAttach(
+    activeContainer: ActiveContainer
+  ): Observable<DockerContainerActionResponse> {
     return this.http
-      .post(`${this.basePath}/container/${activeContainer.getHostname()}/prepare_ws_attach`, {})
+      .post(
+        `${
+          this.basePath
+        }/container/${activeContainer.getHostname()}/prepare_ws_attach`,
+        {}
+      )
       .pipe(
         map((data: any) =>
           DomainConverter.fromDto(DockerContainerActionResponse, data)
@@ -36,7 +46,9 @@ export class DockerService {
       );
   }
 
-  upContainer(containerDef: ContainerDefinition): Observable<DockerContainerActionResponse> {
+  upContainer(
+    containerDef: ContainerDefinition
+  ): Observable<DockerContainerActionResponse> {
     return this.http
       .post(`${this.basePath}/container/${containerDef.getHostname()}/up`, {})
       .pipe(
@@ -56,7 +68,9 @@ export class DockerService {
       );
   }
 
-  downContainer(containerDef: ContainerDefinition): Observable<DockerContainerActionResponse> {
+  downContainer(
+    containerDef: ContainerDefinition
+  ): Observable<DockerContainerActionResponse> {
     return this.http
       .post(`${this.basePath}/container/${containerDef.getHostname()}/down`, {
         container_name: containerDef.getHostname(),
@@ -69,47 +83,47 @@ export class DockerService {
   }
 
   restartEnv(env: Env) {
-    console.log("Restart Env not implemented")
+    console.log("Restart Env not implemented");
     return this.http.post(`${this.basePath}/clusters/${env.name}/restart`, {});
   }
 
   listDefined(env: Env) {
-    return this.http
-      .get(`${this.basePath}/cluster/${env.name}/defined`)
-      .pipe(
-        map((data: any) =>
-          data.defined_containers.map((obj: any) => {
-            let containerDef = DomainConverter.fromDto<ContainerDefinition>(ContainerDefinition, obj, {
+    return this.http.get(`${this.basePath}/cluster/${env.name}/defined`).pipe(
+      map((data: any) =>
+        data.defined_containers.map((obj: any) => {
+          let containerDef = DomainConverter.fromDto<ContainerDefinition>(
+            ContainerDefinition,
+            obj,
+            {
               caseOptions: {
-                excludeValuesForKeys: [
-                  "labels",
-                ]
-              }
-            })
-            containerDef.env = env;
-            return containerDef;
-          })
-        )
-      );
+                excludeValuesForKeys: ["labels"],
+              },
+            }
+          );
+          containerDef.env = env;
+          return containerDef;
+        })
+      )
+    );
   }
 
   listActive(env: Env) {
-    return this.http
-      .get(`${this.basePath}/cluster/${env.name}/active`)
-      .pipe(
-        map((data: any) =>
-          data.active_containers.map((obj: any) => {
-            let activeContainer = DomainConverter.fromDto<ActiveContainer>(ActiveContainer, lowercaseKeys(obj), {
+    return this.http.get(`${this.basePath}/cluster/${env.name}/active`).pipe(
+      map((data: any) =>
+        data.active_containers.map((obj: any) => {
+          let activeContainer = DomainConverter.fromDto<ActiveContainer>(
+            ActiveContainer,
+            lowercaseKeys(obj),
+            {
               caseOptions: {
-                excludeValuesForKeys: [
-                  "labels",
-                ]
-              }
-            })
-            activeContainer.env = env;
-            return activeContainer;
-          })
-        )
-      );
+                excludeValuesForKeys: ["labels"],
+              },
+            }
+          );
+          activeContainer.env = env;
+          return activeContainer;
+        })
+      )
+    );
   }
 }

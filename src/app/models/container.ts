@@ -69,7 +69,7 @@ export interface EnvToDefinedContainerMapping {
 export interface IContainerDefinition {
   env: Env;
   image: string;
-  labels: Record<string,string>;
+  labels: Record<string, string>;
   names: string[];
   containerName: string;
   hostname: string;
@@ -97,7 +97,7 @@ export class ContainerDefinition implements IContainerDefinition {
    * This is equivalent to world group names
    * @returns
    */
-  getContainerNameLabel(): string{
+  getContainerNameLabel(): string {
     return this.getLabelValue(this.NameLabel) ?? "UnknownContainer";
   }
   /**
@@ -130,7 +130,7 @@ export class ContainerDefinition implements IContainerDefinition {
     if (isValidContainerType(label)) {
       return label as ContainerType;
     } else {
-      return ContainerType.Unknown
+      return ContainerType.Unknown;
     }
   }
 
@@ -138,7 +138,7 @@ export class ContainerDefinition implements IContainerDefinition {
     return [
       ContainerType.Minecraft,
       // ContainerType.MySQL
-    ].includes(this.getContainerType())
+    ].includes(this.getContainerType());
   }
 
   get isMinecraftContainer() {
@@ -151,7 +151,12 @@ export class ContainerDefinition implements IContainerDefinition {
 
   get isAuxContainer() {
     return includes(
-      [ContainerType.MCProxy, ContainerType.MySQL, ContainerType.Postgres, ContainerType.Redis],
+      [
+        ContainerType.MCProxy,
+        ContainerType.MySQL,
+        ContainerType.Postgres,
+        ContainerType.Redis,
+      ],
       this.getContainerType()
     );
   }
@@ -168,7 +173,7 @@ export class ContainerDefinition implements IContainerDefinition {
   image = "";
   containerName = "";
   hostname = "";
-  labels: Record<string,string> = {};
+  labels: Record<string, string> = {};
   names: string[] = [];
   mounts: string[] = [];
   networks: string[] = [];

@@ -16,7 +16,9 @@
     <mat-icon> stop_circle </mat-icon>
   </button>
   <button
-    *ngIf="containerDef.isMinecraftContainer || containerDef.isVelocityContainer"
+    *ngIf="
+      containerDef.isMinecraftContainer || containerDef.isVelocityContainer
+    "
     mat-mini-fab
     matTooltip="Edit filesystem and configs"
     (click)="editContainerConfig(containerDef)"
@@ -25,7 +27,9 @@
   </button>
   <!-- Really need to make this functional/useful first -->
   <button
-    *ngIf="containerDef.isMinecraftContainer || containerDef.isVelocityContainer"
+    *ngIf="
+      containerDef.isMinecraftContainer || containerDef.isVelocityContainer
+    "
     mat-mini-fab
     matTooltip="Connect to this world group's server console."
     (click)="openServerConsole()"

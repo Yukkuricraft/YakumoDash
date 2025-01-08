@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewEncapsulation } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  ViewEncapsulation,
+} from "@angular/core";
 import { BackupsFacade } from "@app/store/backups/backups.facade";
 import { Observable } from "rxjs";
 
@@ -11,22 +19,21 @@ export interface Selection {
   selector: "app-worlds-selector",
   templateUrl: "./worlds-selector.component.html",
   styleUrls: ["./worlds-selector.component.scss"],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class WorldsSelectorComponent implements OnInit, OnChanges {
   @Input() worlds!: string[];
-  @Output() onSelectedWorldsChange = new EventEmitter<{worlds: string[]}>();
+  @Output() onSelectedWorldsChange = new EventEmitter<{ worlds: string[] }>();
 
   selections: Selection[];
   isSnapshotWorldsListReadyToRender$: Observable<boolean>;
 
-  constructor(
-    private backupsFacade: BackupsFacade,
-  ) {
+  constructor(private backupsFacade: BackupsFacade) {
     this.selections = [];
-    this.isSnapshotWorldsListReadyToRender$ = this.backupsFacade.isSnapshotWorldsReadyToRender$();
+    this.isSnapshotWorldsListReadyToRender$ =
+      this.backupsFacade.isSnapshotWorldsReadyToRender$();
 
-    this.isSnapshotWorldsListReadyToRender$.subscribe((data) => {
+    this.isSnapshotWorldsListReadyToRender$.subscribe(data => {
       console.log("++");
       console.log(data);
       console.log(this.selections);
@@ -44,11 +51,11 @@ export class WorldsSelectorComponent implements OnInit, OnChanges {
   initializeSelectionsObjects() {
     this.selections = [];
 
-    for(let world of this.worlds) {
+    for (let world of this.worlds) {
       this.selections.push({
         name: world,
         selected: false,
-      })
+      });
     }
   }
 
@@ -64,7 +71,9 @@ export class WorldsSelectorComponent implements OnInit, OnChanges {
     if (this.selections == null) {
       return false;
     }
-    return this.selections.filter(t => t.selected).length > 0 && !this.allSelected;
+    return (
+      this.selections.filter(t => t.selected).length > 0 && !this.allSelected
+    );
   }
 
   selectAll(selected: boolean) {
@@ -78,9 +87,13 @@ export class WorldsSelectorComponent implements OnInit, OnChanges {
   }
 
   emitWorlds() {
-    let d = { worlds: this.selections.filter(s => s.selected).map(s => s.name) };
+    let d = {
+      worlds: this.selections.filter(s => s.selected).map(s => s.name),
+    };
     console.log("emitWorlds");
-    console.log(d.worlds)
-    this.onSelectedWorldsChange.emit({ worlds: this.selections.filter(s => s.selected).map(s => s.name) })
+    console.log(d.worlds);
+    this.onSelectedWorldsChange.emit({
+      worlds: this.selections.filter(s => s.selected).map(s => s.name),
+    });
   }
 }

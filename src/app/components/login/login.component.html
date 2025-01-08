@@ -8,10 +8,9 @@
         Let The Machine Consume You
       </div>
       @if (bypassGoogleAuth) {
-        <button mat-raised-button (click)="bypassLogin()">"Log in"</button>
-      }
-      @else {
-        <asl-google-signin-button></asl-google-signin-button>
+      <button mat-raised-button (click)="bypassLogin()">"Log in"</button>
+      } @else {
+      <asl-google-signin-button></asl-google-signin-button>
       }
     </mat-card>
   </section>

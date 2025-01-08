@@ -6,7 +6,8 @@
 mat-card {
   padding: 16px;
 
-  .mat-mdc-card-content, .mat-mdc-card-content:last-child {
+  .mat-mdc-card-content,
+  .mat-mdc-card-content:last-child {
     padding: 0px;
   }
 }

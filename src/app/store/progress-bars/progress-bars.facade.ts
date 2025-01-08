@@ -6,15 +6,12 @@ import { getSortedActiveProgressBars } from "@app/store/progress-bars/progress-b
 
 @Injectable()
 export class ProgressBarsFacade {
-    constructor(
-        private store: Store<any>
-    ) {
-    }
-    public getSortedActiveProgressBars$(): Observable<ProgressBarIdentifierAndTimestampProp[]> {
-        return this.store.select(getSortedActiveProgressBars)
-    }
+  constructor(private store: Store<any>) {}
+  public getSortedActiveProgressBars$(): Observable<
+    ProgressBarIdentifierAndTimestampProp[]
+  > {
+    return this.store.select(getSortedActiveProgressBars);
+  }
 }
 
-export const progressBarsFeatureFacades = [
-    ProgressBarsFacade,
-];
+export const progressBarsFeatureFacades = [ProgressBarsFacade];

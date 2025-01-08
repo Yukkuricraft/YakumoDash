@@ -6,13 +6,10 @@
       *ngFor="let progressBar of activeProgressBars$ | async"
       class="progress-bars_progress-bar-box"
     >
-      <mat-progress-bar
-        class="progress-bars_bar"
-        mode="indeterminate"
-      >
+      <mat-progress-bar class="progress-bars_bar" mode="indeterminate">
       </mat-progress-bar>
       <div class="progress-bars_id">
-        {{ progressBar.identifier}}
+        {{ progressBar.identifier }}
       </div>
     </section>
   </div>

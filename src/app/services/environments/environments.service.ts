@@ -58,6 +58,10 @@ export class EnvironmentsService {
   listEnvsWithConfigs() {
     return this.http
       .get<any>(`${this.basePath}/list`)
-      .pipe(map(resp => resp.envs.map((env: object) => DomainConverter.fromDto(Env, env))));
+      .pipe(
+        map(resp =>
+          resp.envs.map((env: object) => DomainConverter.fromDto(Env, env))
+        )
+      );
   }
 }

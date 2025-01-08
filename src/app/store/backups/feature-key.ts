@@ -1,1 +1,1 @@
-export const BackupsFeatureKey = 'backups';
+export const BackupsFeatureKey = "backups";

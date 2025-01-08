@@ -1,8 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import {
-  SocialAuthService,
-} from "@abacritt/angularx-social-login";
+import { SocialAuthService } from "@abacritt/angularx-social-login";
 import { Store } from "@ngrx/store";
 import { RootActions } from "@app/store/root/root.actions";
 import { Observable, switchMap, filter, BehaviorSubject } from "rxjs";
@@ -31,7 +29,7 @@ export class AppComponent implements OnInit {
     private authService: SocialAuthService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private progressBarsFacade: ProgressBarsFacade,
+    private progressBarsFacade: ProgressBarsFacade
   ) {}
 
   customIcons = {
@@ -53,9 +51,8 @@ export class AppComponent implements OnInit {
     // Attempt login on load, not guaranteed to work if auth is expired
     this.store.dispatch(RootActions.initializeApp());
 
-    this.authService.authState
-      .subscribe(this.ycAuthService.authSubject$);
-    
+    this.authService.authState.subscribe(this.ycAuthService.authSubject$);
+
     this.ycAuthService.authSubject$
       .pipe(
         filter(v => !!v),
@@ -74,6 +71,7 @@ export class AppComponent implements OnInit {
       });
 
     this.loadingBarActive$ = this.store.select(selectGlobalLoadingBarState);
-    this.activeProgressBars$ = this.progressBarsFacade.getSortedActiveProgressBars$();
+    this.activeProgressBars$ =
+      this.progressBarsFacade.getSortedActiveProgressBars$();
   }
 }

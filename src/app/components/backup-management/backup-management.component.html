@@ -7,17 +7,12 @@
       (click)="createNewBackup()"
       matTooltip="Create New Backup"
     >
-      <mat-icon>
-        create_new_folder
-      </mat-icon>
+      <mat-icon> create_new_folder </mat-icon>
     </button>
   </mat-toolbar>
 
   <div class="backups">
-    <div
-      class="backups_list"
-      *ngIf="areBackupsReadyToRender$ | async"
-    >
+    <div class="backups_list" *ngIf="areBackupsReadyToRender$ | async">
       <table
         mat-table
         [dataSource]="(backupsDataSource$ | async) ?? []"
@@ -26,64 +21,73 @@
         <!-- Position Column -->
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef>Date</th>
-          <td mat-cell *matCellDef="let element">{{element.time.toLocaleString()}}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element.time.toLocaleString() }}
+          </td>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>Id</th>
-          <td mat-cell *matCellDef="let element">{{element.shortId}}</td>
+          <td mat-cell *matCellDef="let element">{{ element.shortId }}</td>
         </ng-container>
 
         <!-- Weight Column -->
         <ng-container matColumnDef="tags">
           <th mat-header-cell *matHeaderCellDef>Tags</th>
-          <td mat-cell *matCellDef="let element">{{element.tags.join(", ")}}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element.tags.join(", ") }}
+          </td>
         </ng-container>
-
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr
-            (click)="backupChoiceSelected(row)"
-            mat-row
-            *matRowDef="let row; columns: displayedColumns;"
+          (click)="backupChoiceSelected(row)"
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
         ></tr>
       </table>
     </div>
-    <div
-      *ngIf="!(areBackupsReadyToRender$ | async)"
-      class="center-contents"
-    >
+    <div *ngIf="!(areBackupsReadyToRender$ | async)" class="center-contents">
       <mat-spinner></mat-spinner>
     </div>
     <mat-card
       appearance="outlined"
-      *ngIf="(isBackupSelected$ | async)"
+      *ngIf="isBackupSelected$ | async"
       class="backup-choice"
     >
       <mat-card-title class="backup-choice_title-box">
         <div class="backup-choice_title">Backup Details</div>
-        <div class="backup-choice_deselect-choice" (click)="deselectBackupChoice()">
+        <div
+          class="backup-choice_deselect-choice"
+          (click)="deselectBackupChoice()"
+        >
           <button mat-icon-button>
-            <mat-icon>
-              cancel
-            </mat-icon>
+            <mat-icon> cancel </mat-icon>
           </button>
         </div>
       </mat-card-title>
       <mat-card-content>
         <div class="backup-choice_details">
           <div class="backup-choice_restic-version-title">Restic Version:</div>
-          <div class="backup-choice_restic-version-value">{{(selectedBackup$ | async)?.programVersion}}</div>
+          <div class="backup-choice_restic-version-value">
+            {{ (selectedBackup$ | async)?.programVersion }}
+          </div>
 
           <div class="backup-choice_backup-date-title">Backup Date:</div>
-          <div class="backup-choice_backup-date-value">{{(selectedBackup$ | async)?.time}}</div>
+          <div class="backup-choice_backup-date-value">
+            {{ (selectedBackup$ | async)?.time }}
+          </div>
 
           <div class="backup-choice_snapshot-id-title">Shapshot ID:</div>
-          <div class="backup-choice_snapshot-id-value">{{(selectedBackup$ | async)?.shortId}}</div>
+          <div class="backup-choice_snapshot-id-value">
+            {{ (selectedBackup$ | async)?.shortId }}
+          </div>
 
           <div class="backup-choice_tags-title">Tags</div>
-          <div class="backup-choice_tags-value">{{(selectedBackup$ | async)?.tags?.join(", ")}}</div>
+          <div class="backup-choice_tags-value">
+            {{ (selectedBackup$ | async)?.tags?.join(", ") }}
+          </div>
         </div>
         <app-worlds-selector
           [worlds]="(worlds$ | async) ?? []"
@@ -91,15 +95,19 @@
         >
         </app-worlds-selector>
         <div
-          *ngIf="(containerRunning$ | async)"
+          *ngIf="containerRunning$ | async"
           class="backup-choice_bypass-running-container-restriction"
         >
-          <h4 class="mat-mdc-card-title">Bypass Running Container Restriction?</h4>
+          <h4 class="mat-mdc-card-title">
+            Bypass Running Container Restriction?
+          </h4>
           <mat-checkbox
             [(ngModel)]="preBypassRunningContainerRestriction$.value"
             (ngModelChange)="onPreBypassClicked($event)"
           >
-            Rolling back while the server is running can cause CATASTROPHIC DAMAGE if done incorrectly. Be 100% sure the worlds you are restoring are unloaded in Multiverse before proceeding.
+            Rolling back while the server is running can cause CATASTROPHIC
+            DAMAGE if done incorrectly. Be 100% sure the worlds you are
+            restoring are unloaded in Multiverse before proceeding.
           </mat-checkbox>
           <mat-checkbox
             *ngIf="preBypassRunningContainerRestriction$ | async"
@@ -111,16 +119,20 @@
         </div>
         <div
           class="backup-choice_confirm-button"
-          matTooltip="{{(isConfirmBackupButtonDisabled$ | async)
-                          ? confirmBackupDisabledTooltipText
-                          : confirmBackupEnabledTooltipText}}">
+          matTooltip="{{
+            (isConfirmBackupButtonDisabled$ | async)
+              ? confirmBackupDisabledTooltipText
+              : confirmBackupEnabledTooltipText
+          }}"
+        >
           <button
             mat-raised-button
             color="primary"
             (click)="backupChoiceConfirmed()"
-            [disabled]="(isConfirmBackupButtonDisabled$ | async)"
+            [disabled]="isConfirmBackupButtonDisabled$ | async"
           >
-           Rollback {{ worldsLength$ | async }} {{(worldsLength$ | async) === 1 ? 'World' : 'Worlds'}}
+            Rollback {{ worldsLength$ | async }}
+            {{ (worldsLength$ | async) === 1 ? "World" : "Worlds" }}
           </button>
         </div>
       </mat-card-content>

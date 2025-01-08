@@ -19,7 +19,10 @@ import { EnvironmentManagementComponent } from "@app/components/environment-mana
 import { Features } from "@app/store";
 import { FilesService } from "@app/services/files/files.service";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { GoogleLoginProvider, GoogleSigninButtonModule } from "@abacritt/angularx-social-login";
+import {
+  GoogleLoginProvider,
+  GoogleSigninButtonModule,
+} from "@abacritt/angularx-social-login";
 import { LoginComponent } from "@app/components/login/login.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -33,7 +36,7 @@ import { MatListModule } from "@angular/material/list";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSidenavModule } from "@angular/material/sidenav";
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -65,7 +68,7 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarModule,
 } from "@angular/material/snack-bar";
-import { CapitalizePipe } from '@app/pipes/capitalize/capitalize.pipe';
+import { CapitalizePipe } from "@app/pipes/capitalize/capitalize.pipe";
 import { AppStoreModule } from "@app/store/app-store.module";
 import { environment } from "src/environments/environment";
 
@@ -137,12 +140,9 @@ import { environment } from "src/environments/environment";
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              environment.G_OAUTH2_CLIENT_ID,
-              {
-                oneTapEnabled: false,
-              }
-            ),
+            provider: new GoogleLoginProvider(environment.G_OAUTH2_CLIENT_ID, {
+              oneTapEnabled: false,
+            }),
           },
         ],
       } as SocialAuthServiceConfig,

@@ -8,9 +8,9 @@ import { BackupDefinition } from "@app/models/backup";
 import { lowercaseKeys } from "@app/helpers/case";
 
 export interface RestoreBackupApiResponse {
-  success: boolean,
-  output: string,
-};
+  success: boolean;
+  output: string;
+}
 
 @Injectable({
   providedIn: "root",
@@ -29,7 +29,10 @@ export class BackupsService {
       .pipe(
         map((data: any) =>
           data.backups.map((obj: any) => {
-            return DomainConverter.fromDto<BackupDefinition>(BackupDefinition, lowercaseKeys(obj));
+            return DomainConverter.fromDto<BackupDefinition>(
+              BackupDefinition,
+              lowercaseKeys(obj)
+            );
           })
         )
       );
@@ -38,32 +41,30 @@ export class BackupsService {
   listSnapshotWorlds(backup: BackupDefinition): Observable<string[]> {
     return this.http
       .get(`${this.basePath}/snapshot/${backup.shortId}/worlds`)
-      .pipe(
-        map(({ worlds }: any) =>
-            worlds
-        )
-      );
+      .pipe(map(({ worlds }: any) => worlds));
   }
 
   createBackup(container: ContainerDefinition) {
-    console.log("Creating backup?")
+    console.log("Creating backup?");
 
-    return this.http
-      .post(`${this.basePath}/create`, {
-        target_env: container.env.name,
-        target_world_group: container.getContainerNameLabel(),
-      })
+    return this.http.post(`${this.basePath}/create`, {
+      target_env: container.env.name,
+      target_world_group: container.getContainerNameLabel(),
+    });
   }
 
-  restoreBackup(backup: BackupDefinition, worlds: string[], bypassRunningContainerRestriction: boolean) {
+  restoreBackup(
+    backup: BackupDefinition,
+    worlds: string[],
+    bypassRunningContainerRestriction: boolean
+  ) {
     console.log("Restoring backup?");
 
-    return this.http
-      .post(`${this.basePath}/restore`, {
-        target_hostname: backup.hostname,
-        target_snapshot_id: backup.id,
-        target_worlds: worlds,
-        bypass_running_container_restriction: bypassRunningContainerRestriction,
-      })
+    return this.http.post(`${this.basePath}/restore`, {
+      target_hostname: backup.hostname,
+      target_snapshot_id: backup.id,
+      target_worlds: worlds,
+      bypass_running_container_restriction: bypassRunningContainerRestriction,
+    });
   }
 }

@@ -6,10 +6,11 @@ export const environment = {
   production: false,
   PROTOCOL: "https",
   USE_AUTH: true,
-  API_HOST: 'dev.api.yukkuricraft.net',
-  FILEBROWSER_HOST: 'dev.files.yakumo.yukkuricraft.net',
-  WSS_HOST: 'dev.docker.yukkuricraft.net',
-  G_OAUTH2_CLIENT_ID: '1084736521175-2b5rrrpcs422qdc5458dhisdsj8auo0p.apps.googleusercontent.com',
+  API_HOST: "dev.api.yukkuricraft.net",
+  FILEBROWSER_HOST: "dev.files.yakumo.yukkuricraft.net",
+  WSS_HOST: "dev.docker.yukkuricraft.net",
+  G_OAUTH2_CLIENT_ID:
+    "1084736521175-2b5rrrpcs422qdc5458dhisdsj8auo0p.apps.googleusercontent.com",
   MIN_PROXY_PORT: 26600,
   MAX_PROXY_PORT: 26700,
 };

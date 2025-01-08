@@ -9,10 +9,7 @@ import {
 } from "@app/store/root/root.selectors";
 import { selectDefinedContainersByEnvAndType } from "@app/store/root/root.selectors.containers";
 import { Env } from "@app/models/env";
-import {
-  RootActions,
-  EnvActions,
-} from "@app/store/root/root.actions";
+import { RootActions, EnvActions } from "@app/store/root/root.actions";
 import { ContainerType } from "@app/models/container";
 import { MatDialog } from "@angular/material/dialog";
 import { NewEnvironmentDialogComponent } from "@app/components/environment-management/subcomponents/new-environment-dialog/new-environment-dialog.component";

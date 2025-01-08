@@ -1,5 +1,10 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from "@angular/router";
 import { map, Observable, of } from "rxjs";
 import { Store } from "@ngrx/store";
 import { selectUser } from "@app/store/root/root.selectors";
@@ -9,7 +14,7 @@ import { environment } from "src/environments/environment";
 @Injectable({
   providedIn: "root",
 })
-export class AuthGuard  {
+export class AuthGuard {
   constructor(private store: Store, private authService: AuthService) {}
 
   canActivate(

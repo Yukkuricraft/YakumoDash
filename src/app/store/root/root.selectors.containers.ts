@@ -38,11 +38,7 @@ export const selectActiveContainerByContainerDef = (
   const name = containerDef.getContainerNameLabel();
 
   return createSelector(
-    selectActiveContainerByEnvTypeAndName(
-      env,
-      type,
-      name
-    ),
+    selectActiveContainerByEnvTypeAndName(env, type, name),
     container => container
   );
 };
@@ -52,17 +48,20 @@ export const selectActiveContainerByEnvTypeAndName = (
   type: ContainerType,
   name: string
 ) =>
-  createSelector(selectActiveContainersByEnvAndType(env, type), (containers: ActiveContainer[]) => {
-    if (isNil(containers)) {
+  createSelector(
+    selectActiveContainersByEnvAndType(env, type),
+    (containers: ActiveContainer[]) => {
+      if (isNil(containers)) {
+        return null;
+      }
+      for (let container of containers) {
+        if (container.getContainerNameLabel() == name) {
+          return container;
+        }
+      }
       return null;
     }
-    for (let container of containers) {
-      if (container.getContainerNameLabel() == name) {
-        return container;
-      }
-    }
-    return null;
-  });
+  );
 
 /** Defined Containers */
 export const selectDefinedContainersByEnv = (env: Env) =>
@@ -75,28 +74,21 @@ export const selectDefinedContainersByEnvAndType = (
   env: Env,
   type: ContainerType
 ) =>
-  createSelector(
-    selectRootState,
-    (state: RootState) => {
-      return (state.definedContainersByEnv[env.name] ?? {})[type]
-    }
-  );
+  createSelector(selectRootState, (state: RootState) => {
+    return (state.definedContainersByEnv[env.name] ?? {})[type];
+  });
 
-export const selectDefinedContainerByName = (
-  name: string
-) =>
+export const selectDefinedContainerByName = (name: string) =>
   createSelector(selectRootState, (state: RootState) => {
     let allContainers: ContainerDefinition[] = [];
 
     Object.entries(state.definedContainersByEnv).forEach(
       ([_, containersByType]) => {
-        Object.entries(containersByType).forEach(
-          ([_, containers]) => {
-            allContainers.push(...containers);
-          }
-        )
+        Object.entries(containersByType).forEach(([_, containers]) => {
+          allContainers.push(...containers);
+        });
       }
-    )
+    );
 
     if (isNil(allContainers)) {
       return null;

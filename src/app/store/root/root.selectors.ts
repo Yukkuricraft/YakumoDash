@@ -7,7 +7,10 @@ import { BackupDefinition } from "@app/models/backup";
 
 const selectRootState = createFeatureSelector<RootState>(Features.Root);
 
-export const selectUser = createSelector(selectRootState, (state: RootState) => state.user);
+export const selectUser = createSelector(
+  selectRootState,
+  (state: RootState) => state.user
+);
 
 export const selectGlobalLoadingBarState = createSelector(
   selectRootState,
@@ -32,22 +35,26 @@ export const selectEnvByEnvString = (envString: string) =>
   });
 
 export const selectCurrentTabIndex = (pageType: string) =>
-  createSelector(selectRootState, (state: RootState) => state.tabIndex[pageType] ?? 0);
-
-export const selectBackupsForContainer = (containerDef: ContainerDefinition | null) =>
   createSelector(
     selectRootState,
-    (state: RootState): BackupDefinition[] => {
-      if (containerDef == null) return [];
-
-      const env = containerDef.getContainerEnvString();
-      if (env in state.backupsByContainerAndEnv) {
-        const containerName = containerDef.getContainerNameShorthand();
-        if (containerName in state.backupsByContainerAndEnv[env]) {
-          return state.backupsByContainerAndEnv[env][containerDef.getContainerNameShorthand()]
-        }
-      }
-
-      return [];
-    }
+    (state: RootState) => state.tabIndex[pageType] ?? 0
   );
+
+export const selectBackupsForContainer = (
+  containerDef: ContainerDefinition | null
+) =>
+  createSelector(selectRootState, (state: RootState): BackupDefinition[] => {
+    if (containerDef == null) return [];
+
+    const env = containerDef.getContainerEnvString();
+    if (env in state.backupsByContainerAndEnv) {
+      const containerName = containerDef.getContainerNameShorthand();
+      if (containerName in state.backupsByContainerAndEnv[env]) {
+        return state.backupsByContainerAndEnv[env][
+          containerDef.getContainerNameShorthand()
+        ];
+      }
+    }
+
+    return [];
+  });

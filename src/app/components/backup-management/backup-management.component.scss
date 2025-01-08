@@ -51,16 +51,18 @@ button[mat-icon-button] {
   }
   &_bypass-running-container-restriction {
     margin-top: 28px;
+    width: 100%;
   }
   &_details {
     font-weight: 1;
     display: grid;
     grid-template-columns: 125px auto;
     grid-template-rows: auto;
-    grid-template-areas: "restic-version-title restic-version-value"
-                         "backup-date-title backup-date-value"
-                         "snapshot-id-title snapshot-id-value"
-                         "tags-title tags-value";
+    grid-template-areas:
+      "restic-version-title restic-version-value"
+      "backup-date-title backup-date-value"
+      "snapshot-id-title snapshot-id-value"
+      "tags-title tags-value";
   }
 
   &_restic-version-title {

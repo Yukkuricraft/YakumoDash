@@ -14,8 +14,8 @@ Currently implemented features:
 
 Why "Yakumo" Dash? Managing all these "views" into areas of the server feels like gapping around the internals. Esp with the ability to make edits, like reaching into the gap. Gap hag etc.
 
-
 ## Developing Locally
+
 - Set up and start [Yukkuricraft/Yukkuricraft](https://github.com/Yukkuricraft/Yukkuricraft/blob/main/docs/developing_locally.md) first
 - Clone this repo
 - `make build`
@@ -24,12 +24,13 @@ Why "Yakumo" Dash? Managing all these "views" into areas of the server feels lik
 - It should "just work"
 
 ## Creating and Connecting to a Cluster Locally
+
 1. Create a new cluster
-    - ![](docs/images/create_new_cluster.png)
+   - ![](docs/images/create_new_cluster.png)
 2. Configure the cluster
-    - Remember the proxy port you use. You will use this to connect to the server.
-    - ![](docs/images/configure_new_cluster.png)
+   - Remember the proxy port you use. You will use this to connect to the server.
+   - ![](docs/images/configure_new_cluster.png)
 3. Start the cluster
-    - ![](docs/images/start_cluster.png)
+   - ![](docs/images/start_cluster.png)
 4. Connect to the cluster
-    - ![](docs/images/connect_minecraft_server.png)
+   - ![](docs/images/connect_minecraft_server.png)
