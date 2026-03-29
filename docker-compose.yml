@@ -1,0 +1,44 @@
+version: '3.4'
+
+services:
+  yakumo-dash:
+    container_name: yakumo-dash-${IMAGE_NAME_SUFFIX}
+    image: yukkuricraft/yakumo-dash-${IMAGE_NAME_SUFFIX}
+    environment:
+      VIRTUAL_HOST: ${YAKUMO_HOST}
+      VIRTUAL_PORT: ${YAKUMO_PORT}
+      LETSENCRYPT_HOST: ${YAKUMO_HOST}
+    volumes:
+      - ./app:/app/app
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '5m'
+        max-file: '20'
+
+  letsencrypt-nginx-proxy:
+    container_name: letsencrypt-nginx-proxy-yakumo-dash
+    image: nginxproxy/acme-companion
+    environment:
+      DEFAULT_EMAIL: remi@yukkuricraft.net
+      ACME_CA_URI: https://acme-v02.api.letsencrypt.org/directory
+      NGINX_PROXY_CONTAINER: nginx-proxy-yakumo-dash
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certs:/etc/nginx/certs:rw
+      - html:/usr/share/nginx/html
+      - vhost:/etc/nginx/vhost.d
+      - acme:/etc/acme.sh
+    depends_on:
+      - nginx-proxy
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '5m'
+        max-file: '20'
+
+volumes:
+  certs:
+  html:
+  vhost:
+  acme:

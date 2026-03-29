@@ -1,0 +1,25 @@
+version: '3.4'
+
+# Run this one if you already have the nginx reverse-proxy running from Yukkuricraft/Yukkuricraft
+
+services:
+  yakumo-dash:
+    container_name: yakumo-dash-${IMAGE_NAME_SUFFIX}
+    image: yukkuricraft/yakumo-dash-${IMAGE_NAME_SUFFIX}
+    environment:
+      VIRTUAL_HOST: ${YAKUMO_HOST}
+      VIRTUAL_PORT: ${YAKUMO_PORT}
+      LETSENCRYPT_HOST: ${YAKUMO_HOST}
+    volumes:
+      - ./app:/app/app
+    networks:
+      - yukkuricraft_yc-web-dev
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '5m'
+        max-file: '5'
+
+networks:
+  yukkuricraft_yc-web-dev:
+    external: true

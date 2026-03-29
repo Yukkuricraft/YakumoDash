@@ -1,0 +1,58 @@
+$yukkuricraft-primary: #e56a00;
+
+@use 'bulma/sass' with (
+  $primary: $yukkuricraft-primary,
+  $body-font-size: 1.2rem,
+  $title-weight: var(--bulma-weight-bold)
+);
+
+@use 'bulma/sass/utilities/mixins';
+
+html {
+  scroll-behavior: smooth;
+  min-height: 100%;
+}
+
+.site {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.site-content {
+  flex: 1;
+}
+
+.env-page-container {
+  overflow: clip;
+  overflow-clip-margin: 8px;
+  position: relative;
+}
+
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: transform 0.5s ease;
+}
+
+.slide-left-leave-active,
+.slide-right-leave-active {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.slide-left-enter-from {
+  transform: translateX(100%);
+}
+.slide-left-leave-to {
+  transform: translateX(-100%);
+}
+
+.slide-right-enter-from {
+  transform: translateX(-100%);
+}
+.slide-right-leave-to {
+  transform: translateX(100%);
+}
