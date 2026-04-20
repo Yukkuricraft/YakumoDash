@@ -38,4 +38,10 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  vite: {
+    server: {
+      allowedHosts: process.env.NUXT_DEV_ALLOWED_HOSTS?.split(',') ?? [],
+    },
+  },
 })

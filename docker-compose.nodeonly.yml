@@ -6,6 +6,8 @@ services:
   yakumo-dash:
     container_name: yakumo-dash-${IMAGE_NAME_SUFFIX}
     image: yukkuricraft/yakumo-dash-${IMAGE_NAME_SUFFIX}
+    env_file:
+      - ${ENV_FILE}
     environment:
       VIRTUAL_HOST: ${YAKUMO_HOST}
       VIRTUAL_PORT: ${YAKUMO_PORT}
