@@ -95,13 +95,14 @@ export function useStopContainer(containerHostname: MaybeRefOrGetter<string>, en
   })
 }
 
-export function usePrepareWsAttach() {
+export function useResizeContainerTty() {
   const { $ycApi } = useNuxtApp()
   return useMutation({
-    mutationFn: (containerHostname: string) =>
-      $ycApi('/server/container/{container_name}/prepare_ws_attach', {
+    mutationFn: ({ containerHostname, h, w }: { containerHostname: string, h: number, w: number }) =>
+      $ycApi('/server/container/{container_name}/resize', {
         method: 'POST',
         path: { container_name: containerHostname },
+        body: { h, w },
       }),
   })
 }
