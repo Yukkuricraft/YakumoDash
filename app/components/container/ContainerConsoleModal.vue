@@ -150,7 +150,10 @@ const onWindowResize = () => {
 function openConsole() {
   if (!terminalEl.value) return
 
-  terminal.value = new Terminal()
+  // convertEol: containers without a TTY (velocity) have no kernel onlcr translation and
+  // their jline falls back to raw System.out, so their output arrives as bare LF and would
+  // otherwise staircase. Harmless for TTY containers, whose CRLF already returns the cursor.
+  terminal.value = new Terminal({ convertEol: true })
   fitAddon.value = new FitAddon()
 
   // Open and fit first so the TTY can be sized from real dimensions below.
