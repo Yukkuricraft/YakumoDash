@@ -1,5 +1,5 @@
 # Copy src and install packages
-FROM node:24-alpine AS node
+FROM node:24.22.1-alpine3.24 AS node
 ENV PATH=/app/node_modules/.bin:$PATH
 
 WORKDIR /app
@@ -41,11 +41,11 @@ ENV NUXT_PUBLIC_PROTOCOL=https \
 RUN nuxt generate
 
 # Nginx - Dev
-FROM nginx:1.23.0 AS nginx_dev
+FROM nginx:1.30.6-alpine3.24 AS nginx_dev
 COPY --from=dev_built /app/.output/public /usr/share/nginx/html
 COPY conf/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Nginx - Prod
-FROM nginx:1.23.0 AS nginx_prod
+FROM nginx:1.30.6-alpine3.24 AS nginx_prod
 COPY --from=prod_built /app/.output/public /usr/share/nginx/html
 COPY conf/nginx/default.conf /etc/nginx/conf.d/default.conf
